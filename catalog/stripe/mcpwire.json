@@ -62,5 +62,8 @@
       "risk": "high",
       "note": "Moves money. Never teleport this."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share selected Stripe MCP tools with MCPWire. Use a restricted host key, expose product and price reads, and keep refund tools out of the allowlist."
+  }
 }

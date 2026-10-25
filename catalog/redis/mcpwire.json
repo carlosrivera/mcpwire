@@ -52,5 +52,8 @@
       "risk": "high",
       "note": "Deletes a key."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Redis MCP inspection tools through MCPWire. Configure a host Redis URL and ACL permissions, then allow key scans, size, and server info."
+  }
 }

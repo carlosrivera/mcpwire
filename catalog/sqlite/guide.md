@@ -12,4 +12,4 @@ The returned row contains revenue `42` and contact `[REDACTED_BY_MCPWIRE]` when 
 
 The allowlist controls tool names. It does not parse SQL or make a database read-only. Use database permissions or a server with enforced read-only behavior for sensitive databases. This example checks the SELECT result; it does not establish that arbitrary SQL is harmless.
 
-See [the CLI reference](/docs#sqlite) for the complete sharing and guest setup.
+See [the CLI reference](/docs/#sqlite) for the complete sharing and guest setup.

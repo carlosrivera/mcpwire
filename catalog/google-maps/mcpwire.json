@@ -57,5 +57,8 @@
       "risk": "safe",
       "note": "Elevation lookup."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Google Maps MCP tools through MCPWire. Configure the host API key, expose geocoding and routing tools, and review API usage limits."
+  }
 }

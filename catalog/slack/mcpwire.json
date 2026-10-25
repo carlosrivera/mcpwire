@@ -48,5 +48,8 @@
       "risk": "high",
       "note": "Replies as your bot."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Slack MCP tools with a teammate’s agent. Configure the host bot token and team ID, review channel access, and keep posting tools blocked."
+  }
 }

@@ -69,5 +69,8 @@
       "risk": "high",
       "note": "Creates an index; disabled by --readOnly."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share MongoDB MCP inventory tools with MCPWire. Configure the host connection, enable read-only mode, and review database and collection access."
+  }
 }

@@ -10,15 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            web/package-lock.json
-      - run: npm ci
-      - run: npm --prefix web ci
-      - run: npm run check:catalog
-      - run: npm run test:catalog
-      - run: npm run build:web
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check:catalog
+      - run: pnpm run test:catalog
+      - run: pnpm run test:builder
+      - run: pnpm run build:web
+      - run: pnpm run test:seo

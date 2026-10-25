@@ -19,5 +19,8 @@
       "risk": "caution",
       "note": "GETs any URL reachable from YOUR machine, including internal hosts."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share the Fetch MCP server with a teammate’s agent. Run it with uvx, configure the guest client, and review URL access before fetching content."
+  }
 }

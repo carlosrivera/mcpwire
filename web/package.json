@@ -9,10 +9,11 @@
     "preview": "astro preview",
     "astro": "astro",
     "check:servers": "node scripts/check-servers.mjs",
-    "prebuild": "node ../scripts/check-catalog.mjs"
+    "prebuild": "node ../scripts/check-catalog.mjs && node ../scripts/generate-social-images.mjs"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.2.1",
-    "astro": "^5.1.1"
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^5.18.2",
+    "shiki": "3.23.0"
   }
 }

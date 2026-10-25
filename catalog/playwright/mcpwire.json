@@ -69,5 +69,8 @@
       "risk": "safe",
       "note": "Closes the page."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Playwright browser tools through MCPWire. Copy host and guest configuration and review navigation, screenshots, and browser-session access."
+  }
 }

@@ -27,5 +27,8 @@
       "risk": "safe",
       "note": "POI / local search."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Set up Brave Search MCP sharing with MCPWire. Keep the API key on the host, expose web and local search tools, and configure a teammate’s client."
+  }
 }

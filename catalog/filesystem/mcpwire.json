@@ -5,8 +5,8 @@
   "category": "Files",
   "source": "official",
   "icon": "/icons/folder.svg",
-  "tagline": "Let a remote agent read your codebase \u2014 without write_file, edit_file or move_file.",
-  "requirements": "Node.js 18 or newer. Replace the example folder with a host directory you intend to expose. The server runs with the host process\u2019s permissions; MCPWire does not sandbox it.",
+  "tagline": "Let a remote agent read your codebase — without write_file, edit_file or move_file.",
+  "requirements": "Node.js 18 or newer. Replace the example folder with a host directory you intend to expose. The server runs with the host process’s permissions; MCPWire does not sandbox it.",
   "inputs": {
     "directory": {
       "example": "."
@@ -76,5 +76,8 @@
       "risk": "high",
       "note": "Moves/renames files."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share a folder through the Filesystem MCP server. Copy host and guest setup, allow read_file and list_directory, and check response redaction."
+  }
 }

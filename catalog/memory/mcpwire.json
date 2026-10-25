@@ -63,5 +63,8 @@
       "risk": "high",
       "note": "Destroys relations."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Memory MCP knowledge-graph tools with MCPWire. Choose graph reads, keep mutation tools blocked, and connect a teammate’s MCP client."
+  }
 }

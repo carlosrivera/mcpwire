@@ -6,4 +6,4 @@ Create a `report.txt` file inside that directory. After connecting, ask the gues
 
 Other read tools are documented in the access table but are not enabled by default. Add their exact names to the allowlist only when needed. Reading files can reveal private data even when no write tools are available.
 
-See [the CLI walkthrough](/docs#share) for a complete host-to-guest example and redaction output.
+See [the CLI walkthrough](/docs/#share) for a complete host-to-guest example and redaction output.

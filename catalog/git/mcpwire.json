@@ -80,5 +80,8 @@
       "risk": "caution",
       "note": "Switches branches."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share a local Git checkout through MCPWire. Set the repository path, allow status and diff tools, and keep commit and reset tools out of the session."
+  }
 }

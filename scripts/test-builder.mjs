@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import { buildShareCommand, parseCallLimit, parseTools } from '../web/src/scripts/builder-model.mjs';
+assert.deepEqual(parseTools('read_file, read_file, list_directory'),['read_file','list_directory']);
+assert.deepEqual(parseTools(''),[]);
+for (const value of ['$(echo injected)','read_file;exit','"read_file"']) assert.throws(()=>parseTools(value));
+for (const value of ['0','-1','1.2','abc','9007199254740992']) assert.throws(()=>parseCallLimit(value));
+assert.equal(parseCallLimit(' 20 '),20);
+assert.equal(parseCallLimit(''),null);
+const options = {command:'npx -y example-server',tools:[],redact:true,confirm:false,ttl:'30m',maxCalls:''};
+assert(buildShareCommand(options).includes('--allow ""'));
+assert(buildShareCommand({...options,confirm:true,maxCalls:'20'}).includes('--max-calls 20'));
+assert(buildShareCommand({...options,confirm:true}).includes('--confirm'));
+assert(!buildShareCommand({...options,ttl:'',redact:false}).includes('--ttl'));
+assert.throws(()=>buildShareCommand({...options,command:''}));
+console.log('PASS builder: explicit deny-all, exact tool names, duplicate removal, positive call limits, and optional controls.');

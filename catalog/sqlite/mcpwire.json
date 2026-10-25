@@ -52,5 +52,8 @@
       "risk": "caution",
       "note": "Writes to an in-memory insight log."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share SQLite MCP tools with a teammate’s agent. Set up uvx, choose read_query and schema tools, configure the guest, and test a SELECT query."
+  }
 }

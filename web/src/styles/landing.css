@@ -8,7 +8,7 @@
 .home-hero { text-align:center; padding-top:116px; padding-bottom:168px; }
 .home-hero h1 { font-size:clamp(38px,4.6vw,60px); font-weight:550; letter-spacing:-.039em; line-height:1.11; color:var(--text); margin:0 auto 22px; max-width:980px; }
 .home-hero > p { font-size:18px; line-height:1.6; color:var(--text-muted); max-width:610px; margin:0 auto 30px; letter-spacing:-.01em; }
-.home-install { display:flex; align-items:center; width:fit-content; max-width:100%; margin:0 auto; background:var(--cta-bg); border:0; box-shadow:var(--shadow-sm); border-radius:8px; color:var(--cta-text); padding:6px 6px 6px 18px; gap:12px; scroll-margin-top:30px; }
+.home-install { display:flex; align-items:center; width:fit-content; max-width:100%; margin:0 auto; background:var(--cta-bg); border:0; box-shadow:var(--shadow-sm); border-radius:8px; color:var(--cta-text); padding:6px 6px 6px 18px; gap:12px; scroll-margin-top:104px; }
 .home-install > code { font-size:14px; letter-spacing:-.02em; white-space:nowrap; overflow-x:auto; scrollbar-width:none; }
 .home-install > code::-webkit-scrollbar { display:none; }
 .install-prompt { color:#68707a; font:14px var(--mono); user-select:none; }

@@ -27,5 +27,8 @@
       "risk": "safe",
       "note": "Downloads image assets."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Figma design context through MCPWire. Configure the host API key and stdio transport, review image downloads, and connect the guest client."
+  }
 }

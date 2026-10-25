@@ -63,5 +63,8 @@
       "risk": "high",
       "note": "Runs general kubectl commands."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Set up Kubernetes MCP sharing with MCPWire. Use the host kubeconfig, review tool access alongside RBAC, and configure a teammate’s MCP client."
+  }
 }

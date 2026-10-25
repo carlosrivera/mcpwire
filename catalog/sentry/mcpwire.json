@@ -53,5 +53,8 @@
       "risk": "high",
       "note": "Generic operation dispatcher; do not expose it as a substitute for a narrow tool allowlist."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Sentry MCP issue-triage tools through MCPWire. Configure host authentication, review project and event access, and connect a teammate’s agent."
+  }
 }

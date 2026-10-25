@@ -63,5 +63,8 @@
       "risk": "safe",
       "note": "Closes the page."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Set up Puppeteer MCP sharing with MCPWire. Review browser tool access, run the archived server on your host, and connect the guest agent."
+  }
 }

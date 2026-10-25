@@ -1,9 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
 import servers from '../../data/servers';
+import { canonicalURL } from '../../data/seo.mjs';
 const categories = [...new Set(servers.map((server) => server.category))];
 ---
-<Base title="Server guides — MCPWire" description="Setup commands, tool access, and session policies for 26 MCP servers.">
+<Base title="MCP server setup guides for AI agents | MCPWire" description={`Setup and sharing guides for ${servers.length} MCP servers, including Filesystem, PostgreSQL, GitHub, and SQLite. Copy host commands and connect your agent.`} image="/social/teleport.png" imageAlt="MCPWire server guides — setup and sharing for MCP integrations" pageType="CollectionPage" breadcrumbs={[{name:'Home',path:'/'},{name:'MCP server guides',path:'/teleport'}]} structuredData={[{'@type':'ItemList',name:'MCP server setup guides',itemListElement:servers.map((server,index)=>({'@type':'ListItem',position:index+1,name:`${server.name} MCP server`,url:canonicalURL(`/teleport/${server.slug}`)}))}]} >
   <section class="section">
     <div class="wrap">
       <div class="page-head">
@@ -17,7 +18,7 @@ const categories = [...new Set(servers.map((server) => server.category))];
           <div class="grid cols-3">
             {servers.filter((server) => server.category === category).map((server) => {
               const defaults = server.defaults.allow.length;
-              return <a class="card server-card" href={`/teleport/${server.slug}`}>
+              return <a class="card server-card" href={`/teleport/${server.slug}/`}>
                 <div class="server-card-head"><img src={server.icon} alt="" width="32" height="32" loading="lazy" /><span aria-hidden="true">↗</span></div>
                 <h3>{server.name}</h3>
                 <p>{server.tagline}</p>

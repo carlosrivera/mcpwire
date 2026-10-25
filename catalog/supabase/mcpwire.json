@@ -56,5 +56,8 @@
       "risk": "high",
       "note": "Pauses the whole project."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Supabase MCP tools with MCPWire. Set a project reference, enable server read-only mode, select schema tools, and configure the guest client."
+  }
 }

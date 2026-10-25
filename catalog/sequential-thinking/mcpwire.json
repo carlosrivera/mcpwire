@@ -21,5 +21,8 @@
       "risk": "safe",
       "note": "Stateless chain-of-thought scratchpad."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Set up Sequential Thinking MCP sharing with MCPWire. Copy the pinned server command, expose the reasoning tool, and configure the guest client."
+  }
 }

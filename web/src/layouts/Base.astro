@@ -3,27 +3,41 @@ import '../styles/global.css';
 import '../styles/landing.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, canonicalURL, serializeSchema } from '../data/seo.mjs';
 interface Props {
-  title: string;
-  minimal?: boolean;
-  description?: string;
-  /** Only set on pages that shouldn't appear in sitemap (e.g. replay tool). */
-  noindex?: boolean;
+  title:string;
+  minimal?:boolean;
+  description?:string;
+  noindex?:boolean;
+  image?:string;
+  imageAlt?:string;
+  pageType?:'WebPage'|'CollectionPage';
+  breadcrumbs?:Array<{name:string;path:string}>;
+  structuredData?:Array<Record<string,unknown>>;
 }
-
 const {
-  title,
-  description = 'Share local MCP tools with a teammate’s agent over an encrypted peer connection. Choose the tools, redact recognized secrets, and set session limits.',
-  noindex = false,
-  minimal = false,
+  title, description = SITE_DESCRIPTION, noindex = false, minimal = false,
+  image = '/social/mcpwire.png', imageAlt = 'MCPWire — share local MCP server tools with a teammate’s agent',
+  pageType = 'WebPage', breadcrumbs = [], structuredData = [],
 } = Astro.props;
-
-const site = 'https://mcpwire.co';
-const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', site).href;
-const fullTitle = title.includes('MCPWire') ? title : `${title} — MCPWire`;
+const canonical = canonicalURL(Astro.url.pathname);
+const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+const imageURL = new URL(image,SITE_URL).href;
+const schema = {
+  '@context':'https://schema.org',
+  '@graph':[
+    {'@type':'Organization','@id':`${SITE_URL}/#organization`,name:SITE_NAME,url:SITE_URL,
+      logo:{'@type':'ImageObject',url:`${SITE_URL}/social/logo.png`,width:512,height:512},sameAs:['https://github.com/carlosrivera/mcpwire']},
+    {'@type':'WebSite','@id':`${SITE_URL}/#website`,url:`${SITE_URL}/`,name:SITE_NAME,description:SITE_DESCRIPTION,inLanguage:'en',publisher:{'@id':`${SITE_URL}/#organization`}},
+    {'@type':'ImageObject','@id':`${canonical}#primaryimage`,url:imageURL,contentUrl:imageURL,width:1200,height:630,caption:imageAlt},
+    {'@type':pageType,'@id':`${canonical}#webpage`,url:canonical,name:fullTitle,description,inLanguage:'en',
+      isPartOf:{'@id':`${SITE_URL}/#website`},primaryImageOfPage:{'@id':`${canonical}#primaryimage`},
+      ...(breadcrumbs.length ? {breadcrumb:{'@id':`${canonical}#breadcrumb`}} : {})},
+    ...(breadcrumbs.length ? [{'@type':'BreadcrumbList','@id':`${canonical}#breadcrumb`,itemListElement:breadcrumbs.map((crumb,index)=>({'@type':'ListItem',position:index+1,name:crumb.name,item:canonicalURL(crumb.path)}))}] : []),
+    ...structuredData,
+  ],
+};
 ---
-
 <!doctype html>
 <html lang="en" class:list={{ 'home-page': minimal }}>
   <head>
@@ -31,33 +45,36 @@ const fullTitle = title.includes('MCPWire') ? title : `${title} — MCPWire`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <>
-      <link rel="preload" href="/fonts/instrument-sans-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
-      <link rel="preload" href="/fonts/ibm-plex-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin />
-    </>
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <link rel="preload" href="/fonts/instrument-sans-latin-wght.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/ibm-plex-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin />
     <meta name="generator" content={Astro.generator} />
-    {noindex && <meta name="robots" content="noindex" />}
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="MCPWire" />
+    <meta property="og:type" content={structuredData.some(item=>item['@type']==='TechArticle') ? 'article' : 'website'} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageURL} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <meta name="theme-color" content="#1b1d20" />
+    <script type="application/ld+json" set:html={serializeSchema(schema)} />
   </head>
   <body class:list={{ home: minimal, 'content-page': !minimal }}>
-    <Header />
-    <main>
-      <slot />
-    </main>
-    <Footer />
+    <Header /><main><slot /></main><Footer />
   </body>
 </html>
-
 <script>
   import '../scripts/copy-buttons';
 </script>

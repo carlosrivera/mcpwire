@@ -53,5 +53,8 @@
       "risk": "high",
       "note": "Reads or modifies environment variables."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Netlify MCP inspection tools with MCPWire. Expose individual operations, configure host authentication, and keep deployment tools blocked."
+  }
 }

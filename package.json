@@ -1,19 +1,25 @@
 {
   "name": "mcpwire-monorepo",
   "private": true,
-  "description": "\u26a1 MCPWire \u2014 P2P Tool Teleportation for AI Agents. Share the capability, never the credentials.",
+  "description": "⚡ MCPWire — P2P Tool Teleportation for AI Agents. Share the capability, never the credentials.",
   "scripts": {
-    "build:cli": "npm --prefix cli run build",
-    "test:cli": "npm --prefix cli test",
-    "build:web": "npm --prefix web run build",
-    "dev:web": "npm --prefix web run dev",
-    "deploy:web": "npm --prefix web run build",
+    "build:cli": "pnpm --filter @mcpwire/cli run build",
+    "test:cli": "pnpm --filter @mcpwire/cli test",
+    "build:web": "pnpm --filter mcpwire-web run build",
+    "dev:web": "pnpm --filter mcpwire-web run dev",
+    "deploy:web": "pnpm --filter mcpwire-web run build",
     "check:catalog": "node scripts/check-catalog.mjs",
     "test:catalog": "node scripts/test-catalog.mjs",
-    "test:catalog:integration": "npm run build:cli && node scripts/test-catalog-integration.mjs"
+    "test:builder": "node scripts/test-builder.mjs",
+    "test:catalog:integration": "pnpm run build:cli && node scripts/test-catalog-integration.mjs",
+    "test:seo": "node scripts/test-seo.mjs",
+    "generate:social": "node scripts/generate-social-images.mjs"
   },
   "devDependencies": {
     "ajv": "8.20.0",
-    "ajv-formats": "3.0.1"
-  }
+    "ajv-formats": "3.0.1",
+    "parse5": "7.3.0",
+    "sharp": "0.34.5"
+  },
+  "packageManager": "pnpm@12.15.0+sha512.b3951d6d6ff4a9f13dc7cf56cd28d2b8eb37dbcc9c68e52e1e1191873ea9f82a017287ab50baadc5ccc494f036c67c0e47eb13608c2fa36f47711b61ea128e61"
 }

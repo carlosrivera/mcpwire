@@ -60,5 +60,8 @@
       "risk": "high",
       "note": "Reads and compresses a local file."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Use the Everything MCP test server with MCPWire. Share selected demo tools, configure host and guest clients, and review non-tool protocol access."
+  }
 }

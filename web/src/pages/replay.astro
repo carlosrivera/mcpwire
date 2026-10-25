@@ -3,8 +3,11 @@ import Base from '../layouts/Base.astro';
 ---
 
 <Base
-  title="Session replay — MCPWire"
-  description="Drag a session.wirelog file recorded by mcpwire share --record into this page and get a DevTools-style waterfall of every remote agent call: latency, blocked tools, redacted secrets. 100% client-side — the file never leaves your machine."
+  title="MCP session replay: inspect tool calls | MCPWire"
+  image="/social/replay.png"
+  imageAlt="MCPWire session replay — tool calls, timing, and blocked requests"
+  breadcrumbs={[{name:"Home",path:"/"},{name:"Session replay",path:"/replay"}]}
+  description="Open a local MCPWire session log to inspect tool calls, response times, blocked requests, and redactions. Review the timeline directly in your browser."
 >
   <section class="section">
     <div class="wrap">

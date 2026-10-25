@@ -26,11 +26,11 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
     "start": "node dist/index.js",
-    "test": "npm run build && node test/run-tests.mjs",
-    "test:e2e": "npm run build && node test/e2e-real.mjs",
-    "test:e2e:sqlite": "npm run build && node test/e2e-real.mjs --sqlite",
+    "test": "pnpm run build && node test/run-tests.mjs",
+    "test:e2e": "pnpm run build && node test/e2e-real.mjs",
+    "test:e2e:sqlite": "pnpm run build && node test/e2e-real.mjs --sqlite",
     "test:examples": "node test/examples.mjs",
-    "prepublishOnly": "npm run build && cp ../README.md ./README.md",
+    "prepublishOnly": "pnpm run build && cp ../README.md ./README.md",
     "postpublish": "rm -f ./README.md"
   },
   "keywords": [
@@ -53,8 +53,8 @@
   "devDependencies": {
     "@modelcontextprotocol/sdk": "1.32.2",
     "@modelcontextprotocol/server-filesystem": "2.0.1",
-    "@types/node": "^22.9.0",
-    "typescript": "^5.7.0"
+    "@types/node": "^22.20.5",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=18.0.0"

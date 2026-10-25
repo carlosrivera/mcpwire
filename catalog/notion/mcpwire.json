@@ -48,5 +48,8 @@
       "risk": "high",
       "note": "Updates page properties, including archive state."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Notion MCP search and page-reading tools with MCPWire. Configure a restricted integration token and keep page updates out of the allowlist."
+  }
 }

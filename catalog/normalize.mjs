@@ -54,7 +54,7 @@ export function normalizeEntry({server, policy}) {
     slug:policy.slug, name:server.title ?? server.name, category:policy.category, source:policy.source,
     package:server.packages[0].identifier, command:[launch.command,...launch.args].map(shellQuote).join(' '),
     tagline:policy.tagline, requirements:policy.requirements, docs:server.websiteUrl,
-    tools:policy.tools, defaults:policy.defaults, icon:policy.icon, launch,
+    tools:policy.tools, defaults:policy.defaults, icon:policy.icon, launch, seo:policy.seo,
     catalogVersion:policy.schemaVersion, packageVersion:server.packages[0].version,
   };
 }

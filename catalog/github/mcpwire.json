@@ -80,5 +80,8 @@
       "risk": "high",
       "note": "Branch mutation."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share GitHub repository and issue tools with MCPWire. Configure the host token and guest client while keeping push and merge tools blocked."
+  }
 }

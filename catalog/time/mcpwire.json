@@ -27,5 +27,8 @@
       "risk": "safe",
       "note": "Timezone conversion."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Set up Time MCP sharing with MCPWire and uvx. Expose current-time and timezone-conversion tools, then connect a teammate’s MCP client."
+  }
 }

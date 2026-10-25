@@ -27,5 +27,8 @@
       "risk": "safe",
       "note": "Fetches versioned docs."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Context7 MCP documentation tools with MCPWire. Configure library lookup and documentation queries, then connect a teammate’s MCP client."
+  }
 }

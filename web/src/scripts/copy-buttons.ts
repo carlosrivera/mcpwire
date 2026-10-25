@@ -21,7 +21,7 @@ document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => 
       button.setAttribute('aria-label', original);
       button.title = original;
       if (status) status.textContent = '';
-      button.disabled = false;
+      button.disabled = button.dataset.copyInvalid === 'true';
     }, 1400);
   });
 });

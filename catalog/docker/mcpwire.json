@@ -64,5 +64,8 @@
       "risk": "high",
       "note": "Deletes images."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Share Docker MCP inspection tools with MCPWire. Configure the host daemon, review container access, and connect the guest without daemon credentials."
+  }
 }

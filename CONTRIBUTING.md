@@ -1,4 +1,4 @@
-# Contributing MCP server guides
+# Contributing to MCPWire
 
 Add a server by contributing a catalog folder. Guides and the command builder read the same definitions; no Astro page or CLI changes are needed for supported packages.
 
@@ -9,12 +9,11 @@ All 26 server definitions live in `catalog/`. Add new contributions there. The s
 From the repository root, with Node.js 18.20+ (Node.js 20 recommended):
 
 ```bash
-npm ci
-npm --prefix web ci
-npm run check:catalog
-npm run test:catalog
-npm run build:web
-npm run dev:web
+pnpm install --frozen-lockfile
+pnpm run check:catalog
+pnpm run test:catalog
+pnpm run build:web
+pnpm run dev:web
 ```
 
 Open `/teleport/<slug>` and `/builder`. Confirm that the guide command and the builder use the same package version, launch arguments, and default allowlist.
@@ -91,9 +90,9 @@ Set `icon` to an existing `/icons/<name>.svg` in `web/public/icons`, or add an i
 ## Checks and review
 
 ```bash
-npm run check:catalog
-npm run test:catalog
-npm run build:web
+pnpm run check:catalog
+pnpm run test:catalog
+pnpm run build:web
 ```
 
 These checks are offline and do not execute contributed server packages. They validate both schemas, supported launch configuration, unique slugs, placeholders, explicit tool defaults, guides, icons, and policy/quoting regressions. PR CI runs these checks and builds all pages.
@@ -101,17 +100,62 @@ These checks are offline and do not execute contributed server packages. They va
 Package metadata checks are separate and require network access:
 
 ```bash
-npm --prefix web run check:servers
+pnpm --filter mcpwire-web run check:servers
 ```
 
 Runtime verification is an explicit maintainer step. Review the package source and arguments first, then run in an isolated environment without production credentials:
 
 ```bash
-npm --prefix cli ci
+pnpm install --frozen-lockfile
 # uvx is also required for SQLite
-npm run test:catalog:integration
+pnpm run test:catalog:integration
 ```
 
-This executes the pinned filesystem and SQLite packages from the catalog through a real SDK client → CLI join → local DHT/Noise connection → CLI share → MCP server. It checks tool discovery, reads/SELECT, redaction, denied writes, recording, startup failure, and final-response delivery at the call limit. It uses a local bootstrap node, not a cross-network NAT traversal test. For the reviewed set of additional initialization checks, run `npm --prefix cli run test:examples`. Some pinned packages require Node.js 24; check each entry’s prerequisites. These checks use catalog-pinned launch arguments; fixtures supply a temporary Git checkout or dummy credentials where needed. They check MCP initialization and default tool names without making authenticated service calls. Adding a folder does not automatically execute its package. Other entries still need a reviewed runtime fixture and any service prerequisites.
+This executes the pinned filesystem and SQLite packages from the catalog through a real SDK client → CLI join → local DHT/Noise connection → CLI share → MCP server. It checks tool discovery, reads/SELECT, redaction, denied writes, recording, startup failure, and final-response delivery at the call limit. It uses a local bootstrap node, not a cross-network NAT traversal test. For the reviewed set of additional initialization checks, run `pnpm --filter @mcpwire/cli run test:examples`. Some pinned packages require Node.js 24; check each entry’s prerequisites. These checks use catalog-pinned launch arguments; fixtures supply a temporary Git checkout or dummy credentials where needed. They check MCP initialization and default tool names without making authenticated service calls. Adding a folder does not automatically execute its package. Other entries still need a reviewed runtime fixture and any service prerequisites.
 
 Include the commands and results you actually ran in your PR. Do not mark a server verified solely because its metadata validates. Any package version or default-policy update needs another review and runtime check.
+
+## Build and run the CLI from source
+
+For development, use the repository checkout rather than the published npm package:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm run build:cli
+node cli/dist/index.js --help
+pnpm run test:cli
+```
+
+Replace `npx -y @mcpwire/cli` in a documentation example with `node cli/dist/index.js` when running from the repository root. In a guest MCP configuration, use `command: "node"` and pass the absolute path to that guest machine’s `cli/dist/index.js` before `join` and the ticket.
+
+The client launches `join` as a stdio transport. Its stdin/stdout carry MCP messages; diagnostics use stderr. Each peer connection starts a separate server child process on the host, inheriting its environment and working directory. Keep protocol output separate from diagnostic logs when changing the CLI.
+
+## Network test setup
+
+The filesystem and SQLite documentation examples are exercised with a real MCP SDK client through separate CLI host and guest processes, using a local DHT bootstrap node. This verifies protocol handling, filtering, redaction, recording, and session limits. It does not establish connectivity between two machines on different networks.
+
+To use an existing bootstrap node in a controlled environment, set this variable for both host and guest processes:
+
+```bash
+export MCPWIRE_BOOTSTRAP="127.0.0.1:49737"
+```
+
+The example requires a node already listening on that port, and loopback works only on the same machine. Across machines, use a mutually reachable host and port. Multiple nodes can be comma-separated. The variable selects bootstrap nodes; it does not start one or provide a relay. The integration test creates and cleans up its own local bootstrap node.
+
+For a public-discovery check:
+
+```bash
+pnpm run build:cli
+MCPWIRE_E2E_RUNS=1 node cli/test/e2e-real.mjs --public
+```
+
+This still runs both processes on one machine. Test across two real networks separately before making NAT traversal or connection-reliability claims. Calls are not automatically replayed after a disconnect.
+
+
+## Search metadata and social previews
+
+Each catalog entry may define `seo.title` (without the MCPWire suffix) and `seo.description` in `mcpwire.json`. Describe that server’s actual setup and capabilities; avoid generic claims that its tools are safe. The guide falls back to generated metadata for new entries.
+
+The shared layout owns canonicals, Open Graph/Twitter tags, and the structured-data graph. Server pages add breadcrumbs and a technical article describing their visible guide. Do not add invented reviews, rankings, dates, or claims of rich-result eligibility.
+
+`pnpm run build:web` generates 1200×630 PNG previews from the catalog and builds the sitemap. Run `pnpm run test:seo` afterwards to check every rendered page, metadata uniqueness, social-image files, structured data, and sitemap coverage. The 404 page is deliberately excluded from indexing and the sitemap. Query variants such as `/builder/?server=sqlite` canonicalize to `/builder/`.

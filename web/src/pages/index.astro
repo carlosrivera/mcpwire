@@ -61,7 +61,7 @@ const guest = `{
 }`;
 ---
 
-<Base title="MCPWire — Share your local MCP server with a teammate’s agent" description="Give a teammate’s AI agent access to your local MCP tools over an encrypted peer-to-peer connection. Choose the tools, redact secrets, and set an expiry." minimal>
+<Base title="MCPWire — Share local MCP servers with AI agents" description="Give a teammate’s AI agent access to your local MCP tools over an encrypted peer-to-peer connection. Choose the tools, redact secrets, and set an expiry." minimal>
   <section class="home-hero home-width">
     <h1>Share your local MCP server<br class="wide-break" /> with a teammate’s agent.</h1>
     <p>Give them access to your tools over an encrypted, peer-to-peer connection. Your MCP server runs locally, and your teammate connects through MCPWire.</p>
@@ -191,10 +191,10 @@ const guest = `{
     <div class="home-integrations-copy">
       <h2 id="integrations-title">Works with any<br /> stdio MCP server</h2>
       <p>Wrap the databases, browsers, and internal tools you already run locally—no SDK changes required.</p>
-      <a href="/teleport">Browse all {servers.length} server guides <span aria-hidden="true">→</span></a>
+      <a href="/teleport/">Browse all {servers.length} server guides <span aria-hidden="true">→</span></a>
     </div>
     {integrations.map((server) => (
-      <a class="home-integration" href={`/teleport/${server.slug}`} aria-label={`${server.name} server guide`} data-tooltip={server.name}>
+      <a class="home-integration" href={`/teleport/${server.slug}/`} aria-label={`${server.name} server guide`} data-tooltip={server.name}>
         <img src={`/icons/${server.icon}.svg`} alt="" width="38" height="38" loading="lazy" />
       </a>
     ))}
@@ -243,7 +243,7 @@ const guest = `{
           <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="faq-answer">
-          <p>Yes. Add <code>--confirm</code> to approve tool calls in your terminal. You can allow or deny a call, or approve that tool for the rest of the session. Add <code>--record session.wirelog</code> to save a local audit trail for the <a href="/replay">session replay viewer</a>.</p>
+          <p>Yes. Add <code>--confirm</code> to approve tool calls in your terminal. You can allow or deny a call, or approve that tool for the rest of the session. Add <code>--record session.wirelog</code> to save a local audit trail for the <a href="/replay/">session replay viewer</a>.</p>
         </div>
       </details>
 
@@ -261,7 +261,7 @@ const guest = `{
 
   <section class="home-docs home-width" aria-labelledby="docs-title">
     <div><h2 id="docs-title">Connect your own tools</h2><p>Server setup, access policies, and the full CLI flag reference.</p></div>
-    <a href="/docs">Read the docs <span aria-hidden="true">→</span></a>
+    <a href="/docs/">Read the docs <span aria-hidden="true">→</span></a>
   </section>
 </Base>
 

@@ -25,5 +25,8 @@
       "risk": "safe",
       "note": "Runs SQL inside the reference server’s read-only transaction. Keep database credentials read-only as well."
     }
-  ]
+  ],
+  "seo": {
+    "description": "Set up the PostgreSQL MCP server with MCPWire. Share the query tool, use restricted database credentials, and connect a teammate’s MCP client."
+  }
 }

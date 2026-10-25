@@ -4,4 +4,5 @@ dist/
 .DS_Store
 *.wirelog
 npm-debug.log*
+.pnpm-debug.log*
 .wrangler/
