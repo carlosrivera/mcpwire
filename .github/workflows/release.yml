@@ -17,22 +17,13 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
-
-      - name: Upgrade npm
-        run: npm install -g npm@latest
-
-      - name: Inspect Decoded OIDC Token Claims
-        run: |
-          RESPONSE=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=https://registry.npmjs.org")
-          JWT=$(echo "$RESPONSE" | jq -r .value)
-          echo "=== Decoded GitHub OIDC Claims ==="
-          echo "$JWT" | cut -d '.' -f 2 | tr '_-' '/+' | base64 -d 2>/dev/null | jq '{aud, iss, repository, repository_owner, job_workflow_ref, ref, workflow}' || true
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm --prefix cli ci
@@ -46,4 +37,4 @@ jobs:
       - name: Publish @mcpwire/cli
         run: |
           cd cli
-          npm publish --access public --registry=https://registry.npmjs.org/
+          npm publish --access public
