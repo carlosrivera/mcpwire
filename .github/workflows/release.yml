@@ -23,7 +23,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm --prefix cli ci
@@ -36,5 +35,9 @@ jobs:
 
       - name: Publish @mcpwire/cli
         run: |
+          rm -f "$NPM_CONFIG_USERCONFIG"
+          rm -f ~/.npmrc
           cd cli
           npm publish --access public
+        env:
+          NPM_CONFIG_USERCONFIG: ""
