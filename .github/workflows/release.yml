@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: npm --prefix cli ci
 
+      - name: Build CLI
+        run: npm --prefix cli run build
+
       - name: Run CLI tests
         run: npm --prefix cli test
 
