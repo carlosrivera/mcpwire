@@ -23,10 +23,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Upgrade npm to latest
-        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: npm --prefix cli ci
@@ -40,4 +36,4 @@ jobs:
       - name: Publish @mcpwire/cli
         run: |
           cd cli
-          npm publish --access public
+          npm publish --provenance --access public
