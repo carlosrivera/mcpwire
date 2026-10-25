@@ -1,5 +1,7 @@
 // Real SDK client -> CLI join -> Noise/DHT -> CLI share -> real MCP server.
 import assert from 'node:assert/strict';
+import { readEntries } from '../../catalog/load.mjs';
+import { resolveLaunch } from '../../catalog/normalize.mjs';
 import { spawn } from 'node:child_process';
 import { mkdtempSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -13,7 +15,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const cli = path.join(root, 'dist/index.js');
-const filesystem = fileURLToPath(import.meta.resolve('@modelcontextprotocol/server-filesystem/dist/index.js'));
+const entries = readEntries();
 const work = mkdtempSync(path.join(tmpdir(), 'mcpwire-e2e-'));
 const socket = createSocket('udp4');
 socket.bind(0, '127.0.0.1');
@@ -37,8 +39,10 @@ async function runSession(kind, iteration) {
   const isSqlite = kind === 'sqlite';
   const limited = kind === 'limited';
   const missing = kind === 'missing';
-  const allow = isSqlite ? 'read_query,list_tables,describe_table' : 'read_file,list_directory';
-  const command = missing ? ['mcpwire-nonexistent-test-command'] : isSqlite ? ['uvx', '--with', 'mcp<2', 'mcp-server-sqlite', '--db-path', path.join(folder, 'app.db')] : [process.execPath, filesystem, folder];
+  const entry = entries.find(entry => entry.folder === (isSqlite ? 'sqlite' : 'filesystem'));
+  const allow = entry.policy.defaults.allow.join(',');
+  const launch = resolveLaunch(entry.server, entry.policy, isSqlite ? {database:path.join(folder, 'app.db')} : {directory:folder});
+  const command = missing ? ['mcpwire-nonexistent-test-command'] : [launch.command, ...launch.args];
   // stderr is deliberately consumed without logging: logging can hide the LAN race.
   const host = spawn(process.execPath, [cli, 'share', '--allow', allow, '--redact-secrets', '--ttl', '60s', ...(limited ? ['--max-calls', '1'] : []), '--record', record, '--', ...command], { env, stdio: ['ignore', 'pipe', 'pipe'] });
   let hostLog = '';

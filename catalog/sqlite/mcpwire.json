@@ -1,0 +1,56 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "sqlite",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/sqlite.svg",
+  "tagline": "Share selected SQLite tools with response redaction and a session expiry.",
+  "requirements": "Install uv (which provides uvx). Choose a local database path; the server creates the file if it does not exist. This is the archived reference server. The command constrains the MCP Python SDK to v1 because the archived server is incompatible with v2.",
+  "inputs": {
+    "database": {
+      "example": "./app.db"
+    }
+  },
+  "defaults": {
+    "allow": [
+      "read_query",
+      "list_tables",
+      "describe_table"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "read_query",
+      "risk": "safe",
+      "note": "Accepts a query string. MCPWire filters the tool name, not the SQL; enforce read-only access in the database/server."
+    },
+    {
+      "name": "list_tables",
+      "risk": "safe",
+      "note": "Lists table names and schemas."
+    },
+    {
+      "name": "describe_table",
+      "risk": "safe",
+      "note": "Column details for one table."
+    },
+    {
+      "name": "write_query",
+      "risk": "high",
+      "note": "INSERT / UPDATE / DELETE against your file."
+    },
+    {
+      "name": "create_table",
+      "risk": "high",
+      "note": "Schema mutation."
+    },
+    {
+      "name": "append_insight",
+      "risk": "caution",
+      "note": "Writes to an in-memory insight log."
+    }
+  ]
+}

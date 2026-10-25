@@ -1,13 +1,14 @@
+import { loadCatalog } from '../../catalog/load.mjs';
 // Initialize published examples and validate selected allowlist names, without
 // making calls to credential-backed services. Requires uvx for Python servers.
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-const servers = JSON.parse(readFileSync(new URL('../../web/src/data/servers.json', import.meta.url)));
+const servers = loadCatalog();
 const folder = mkdtempSync(path.join(tmpdir(), 'mcpwire-git-example-'));
 execFileSync('git', ['init', '-q', folder]);
 const configs = [
@@ -33,7 +34,7 @@ try {
       await Promise.race([client.connect(transport), new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`${slug}: initialization timed out`)), 45000); })]);
       const response = await client.listTools();
       const actual = new Set(response.tools.map((tool) => tool.name));
-      for (const tool of servers.find((server) => server.slug === slug).tools.filter((tool) => tool.risk === 'safe')) {
+      for (const tool of servers.find((server) => server.slug === slug).tools.filter((tool) => servers.find((server) => server.slug === slug).defaults.allow.includes(tool.name))) {
         assert(actual.has(tool.name), `${slug}: allowlisted tool ${tool.name} does not exist`);
       }
       console.log(`PASS ${slug}: MCP initialization and guide allowlist verified`);

@@ -1,12 +1,19 @@
 {
   "name": "mcpwire-monorepo",
   "private": true,
-  "description": "⚡ MCPWire — P2P Tool Teleportation for AI Agents. Share the capability, never the credentials.",
+  "description": "\u26a1 MCPWire \u2014 P2P Tool Teleportation for AI Agents. Share the capability, never the credentials.",
   "scripts": {
     "build:cli": "npm --prefix cli run build",
     "test:cli": "npm --prefix cli test",
     "build:web": "npm --prefix web run build",
     "dev:web": "npm --prefix web run dev",
-    "deploy:web": "npm --prefix web run build && cd web && npx wrangler pages deploy dist --project-name=mcpwire --commit-dirty=true"
+    "deploy:web": "npm --prefix web run build",
+    "check:catalog": "node scripts/check-catalog.mjs",
+    "test:catalog": "node scripts/test-catalog.mjs",
+    "test:catalog:integration": "npm run build:cli && node scripts/test-catalog-integration.mjs"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
   }
 }

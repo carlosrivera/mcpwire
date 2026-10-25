@@ -1,0 +1,44 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.modelcontextprotocol/sqlite",
+  "title": "SQLite",
+  "description": "Archived stdio MCP server for SQLite databases.",
+  "version": "2025.4.25",
+  "repository": {
+    "url": "https://github.com/modelcontextprotocol/servers-archived",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sqlite",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "mcp-server-sqlite",
+      "version": "2025.4.25",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "runtimeArguments": [
+        {
+          "type": "named",
+          "name": "--with",
+          "value": "mcp<2"
+        }
+      ],
+      "packageArguments": [
+        {
+          "type": "named",
+          "name": "--db-path",
+          "value": "{database}",
+          "variables": {
+            "database": {
+              "description": "Host SQLite database file",
+              "format": "filepath",
+              "isRequired": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

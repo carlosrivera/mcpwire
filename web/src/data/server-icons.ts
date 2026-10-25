@@ -6,4 +6,4 @@ const icons: Record<string, string> = {
   time:'clock', everything:'blocks', notion:'notion', figma:'figma', mongodb:'mongodb',
   netlify:'netlify', redis:'redis',
 };
-export const serverIcon = (slug: string) => `/icons/${icons[slug] || 'mcp'}.svg`;
+export const serverIcon = (slug: string, catalogIcon?: string) => catalogIcon || `/icons/${icons[slug] || 'mcp'}.svg`;

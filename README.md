@@ -21,7 +21,7 @@ MCPWire teleports a local [MCP](https://modelcontextprotocol.io) server (Postgre
 | Path | What it is |
 |---|---|
 | [`cli/`](./cli) | The `mcpwire` npm package (TypeScript + hyperswarm). This is the product. |
-| [`web/`](./web) | [mcpwire.co](https://mcpwire.co) — static Astro site (builder, SEO pages, wirelog replay). Deploys to Cloudflare Pages. |
+| [`web/`](./web) | [mcpwire.co](https://mcpwire.co) — static Astro site (builder, SEO pages, wirelog replay). Deploys to GitHub Pages via GitHub Actions. |
 
 ## Quick start
 
@@ -95,8 +95,8 @@ cd web && npm install && npm run dev       # http://localhost:4321
 cd web && npm run build                    # -> dist/ (29 static pages)
 npm run check:servers                      # check all example packages against npm/PyPI
 
-# Deploy web to Cloudflare Pages
-cd web && npx wrangler pages deploy dist --project-name=mcpwire
+# Deploy web: push to main triggers GitHub Pages deployment via GitHub Actions
+git push origin main
 ```
 
 The test suite covers: scrubbing (keys/JWT/email/cards + Luhn false-positive guard), firewall allow/deny semantics, duration parsing, and an end-to-end session through the **real** tunnel code path (`share` firewall + DLP + recorder over a duplex pair against a fake MCP server), plus a full P2P test through hyperswarm when the DHT is reachable.
@@ -120,3 +120,9 @@ An explicit empty `--allow ""` exposes no tools. Omitting `--allow` still permit
 `npx mcpwire` remains a placeholder package name for this checkout; use `node cli/dist/index.js` for local testing until the intended npm package is published.
 
 To exercise public DHT discovery with the real filesystem server, run `MCPWIRE_E2E_RUNS=1 node cli/test/e2e-real.mjs --public` from the repository root. This tests the public discovery path from one host; a two-machine NAT traversal test is still a separate check.
+
+## Contributing server definitions
+
+Filesystem and SQLite now live in the shared `catalog/`. Their pinned launch commands, explicit tool defaults, and metadata drive both server guides and the command builder. The remaining entries use a compatibility adapter during migration.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the format, schemas, local checks, and reviewed runtime verification. Run `npm ci` at the repository root before building the website to install catalog validation dependencies.

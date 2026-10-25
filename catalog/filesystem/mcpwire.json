@@ -1,0 +1,80 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "filesystem",
+  "category": "Files",
+  "source": "official",
+  "icon": "/icons/folder.svg",
+  "tagline": "Let a remote agent read your codebase \u2014 without write_file, edit_file or move_file.",
+  "requirements": "Node.js 18 or newer. Replace the example folder with a host directory you intend to expose. The server runs with the host process\u2019s permissions; MCPWire does not sandbox it.",
+  "inputs": {
+    "directory": {
+      "example": "."
+    }
+  },
+  "defaults": {
+    "allow": [
+      "read_file",
+      "list_directory"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "read_file",
+      "risk": "safe",
+      "note": "Reads one file."
+    },
+    {
+      "name": "read_multiple_files",
+      "risk": "safe",
+      "note": "Batch read."
+    },
+    {
+      "name": "list_directory",
+      "risk": "safe",
+      "note": "Lists one directory."
+    },
+    {
+      "name": "directory_tree",
+      "risk": "safe",
+      "note": "Recursive tree listing."
+    },
+    {
+      "name": "search_files",
+      "risk": "safe",
+      "note": "Filename search."
+    },
+    {
+      "name": "get_file_info",
+      "risk": "safe",
+      "note": "Stat metadata."
+    },
+    {
+      "name": "list_allowed_directories",
+      "risk": "safe",
+      "note": "Shows the configured allowed directories."
+    },
+    {
+      "name": "write_file",
+      "risk": "high",
+      "note": "Creates/overwrites files on YOUR disk."
+    },
+    {
+      "name": "edit_file",
+      "risk": "high",
+      "note": "In-place edits."
+    },
+    {
+      "name": "create_directory",
+      "risk": "high",
+      "note": "mkdir on your machine."
+    },
+    {
+      "name": "move_file",
+      "risk": "high",
+      "note": "Moves/renames files."
+    }
+  ]
+}

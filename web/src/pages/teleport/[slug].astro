@@ -1,21 +1,22 @@
 ---
 import Base from '../../layouts/Base.astro';
-import LeadCapture from '../../components/LeadCapture.astro';
 import CopyButton from '../../components/CopyButton.astro';
 import { Code } from 'astro:components';
-import servers from '../../data/servers.json';
+import servers from '../../data/servers';
 import { serverIcon } from '../../data/server-icons';
 export function getStaticPaths() {
   return servers.map((server) => ({ params:{slug:server.slug}, props:{server} }));
 }
 const s = Astro.props.server;
-const defaults = s.tools.filter((tool) => tool.risk === 'safe');
-const caution = s.tools.filter((tool) => tool.risk === 'caution');
-const high = s.tools.filter((tool) => tool.risk === 'high');
-const shareCmd = ['npx -y mcpwire share',`--allow "${defaults.map((tool) => tool.name).join(',')}"`,'--redact-secrets --ttl 30m',`-- ${s.command}`].join(' \\\n  ');
+const defaults = s.tools.filter((tool) => s.defaults.allow.includes(tool.name));
+const guides = import.meta.glob('../../../../catalog/*/guide.md', {eager:true});
+const Guide = (guides[`../../../../catalog/${s.slug}/guide.md`] as {Content?: any} | undefined)?.Content;
+const caution = s.tools.filter((tool) => !s.defaults.allow.includes(tool.name) && tool.risk !== 'high');
+const high = s.tools.filter((tool) => !s.defaults.allow.includes(tool.name) && tool.risk === 'high');
+const shareCmd = ['npx -y mcpwire share',`--allow "${defaults.map((tool) => tool.name).join(',')}"`,`${s.defaults.redactSecrets ? '--redact-secrets ' : ''}--ttl ${s.defaults.ttl}`,`-- ${s.command}`].join(' \\\n  ');
 const guestJson = JSON.stringify({mcpServers:{[`teleported-${s.slug}`]:{command:'npx',args:['-y','mcpwire','join','wire://<TICKET_FROM_HOST_BANNER>']}}},null,2);
 const title = `Share ${s.name} MCP tools — MCPWire`;
-const description = `Set up ${s.name} with MCPWire. Review tool access and copy a sharing command with an explicit allowlist, recognized-secret redaction, and a 30-minute expiry.`;
+const description = `Set up ${s.name} with MCPWire. Review tool access and copy a sharing command with an explicit allowlist, recognized-secret redaction, and a session expiry.`;
 ---
 <Base title={title} description={description}>
   <script type="application/ld+json" set:html={JSON.stringify({'@context':'https://schema.org','@type':'HowTo',name:title,description,tool:[{'@type':'HowToTool',name:'mcpwire'}],step:[{'@type':'HowToStep',name:'Start the host session',text:shareCmd},{'@type':'HowToStep',name:'Share the session ticket privately'},{'@type':'HowToStep',name:'Configure the teammate’s MCP client',text:guestJson}]})} />
@@ -24,14 +25,14 @@ const description = `Set up ${s.name} with MCPWire. Review tool access and copy 
       <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/teleport">Server guides</a><span aria-hidden="true">/</span><span>{s.name}</span></nav>
       <div class="page-head">
         <div class="eyebrow">{s.category} · {s.source} server</div>
-        <div class="guide-title"><img src={serverIcon(s.slug)} alt="" width="46" height="46" /><h1>Share {s.name} tools.</h1></div>
+        <div class="guide-title"><img src={serverIcon(s.slug, s.icon)} alt="" width="46" height="46" /><h1>Share {s.name} tools.</h1></div>
         <p class="page-intro">Run {s.name} on your machine and connect a teammate’s agent to selected tools. Review the access list below before starting your session.</p>
       </div>
       <div class="guide-stats" aria-label="Guide summary">
         <div class="stat"><strong>{defaults.length}</strong><span>Default tools</span></div>
         <div class="stat"><strong>{caution.length}</strong><span>Review first</span></div>
         <div class="stat"><strong>{high.length}</strong><span>Restricted tools</span></div>
-        <div class="stat"><strong>30m</strong><span>Session expiry</span></div>
+        <div class="stat"><strong>{s.defaults.ttl}</strong><span>Session expiry</span></div>
       </div>
       {(s.requirements || s.docs) && <aside class="card prerequisites"><h2>Before you start</h2>{s.requirements && <p>{s.requirements}</p>}{s.docs && <a href={s.docs} target="_blank" rel="noopener noreferrer">Server setup and tool reference <span aria-hidden="true">↗</span></a>}</aside>}
       <div class="guide-columns">
@@ -39,7 +40,7 @@ const description = `Set up ${s.name} with MCPWire. Review tool access and copy 
           <div class="panel">
             <div class="panel-head"><span>On your machine · Terminal</span><CopyButton text={shareCmd} label="Copy host command" /></div>
             <Code code={shareCmd} lang="bash" theme="github-dark-dimmed" />
-            <div class="panel-body"><p class="faint">This command exposes the {defaults.length} default tools, enables pattern-based secret redaction, and ends the session after 30 minutes. Add <code class="inline">--confirm</code> for interactive approvals or <code class="inline">--max-calls 20</code> for a call budget.</p></div>
+            <div class="panel-body"><p class="faint">This command exposes the {defaults.length} default tools, {s.defaults.redactSecrets ? 'enables pattern-based secret redaction, and ' : ''}ends the session after {s.defaults.ttl}. Add <code class="inline">--confirm</code> for interactive approvals or <code class="inline">--max-calls 20</code> for a call budget.</p></div>
           </div>
           <div class="panel">
             <div class="panel-head"><span>On their machine · MCP client</span><CopyButton text={guestJson} label="Copy guest config template" /></div>
@@ -50,10 +51,11 @@ const description = `Set up ${s.name} with MCPWire. Review tool access and copy 
         <div class="panel">
           <div class="panel-head">Tool access · {s.name}</div>
           <div class="table-scroll" role="region" aria-label={`${s.name} tool access`} tabindex="0">
-            <table class="tbl risk-table"><thead><tr><th>Tool</th><th>Access</th><th>Notes</th></tr></thead><tbody>{s.tools.map((tool) => <tr><td><code>{tool.name}</code></td><td><span class:list={['badge',tool.risk === 'safe' ? 'safe' : tool.risk === 'caution' ? 'warn' : 'risk']}>{tool.risk === 'safe' ? 'Default' : tool.risk === 'caution' ? 'Review' : 'Restricted'}</span></td><td class="dim">{tool.note}</td></tr>)}</tbody></table>
+            <table class="tbl risk-table"><thead><tr><th>Tool</th><th>Access</th><th>Notes</th></tr></thead><tbody>{s.tools.map((tool) => <tr><td><code>{tool.name}</code></td><td><span class:list={['badge',s.defaults.allow.includes(tool.name) ? 'safe' : tool.risk === 'high' ? 'risk' : 'warn']}>{s.defaults.allow.includes(tool.name) ? 'Default' : tool.risk === 'high' ? 'Restricted' : 'Review'}</span></td><td class="dim">{tool.note}</td></tr>)}</tbody></table>
           </div>
         </div>
       </div>
+      {Guide && <section class="catalog-guide card"><Guide /></section>}
       <div class="grid cols-3 guide-notes">
         <article class="card"><h2>Keep setup on your machine.</h2><p>Your teammate uses the shared tools through MCPWire. They don’t need to install this server or configure its API keys.</p></article>
         <article class="card"><h2>Review the session.</h2><p>Add <code class="inline">--record session.wirelog</code> to save a local log, then open it in the <a href="/replay">session replay viewer</a>.</p></article>
@@ -65,7 +67,6 @@ const description = `Set up ${s.name} with MCPWire. Review tool access and copy 
         <details><summary>How does the connection work?</summary><p>MCPWire uses the public Hyperswarm DHT for discovery and attempts a Noise-encrypted peer connection. Connectivity depends on both networks; restrictive NAT or firewall rules can prevent a connection.</p></details>
       </div>
       <div class="page-actions"><a class="btn ghost" href="/teleport">← All server guides</a><a class="btn" href="/builder">Open command builder <span aria-hidden="true">→</span></a></div>
-      <div class="guide-contact"><LeadCapture /></div>
     </div>
   </section>
 </Base>
@@ -91,6 +92,13 @@ const description = `Set up ${s.name} with MCPWire. Review tool access and copy 
   .guide-commands .panel-body { padding-top:12px; }
   .panel-body p { margin:0; }
   .risk-table { min-width:500px; }
+  .catalog-guide { margin-top:32px; }
+  .catalog-guide :global(h2) { font-size:24px; }
+  .catalog-guide :global(p) { font-size:16px; margin-bottom:16px; }
+  .catalog-guide :global(p:last-child) { margin-bottom:0; }
+  .catalog-guide :global(a) { color:var(--accent); }
+  .catalog-guide :global(pre) { margin-block:20px; }
+  .catalog-guide :global(code) { overflow-wrap:anywhere; }
   .guide-notes { margin-top:32px; }
   .guide-notes h2 { font-size:20px; }
   .guide-notes a { color:var(--accent); }
@@ -98,7 +106,6 @@ const description = `Set up ${s.name} with MCPWire. Review tool access and copy 
   .guide-faq details { background:var(--surface); border-radius:12px; padding:20px 24px; box-shadow:var(--shadow-sm); }
   .guide-faq summary { cursor:pointer; font-size:16px; font-weight:500; }
   .guide-faq p { color:var(--text-muted); margin:14px 0 0; max-width:850px; }
-  .guide-contact { margin-top:44px; max-width:760px; }
   @media(max-width:1000px) { .guide-columns { grid-template-columns:1fr; } }
   @media(max-width:680px) { .guide-stats { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } .stat { padding:18px; } .guide-title { gap:14px; align-items:flex-start; } .guide-title img { width:36px; height:36px; margin-top:4px; } }
 </style>

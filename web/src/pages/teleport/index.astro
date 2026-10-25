@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import LeadCapture from '../../components/LeadCapture.astro';
-import servers from '../../data/servers.json';
+import servers from '../../data/servers';
 import { serverIcon } from '../../data/server-icons';
 const categories = [...new Set(servers.map((server) => server.category))];
 ---
@@ -18,9 +17,9 @@ const categories = [...new Set(servers.map((server) => server.category))];
           <h2 id={`category-${category.toLowerCase()}`}>{category}</h2>
           <div class="grid cols-3">
             {servers.filter((server) => server.category === category).map((server) => {
-              const defaults = server.tools.filter((tool) => tool.risk === 'safe').length;
+              const defaults = server.defaults.allow.length;
               return <a class="card server-card" href={`/teleport/${server.slug}`}>
-                <div class="server-card-head"><img src={serverIcon(server.slug)} alt="" width="32" height="32" loading="lazy" /><span aria-hidden="true">↗</span></div>
+                <div class="server-card-head"><img src={serverIcon(server.slug, server.icon)} alt="" width="32" height="32" loading="lazy" /><span aria-hidden="true">↗</span></div>
                 <h3>{server.name}</h3>
                 <p>{server.tagline}</p>
                 <div class="server-card-meta"><span>{defaults} default {defaults === 1 ? 'tool' : 'tools'}</span><span>{server.tools.length - defaults} to review</span></div>
@@ -29,7 +28,6 @@ const categories = [...new Set(servers.map((server) => server.category))];
           </div>
         </section>
       ))}
-      <div class="page-contact"><LeadCapture /></div>
     </div>
   </section>
 </Base>
@@ -45,5 +43,4 @@ const categories = [...new Set(servers.map((server) => server.category))];
   .server-card p { margin-bottom:24px; }
   .server-card-meta { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:auto; font-size:14px; color:var(--text-faint); }
   .server-card-meta > span:first-child { color:var(--accent); }
-  .page-contact { margin-top:56px; max-width:760px; }
 </style>

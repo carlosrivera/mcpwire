@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { readEntries, loadCatalog } from '../catalog/load.mjs';
+import { mergeCatalog, resolveLaunch, shellQuote } from '../catalog/normalize.mjs';
+import { validateEntry } from './check-catalog.mjs';
+const entries = readEntries();
+const fs = entries.find(entry => entry.folder === 'filesystem');
+const sqlite = entries.find(entry => entry.folder === 'sqlite');
+assert(fs && sqlite);
+for (const entry of entries) validateEntry(entry);
+const mutate = fn => { const entry = structuredClone(fs); delete entry.directory; fn(entry); return entry; };
+assert.throws(() => validateEntry(mutate(e => e.policy.defaults.allow.push('missing_tool'))), /not declared/);
+assert.throws(() => validateEntry(mutate(e => e.policy.tools.push(e.policy.tools[0]))), /duplicate tool/);
+assert.throws(() => validateEntry(mutate(e => e.policy.defaults.redactSecrets = 'yes')), /must be boolean/);
+assert.throws(() => validateEntry(mutate(e => e.policy.slug = 'another-server')), /folder and slug/);
+assert.throws(() => validateEntry(mutate(e => e.server.packages[0].version = 'latest')), /version/);
+assert.throws(() => validateEntry(mutate(e => e.server.packages[0].transport = {type:'streamable-http',url:'http://localhost:3000/mcp'})), /stdio/);
+assert.throws(() => validateEntry(mutate(e => e.policy.inputs.directory.example = '{unresolved}')), /unresolved/);
+assert.throws(() => validateEntry(mutate(e => e.policy.inputs.unused = {example:'x'})), /unused input/);
+assert.throws(() => validateEntry(mutate(e => e.policy.defaults.ttl = '0s')), /positive/);
+assert.throws(() => mergeCatalog(loadCatalog(), [fs]), /Duplicate server slug/);
+// Adding a low-risk tool cannot grant access implicitly.
+const added = mutate(e => e.policy.tools.push({name:'new_read_tool',risk:'safe',note:'Still not approved by default.'}));
+assert(!validateEntry(added).defaults.allow.includes('new_read_tool'));
+// Displayed shell commands must preserve argument boundaries, including hostile input.
+const directory = "/tmp/a folder/'quoted' $HOME $(echo should-not-run); *";
+const launch = resolveLaunch(fs.server, fs.policy, {directory});
+assert.equal(launch.args.at(-1), directory);
+const literal = shellQuote(directory);
+assert.equal(execFileSync('/bin/sh', ['-c', `printf '%s' ${literal}`], {encoding:'utf8'}), directory);
+assert.equal(resolveLaunch(sqlite.server, sqlite.policy, {database:'/tmp/data space.db'}).args.at(-1), '/tmp/data space.db');
+console.log('PASS catalog regressions: schema failures, policy boundaries, duplicate slugs, version pins, transport support, and shell quoting.');

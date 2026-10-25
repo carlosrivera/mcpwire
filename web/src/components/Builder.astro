@@ -1,11 +1,12 @@
 ---
-import serversRaw from '../data/servers.json';
+import serversRaw from '../data/servers';
 import CopyButton from './CopyButton.astro';
 const servers = (serversRaw as any[]).map((s) => ({
   slug: s.slug,
   name: s.name,
   category: s.category,
   command: s.command,
+  defaults: s.defaults,
   tools: s.tools.map((t: any) => ({ name: t.name, risk: t.risk })),
 }));
 ---
@@ -35,7 +36,7 @@ const servers = (serversRaw as any[]).map((s) => ({
             <div class="lbl-row">
               <span class="lbl">Tools exposed to the peer</span>
               <span class="lbl-actions">
-                <button type="button" class="mini" id="b-safe-only">Safe only</button>
+                <button type="button" class="mini" id="b-safe-only">Default tools</button>
                 <button type="button" class="mini" id="b-all">Allow all</button>
               </span>
             </div>
@@ -88,12 +89,13 @@ const servers = (serversRaw as any[]).map((s) => ({
 </section>
 
 <script>
-  import serversJson from '../data/servers.json';
+  import serversJson from '../data/servers';
 
   const servers: any[] = (serversJson as any[]).map((s) => ({
     slug: s.slug,
     name: s.name,
     command: s.command,
+    defaults: s.defaults,
     tools: s.tools.map((t) => ({ name: t.name, risk: t.risk })),
   }));
 
@@ -122,6 +124,19 @@ const servers = (serversRaw as any[]).map((s) => ({
     return servers.find((s) => s.slug === el.server.value) ?? null;
   }
 
+  function applyDefaults(s: any) {
+    el.cmd.value = s.command;
+    el.redact.checked = s.defaults.redactSecrets;
+    const ttl = s.defaults.ttl;
+    if (![...el.ttl.options].some(option => option.value === ttl)) {
+      const option = document.createElement('option');
+      option.value = ttl;
+      option.textContent = ttl;
+      el.ttl.append(option);
+    }
+    el.ttl.value = ttl;
+  }
+
   function renderTools() {
     const s = current();
     el.tools.innerHTML = '';
@@ -131,7 +146,8 @@ const servers = (serversRaw as any[]).map((s) => ({
       label.className = `tool-chip ${t.risk === 'high' ? 'risky' : ''}`;
       const cb = document.createElement('input');
       cb.type = 'checkbox';
-      cb.checked = t.risk === 'safe';
+      cb.checked = s.defaults.allow.includes(t.name);
+      cb.dataset.default = String(cb.checked);
       cb.dataset.name = t.name;
       cb.dataset.risk = t.risk;
       const name = document.createElement('span');
@@ -204,7 +220,7 @@ const servers = (serversRaw as any[]).map((s) => ({
 
   el.server.addEventListener('change', () => {
     const s = current();
-    if (s) el.cmd.value = s.command;
+    if (s) applyDefaults(s);
     renderTools();
     update();
   });
@@ -214,7 +230,7 @@ const servers = (serversRaw as any[]).map((s) => ({
 
   el.safeOnly.addEventListener('click', () => {
     el.tools.querySelectorAll('input').forEach((i) => {
-      (i as HTMLInputElement).checked = (i as HTMLInputElement).dataset.risk === 'safe';
+      (i as HTMLInputElement).checked = (i as HTMLInputElement).dataset.default === 'true';
     });
     update();
   });
@@ -225,7 +241,7 @@ const servers = (serversRaw as any[]).map((s) => ({
 
   // init
   el.server.value = servers[0].slug;
-  el.cmd.value = servers[0].command;
+  applyDefaults(servers[0]);
   renderTools();
   update();
 </script>

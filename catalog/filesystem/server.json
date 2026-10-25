@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.modelcontextprotocol/filesystem",
+  "title": "Filesystem",
+  "description": "A stdio MCP server for selected local filesystem tools.",
+  "version": "2.0.1",
+  "repository": {
+    "url": "https://github.com/modelcontextprotocol/servers",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@modelcontextprotocol/server-filesystem",
+      "version": "2.0.1",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "valueHint": "directory",
+          "value": "{directory}",
+          "variables": {
+            "directory": {
+              "description": "Host folder to expose",
+              "format": "filepath",
+              "isRequired": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
