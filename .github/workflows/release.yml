@@ -24,6 +24,12 @@ jobs:
         with:
           node-version: 24
 
+      - name: Inspect Environment & OIDC
+        run: |
+          echo "npm version: $(npm -v)"
+          echo "node version: $(node -v)"
+          npm config list
+
       - name: Install dependencies
         run: npm --prefix cli ci
 
@@ -36,4 +42,4 @@ jobs:
       - name: Publish @mcpwire/cli
         run: |
           cd cli
-          npm publish --provenance --access public
+          npm publish --access public --registry=https://registry.npmjs.org/
