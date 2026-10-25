@@ -22,13 +22,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
 
-      - name: Inspect Environment & OIDC
+      - name: Inspect OIDC
         run: |
           echo "npm version: $(npm -v)"
           echo "node version: $(node -v)"
-          npm config list
+          if [ -n "$ACTIONS_ID_TOKEN_REQUEST_URL" ]; then
+            echo "OIDC URL is present"
+          else
+            echo "OIDC URL is MISSING"
+          fi
 
       - name: Install dependencies
         run: npm --prefix cli ci
@@ -42,4 +46,4 @@ jobs:
       - name: Publish @mcpwire/cli
         run: |
           cd cli
-          npm publish --access public --registry=https://registry.npmjs.org/
+          npm publish --access public
