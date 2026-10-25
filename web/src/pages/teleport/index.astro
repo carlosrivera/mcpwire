@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import LeadCapture from '../../components/LeadCapture.astro';
+import servers from '../../data/servers.json';
+import { serverIcon } from '../../data/server-icons';
+const categories = [...new Set(servers.map((server) => server.category))];
+---
+<Base title="Server guides — MCPWire" description="Setup commands, tool access, and session policies for 26 MCP servers.">
+  <section class="section">
+    <div class="wrap">
+      <div class="page-head">
+        <div class="eyebrow">Server guides</div>
+        <h1>Your tools, ready to share.</h1>
+        <p class="page-intro">Setup commands and tool access for {servers.length} MCP servers. Choose a server, review its tools, and start a scoped session from your machine.</p>
+      </div>
+      {categories.map((category) => (
+        <section class="category" aria-labelledby={`category-${category.toLowerCase()}`}>
+          <h2 id={`category-${category.toLowerCase()}`}>{category}</h2>
+          <div class="grid cols-3">
+            {servers.filter((server) => server.category === category).map((server) => {
+              const defaults = server.tools.filter((tool) => tool.risk === 'safe').length;
+              return <a class="card server-card" href={`/teleport/${server.slug}`}>
+                <div class="server-card-head"><img src={serverIcon(server.slug)} alt="" width="32" height="32" loading="lazy" /><span aria-hidden="true">↗</span></div>
+                <h3>{server.name}</h3>
+                <p>{server.tagline}</p>
+                <div class="server-card-meta"><span>{defaults} default {defaults === 1 ? 'tool' : 'tools'}</span><span>{server.tools.length - defaults} to review</span></div>
+              </a>;
+            })}
+          </div>
+        </section>
+      ))}
+      <div class="page-contact"><LeadCapture /></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .category { margin-top:44px; }
+  .category h2 { font-size:24px; margin-bottom:20px; }
+  .server-card { display:flex; flex-direction:column; }
+  .server-card-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+  .server-card-head img { object-fit:contain; }
+  .server-card-head > span { color:var(--text-faint); }
+  .server-card:hover .server-card-head > span { color:var(--accent); }
+  .server-card h3 { font-size:20px; margin-bottom:10px; }
+  .server-card p { margin-bottom:24px; }
+  .server-card-meta { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:auto; font-size:14px; color:var(--text-faint); }
+  .server-card-meta > span:first-child { color:var(--accent); }
+  .page-contact { margin-top:56px; max-width:760px; }
+</style>

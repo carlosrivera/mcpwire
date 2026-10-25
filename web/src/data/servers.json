@@ -1,0 +1,1208 @@
+[
+  {
+    "slug": "postgres",
+    "name": "PostgreSQL",
+    "category": "Database",
+    "source": "official",
+    "package": "@modelcontextprotocol/server-postgres",
+    "command": "npx -y @modelcontextprotocol/server-postgres postgresql://localhost:5432/mydb",
+    "tagline": "Share a local Postgres replica with remote agents without handing over the keys to prod.",
+    "intro": "The archived PostgreSQL reference server exposes one query tool and wraps queries in a read-only transaction. MCPWire filters by tool name; it does not inspect SQL or turn a general SQL tool into a read-only one.",
+    "tools": [
+      {
+        "name": "query",
+        "risk": "safe",
+        "note": "Runs SQL inside the reference server’s read-only transaction. Keep database credentials read-only as well."
+      }
+    ],
+    "requirements": "Provide a working PostgreSQL connection URL. Use database credentials with read-only permissions. This is an archived reference server.",
+    "docs": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres"
+  },
+  {
+    "slug": "sqlite",
+    "name": "SQLite",
+    "category": "Database",
+    "source": "official",
+    "package": "mcp-server-sqlite",
+    "command": "uvx --with 'mcp<2' mcp-server-sqlite --db-path ./app.db",
+    "tagline": "Read-only SQL access to a local SQLite file, P2P encrypted, auto-expiring.",
+    "intro": "The official SQLite MCP server separates read_query from write_query — a perfect fit for MCPWire's layer-7 firewall. Expose the three read tools, block schema mutations, and let a remote agent explore your dataset safely.",
+    "tools": [
+      {
+        "name": "read_query",
+        "risk": "safe",
+        "note": "SELECT-only queries."
+      },
+      {
+        "name": "list_tables",
+        "risk": "safe",
+        "note": "Lists table names and schemas."
+      },
+      {
+        "name": "describe_table",
+        "risk": "safe",
+        "note": "Column details for one table."
+      },
+      {
+        "name": "write_query",
+        "risk": "high",
+        "note": "INSERT / UPDATE / DELETE against your file."
+      },
+      {
+        "name": "create_table",
+        "risk": "high",
+        "note": "Schema mutation."
+      },
+      {
+        "name": "append_insight",
+        "risk": "caution",
+        "note": "Writes to an in-memory insight log."
+      }
+    ],
+    "requirements": "Install uv (which provides uvx). Choose a local database path; the server creates the file if it does not exist. This is the archived reference server. The command constrains the MCP Python SDK to v1 because the archived server is incompatible with v2.",
+    "docs": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sqlite"
+  },
+  {
+    "slug": "filesystem",
+    "name": "Filesystem",
+    "category": "Files",
+    "source": "official",
+    "package": "@modelcontextprotocol/server-filesystem",
+    "command": "npx -y @modelcontextprotocol/server-filesystem .",
+    "tagline": "Let a remote agent read your codebase — without write_file, edit_file or move_file.",
+    "intro": "The official Filesystem MCP server gives an agent full CRUD over a directory tree. With MCPWire you can teleport only the read primitives: an outside LLM can browse and search files, but write_file and edit_file are filtered out of tools/list entirely.",
+    "tools": [
+      {
+        "name": "read_file",
+        "risk": "safe",
+        "note": "Reads one file."
+      },
+      {
+        "name": "read_multiple_files",
+        "risk": "safe",
+        "note": "Batch read."
+      },
+      {
+        "name": "list_directory",
+        "risk": "safe",
+        "note": "Lists one directory."
+      },
+      {
+        "name": "directory_tree",
+        "risk": "safe",
+        "note": "Recursive tree listing."
+      },
+      {
+        "name": "search_files",
+        "risk": "safe",
+        "note": "Filename search."
+      },
+      {
+        "name": "get_file_info",
+        "risk": "safe",
+        "note": "Stat metadata."
+      },
+      {
+        "name": "list_allowed_directories",
+        "risk": "safe",
+        "note": "Shows the sandbox roots."
+      },
+      {
+        "name": "write_file",
+        "risk": "high",
+        "note": "Creates/overwrites files on YOUR disk."
+      },
+      {
+        "name": "edit_file",
+        "risk": "high",
+        "note": "In-place edits."
+      },
+      {
+        "name": "create_directory",
+        "risk": "high",
+        "note": "mkdir on your machine."
+      },
+      {
+        "name": "move_file",
+        "risk": "high",
+        "note": "Moves/renames files."
+      }
+    ],
+    "requirements": "Run from the directory you intend to share, or replace the final dot with an absolute directory path."
+  },
+  {
+    "slug": "github",
+    "name": "GitHub",
+    "category": "DevOps",
+    "source": "official",
+    "package": "@modelcontextprotocol/server-github",
+    "command": "npx -y @modelcontextprotocol/server-github",
+    "tagline": "Share repo research and issue triage — never push_files or fork_repository.",
+    "intro": "The official GitHub MCP server mixes read tools with destructive ones that act on YOUR token: push_files, fork_repository, merge_pull_request. MCPWire's firewall lets a peer's agent search repos and read issues while every write path stays invisible.",
+    "tools": [
+      {
+        "name": "search_repositories",
+        "risk": "safe",
+        "note": "Repo search."
+      },
+      {
+        "name": "get_file_contents",
+        "risk": "safe",
+        "note": "Reads files/dirs from a repo."
+      },
+      {
+        "name": "get_pull_request",
+        "risk": "safe",
+        "note": "PR details."
+      },
+      {
+        "name": "list_issues",
+        "risk": "safe",
+        "note": "Issue listing."
+      },
+      {
+        "name": "list_commits",
+        "risk": "safe",
+        "note": "Commit history."
+      },
+      {
+        "name": "create_issue",
+        "risk": "high",
+        "note": "Writes to your repos."
+      },
+      {
+        "name": "add_comment_to_issue",
+        "risk": "high",
+        "note": "Posts as your identity."
+      },
+      {
+        "name": "create_pull_request",
+        "risk": "high",
+        "note": "Opens PRs."
+      },
+      {
+        "name": "merge_pull_request",
+        "risk": "high",
+        "note": "Merges code."
+      },
+      {
+        "name": "fork_repository",
+        "risk": "high",
+        "note": "Forks under your account."
+      },
+      {
+        "name": "push_files",
+        "risk": "high",
+        "note": "Commits directly to branches."
+      },
+      {
+        "name": "create_branch",
+        "risk": "high",
+        "note": "Branch mutation."
+      }
+    ],
+    "docs": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/github",
+    "requirements": "Set GITHUB_PERSONAL_ACCESS_TOKEN in the host environment. This is the archived reference server."
+  },
+  {
+    "slug": "git",
+    "name": "Git",
+    "category": "DevOps",
+    "source": "official",
+    "package": "mcp-server-git",
+    "command": "uvx mcp-server-git --repository .",
+    "tagline": "Remote code review over P2P: git_log and git_diff in, git_commit and git_reset out.",
+    "intro": "The official Git MCP server operates on a local working copy. Teleport the inspection tools and an outside agent can review your uncommitted work end-to-end — while add/commit/reset never leave your machine.",
+    "tools": [
+      {
+        "name": "git_status",
+        "risk": "safe",
+        "note": "Working tree status."
+      },
+      {
+        "name": "git_log",
+        "risk": "safe",
+        "note": "Commit history."
+      },
+      {
+        "name": "git_diff_unstaged",
+        "risk": "safe",
+        "note": "Diff of unstaged changes."
+      },
+      {
+        "name": "git_diff_staged",
+        "risk": "safe",
+        "note": "Diff of staged changes."
+      },
+      {
+        "name": "git_diff",
+        "risk": "safe",
+        "note": "Diff between refs."
+      },
+      {
+        "name": "git_show",
+        "risk": "safe",
+        "note": "Shows a commit."
+      },
+      {
+        "name": "git_add",
+        "risk": "high",
+        "note": "Stages files."
+      },
+      {
+        "name": "git_commit",
+        "risk": "high",
+        "note": "Creates commits."
+      },
+      {
+        "name": "git_reset",
+        "risk": "high",
+        "note": "Unstages/resets state."
+      },
+      {
+        "name": "git_create_branch",
+        "risk": "caution",
+        "note": "Branch creation."
+      },
+      {
+        "name": "git_checkout",
+        "risk": "caution",
+        "note": "Switches branches."
+      }
+    ],
+    "requirements": "Install uv (which provides uvx). Point --repository at an existing Git checkout.",
+    "docs": "https://github.com/modelcontextprotocol/servers/tree/main/src/git"
+  },
+  {
+    "slug": "brave-search",
+    "name": "Brave Search",
+    "category": "Web",
+    "source": "official",
+    "package": "@modelcontextprotocol/server-brave-search",
+    "command": "npx -y @modelcontextprotocol/server-brave-search",
+    "tagline": "Lend your Brave API quota to a teammate's agent — key never leaves your machine.",
+    "intro": "The official Brave Search MCP server needs a BRAVE_API_KEY the remote peer doesn't have. Teleport the capability instead: their LLM searches the web through your tunnel, your credential stays in your env, and the DLP shield scrubs any key that leaks into output.",
+    "tools": [
+      {
+        "name": "brave_web_search",
+        "risk": "safe",
+        "note": "Web search (consumes your quota)."
+      },
+      {
+        "name": "brave_local_search",
+        "risk": "safe",
+        "note": "POI / local search."
+      }
+    ],
+    "docs": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/brave-search",
+    "requirements": "Set BRAVE_API_KEY in the host environment. This is the archived reference server."
+  },
+  {
+    "slug": "fetch",
+    "name": "Fetch",
+    "category": "Web",
+    "source": "official",
+    "package": "mcp-server-fetch",
+    "command": "uvx mcp-server-fetch",
+    "tagline": "Give an agent URL fetching from your network position — rate-limited by your kill-switch.",
+    "intro": "The official Fetch server turns an LLM into a curl with markdown conversion. Shared raw it lets a peer's agent request anything your machine can reach (including localhost). Use --max-calls and --ttl to keep it on a short leash.",
+    "tools": [
+      {
+        "name": "fetch",
+        "risk": "caution",
+        "note": "GETs any URL reachable from YOUR machine, including internal hosts."
+      }
+    ],
+    "requirements": "Install uv (which provides uvx). Requests need network access.",
+    "docs": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch"
+  },
+  {
+    "slug": "puppeteer",
+    "name": "Puppeteer",
+    "category": "Browser",
+    "source": "official",
+    "package": "@modelcontextprotocol/server-puppeteer",
+    "command": "npx -y @modelcontextprotocol/server-puppeteer",
+    "tagline": "Drive a headless Chrome on your machine from a remote agent, safely sandboxed.",
+    "intro": "The official Puppeteer server runs a real browser on the host. Teleport it when a teammate's agent needs to render or screenshot a page that only your machine can reach — puppeteer_evaluate is the tool to think twice about, since it executes arbitrary JS in page context.",
+    "tools": [
+      {
+        "name": "puppeteer_navigate",
+        "risk": "caution",
+        "note": "Opens URLs in your browser."
+      },
+      {
+        "name": "puppeteer_screenshot",
+        "risk": "safe",
+        "note": "Captures the page."
+      },
+      {
+        "name": "puppeteer_click",
+        "risk": "caution",
+        "note": "Clicks elements."
+      },
+      {
+        "name": "puppeteer_fill",
+        "risk": "caution",
+        "note": "Fills inputs — could type into logged-in sessions."
+      },
+      {
+        "name": "puppeteer_select",
+        "risk": "caution",
+        "note": "Selects options."
+      },
+      {
+        "name": "puppeteer_hover",
+        "risk": "caution",
+        "note": "Hovers elements."
+      },
+      {
+        "name": "puppeteer_evaluate",
+        "risk": "high",
+        "note": "Arbitrary JavaScript in page context."
+      },
+      {
+        "name": "puppeteer_resize",
+        "risk": "safe",
+        "note": "Viewport size."
+      },
+      {
+        "name": "puppeteer_close",
+        "risk": "safe",
+        "note": "Closes the page."
+      }
+    ],
+    "docs": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/puppeteer",
+    "requirements": "Requires a supported browser installation. This is the archived reference server."
+  },
+  {
+    "slug": "playwright",
+    "name": "Playwright",
+    "category": "Browser",
+    "source": "official",
+    "package": "@playwright/mcp",
+    "command": "npx -y @playwright/mcp",
+    "tagline": "Accessibility-tree browser automation, teleported with a call ceiling.",
+    "intro": "Microsoft's Playwright MCP drives a browser via accessibility snapshots instead of screenshots. Sharing it over MCPWire gives a remote agent a real browser on your machine — pair --confirm with browser_click and browser_type so nothing happens without your y/n.",
+    "tools": [
+      {
+        "name": "browser_navigate",
+        "risk": "caution",
+        "note": "Opens URLs on your machine."
+      },
+      {
+        "name": "browser_snapshot",
+        "risk": "safe",
+        "note": "Accessibility tree capture."
+      },
+      {
+        "name": "browser_screenshot",
+        "risk": "safe",
+        "note": "Screenshot capture."
+      },
+      {
+        "name": "browser_click",
+        "risk": "caution",
+        "note": "Clicks page elements."
+      },
+      {
+        "name": "browser_type",
+        "risk": "caution",
+        "note": "Types into fields — could type credentials."
+      },
+      {
+        "name": "browser_fill_form",
+        "risk": "caution",
+        "note": "Batch form filling."
+      },
+      {
+        "name": "browser_press_key",
+        "risk": "caution",
+        "note": "Key events."
+      },
+      {
+        "name": "browser_evaluate",
+        "risk": "high",
+        "note": "Runs arbitrary JS in the page."
+      },
+      {
+        "name": "browser_console_messages",
+        "risk": "safe",
+        "note": "Reads console output."
+      },
+      {
+        "name": "browser_close",
+        "risk": "safe",
+        "note": "Closes the page."
+      }
+    ]
+  },
+  {
+    "slug": "memory",
+    "name": "Memory (Knowledge Graph)",
+    "category": "Knowledge",
+    "source": "official",
+    "package": "@modelcontextprotocol/server-memory",
+    "command": "npx -y @modelcontextprotocol/server-memory",
+    "tagline": "Share a knowledge graph read-only — or let trusted agents write to theirs.",
+    "intro": "The official Memory server persists an entity/relation graph in a JSON file. Teleport the read tools to let any agent ground its answers in your graph, and gate the mutating tools behind --confirm.",
+    "tools": [
+      {
+        "name": "read_graph",
+        "risk": "safe",
+        "note": "Full graph dump."
+      },
+      {
+        "name": "search_nodes",
+        "risk": "safe",
+        "note": "Fuzzy node search."
+      },
+      {
+        "name": "open_nodes",
+        "risk": "safe",
+        "note": "Reads specific nodes."
+      },
+      {
+        "name": "create_entities",
+        "risk": "caution",
+        "note": "Writes to the graph."
+      },
+      {
+        "name": "create_relations",
+        "risk": "caution",
+        "note": "Writes relations."
+      },
+      {
+        "name": "add_observations",
+        "risk": "caution",
+        "note": "Appends observations."
+      },
+      {
+        "name": "delete_entities",
+        "risk": "high",
+        "note": "Destroys graph data."
+      },
+      {
+        "name": "delete_observations",
+        "risk": "high",
+        "note": "Destroys observations."
+      },
+      {
+        "name": "delete_relations",
+        "risk": "high",
+        "note": "Destroys relations."
+      }
+    ]
+  },
+  {
+    "slug": "sequential-thinking",
+    "name": "Sequential Thinking",
+    "category": "Knowledge",
+    "source": "official",
+    "package": "@modelcontextprotocol/server-sequential-thinking",
+    "command": "npx -y @modelcontextprotocol/server-sequential-thinking",
+    "tagline": "The zero-risk demo: one stateless reasoning tool, perfect first teleport.",
+    "intro": "The reference sequential thinking server maintains a reasoning scratchpad for each server process. Share its single tool to try the connection without cloud credentials.",
+    "tools": [
+      {
+        "name": "sequentialthinking",
+        "risk": "safe",
+        "note": "Stateless chain-of-thought scratchpad."
+      }
+    ],
+    "docs": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking"
+  },
+  {
+    "slug": "slack",
+    "name": "Slack",
+    "category": "Comms",
+    "source": "official",
+    "package": "@modelcontextprotocol/server-slack",
+    "command": "npx -y @modelcontextprotocol/server-slack",
+    "tagline": "Remote agents read your Slack history; posting stays behind your y/n.",
+    "intro": "The official Slack server authenticates with YOUR bot token. Teleport the listing/search tools so a teammate's agent can research threads, and put slack_post_message behind Human-in-the-Loop confirmation so nothing ships to a channel without you.",
+    "tools": [
+      {
+        "name": "slack_list_channels",
+        "risk": "safe",
+        "note": "Channel index."
+      },
+      {
+        "name": "slack_get_channel_history",
+        "risk": "safe",
+        "note": "Thread/message history."
+      },
+      {
+        "name": "slack_get_users",
+        "risk": "caution",
+        "note": "Member directory (PII — keep DLP on)."
+      },
+      {
+        "name": "slack_search_messages",
+        "risk": "safe",
+        "note": "Message search."
+      },
+      {
+        "name": "slack_post_message",
+        "risk": "high",
+        "note": "Posts to channels as your bot."
+      },
+      {
+        "name": "slack_reply_to_thread",
+        "risk": "high",
+        "note": "Replies as your bot."
+      }
+    ],
+    "docs": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/slack",
+    "requirements": "Set SLACK_BOT_TOKEN and SLACK_TEAM_ID in the host environment. This is the archived reference server."
+  },
+  {
+    "slug": "docker",
+    "name": "Docker",
+    "category": "Infra",
+    "source": "community",
+    "package": "mcp-server-docker",
+    "command": "uvx mcp-server-docker",
+    "tagline": "Inspect containers and images from a remote machine; no run/stop teleported.",
+    "intro": "This community Docker MCP server operates on the host Docker daemon. Expose container and image inspection tools while blocking container and image mutation.",
+    "tools": [
+      {
+        "name": "list_containers",
+        "risk": "safe",
+        "note": "Lists containers."
+      },
+      {
+        "name": "list_images",
+        "risk": "safe",
+        "note": "Lists images."
+      },
+      {
+        "name": "list_networks",
+        "risk": "safe",
+        "note": "Lists networks."
+      },
+      {
+        "name": "list_volumes",
+        "risk": "safe",
+        "note": "Lists volumes."
+      },
+      {
+        "name": "fetch_container_logs",
+        "risk": "caution",
+        "note": "Logs can contain secrets."
+      },
+      {
+        "name": "run_container",
+        "risk": "high",
+        "note": "Runs containers."
+      },
+      {
+        "name": "stop_container",
+        "risk": "high",
+        "note": "Stops containers."
+      },
+      {
+        "name": "remove_container",
+        "risk": "high",
+        "note": "Deletes containers."
+      },
+      {
+        "name": "remove_image",
+        "risk": "high",
+        "note": "Deletes images."
+      }
+    ],
+    "requirements": "Install uv (uvx) and run a Docker daemon accessible to the host. The server uses the Docker SDK environment configuration.",
+    "docs": "https://github.com/ckreiling/mcp-server-docker"
+  },
+  {
+    "slug": "kubernetes",
+    "name": "Kubernetes",
+    "category": "Infra",
+    "source": "community",
+    "package": "mcp-server-kubernetes",
+    "command": "npx -y mcp-server-kubernetes",
+    "tagline": "Debug a cluster from a teammate's terminal — scale and delete stay with you.",
+    "intro": "Kubernetes MCP servers act on your kubeconfig: listing pods is diagnostics, scaling a deployment is an incident. MCPWire's firewall splits the two cleanly, and --ttl makes the access window explicit.",
+    "tools": [
+      {
+        "name": "kubectl_get",
+        "risk": "safe",
+        "note": "Reads Kubernetes resource state; use least-privilege kubeconfig credentials."
+      },
+      {
+        "name": "kubectl_describe",
+        "risk": "safe",
+        "note": "Describes a resource."
+      },
+      {
+        "name": "list_api_resources",
+        "risk": "safe",
+        "note": "Lists resource kinds."
+      },
+      {
+        "name": "kubectl_logs",
+        "risk": "caution",
+        "note": "Reads application logs, which may contain secrets."
+      },
+      {
+        "name": "kubectl_create",
+        "risk": "high",
+        "note": "Creates resources."
+      },
+      {
+        "name": "kubectl_apply",
+        "risk": "high",
+        "note": "Applies manifests."
+      },
+      {
+        "name": "kubectl_delete",
+        "risk": "high",
+        "note": "Deletes resources."
+      },
+      {
+        "name": "kubectl_scale",
+        "risk": "high",
+        "note": "Changes replicas."
+      },
+      {
+        "name": "kubectl_generic",
+        "risk": "high",
+        "note": "Runs general kubectl commands."
+      }
+    ],
+    "requirements": "Install kubectl and configure a kubeconfig with access to your cluster. Helm is optional.",
+    "docs": "https://github.com/Flux159/mcp-server-kubernetes"
+  },
+  {
+    "slug": "stripe",
+    "name": "Stripe",
+    "category": "Business",
+    "source": "official",
+    "package": "@stripe/mcp",
+    "command": "npx -y @stripe/mcp",
+    "tagline": "Revenue research for remote agents — refunds and customer creation stay local.",
+    "intro": "Stripe's agent toolkit speaks directly to your billing account with a secret key. Never paste that key into a teammate's config: teleport the read-only tools over MCPWire and the credential physically never leaves your machine.",
+    "tools": [
+      {
+        "name": "list_customers",
+        "risk": "caution",
+        "note": "Customer records contain PII — keep DLP on."
+      },
+      {
+        "name": "list_products",
+        "risk": "safe",
+        "note": "Product catalog."
+      },
+      {
+        "name": "list_prices",
+        "risk": "safe",
+        "note": "Price catalog."
+      },
+      {
+        "name": "list_invoices",
+        "risk": "caution",
+        "note": "Invoice history."
+      },
+      {
+        "name": "list_balance_transactions",
+        "risk": "caution",
+        "note": "Financial ledger."
+      },
+      {
+        "name": "create_customer",
+        "risk": "high",
+        "note": "Mutates billing data."
+      },
+      {
+        "name": "create_product",
+        "risk": "high",
+        "note": "Mutates catalog."
+      },
+      {
+        "name": "create_payment_link",
+        "risk": "high",
+        "note": "Creates live payment links."
+      },
+      {
+        "name": "create_refund",
+        "risk": "high",
+        "note": "Moves money. Never teleport this."
+      }
+    ],
+    "requirements": "Set STRIPE_SECRET_KEY in the host environment. Use a restricted API key with only the permissions you intend to share.",
+    "docs": "https://github.com/stripe/ai/tree/main/tools/modelcontextprotocol"
+  },
+  {
+    "slug": "sentry",
+    "name": "Sentry",
+    "category": "Observability",
+    "source": "official",
+    "package": "@sentry/mcp-server",
+    "command": "npx -y @sentry/mcp-server",
+    "tagline": "Issue triage for on-call buddies — read-only by construction.",
+    "intro": "Sentry's MCP server is designed around read-heavy issue triage, which makes it an ideal teleport target: a teammate helping you debug gets stack traces and tags through the tunnel, and the DLP shield scrubs tokens that appear in event payloads.",
+    "tools": [
+      {
+        "name": "find_organizations",
+        "risk": "safe",
+        "note": "Lists accessible organizations."
+      },
+      {
+        "name": "find_projects",
+        "risk": "safe",
+        "note": "Lists projects."
+      },
+      {
+        "name": "search_issues",
+        "risk": "safe",
+        "note": "Searches issues; AI-powered search may require a provider key."
+      },
+      {
+        "name": "get_sentry_resource",
+        "risk": "caution",
+        "note": "Reads Sentry resources that can include private data."
+      },
+      {
+        "name": "search_events",
+        "risk": "caution",
+        "note": "Searches event data."
+      },
+      {
+        "name": "update_issue",
+        "risk": "high",
+        "note": "Changes issue fields or status."
+      },
+      {
+        "name": "execute_sentry_tool",
+        "risk": "high",
+        "note": "Generic operation dispatcher; do not expose it as a substitute for a narrow tool allowlist."
+      }
+    ],
+    "requirements": "Set SENTRY_ACCESS_TOKEN on the host, or complete the server’s device-code login. AI-powered search may additionally require an LLM provider key.",
+    "docs": "https://github.com/getsentry/sentry-mcp"
+  },
+  {
+    "slug": "supabase",
+    "name": "Supabase",
+    "category": "Database",
+    "source": "official",
+    "package": "@supabase/mcp-server-supabase",
+    "command": "npx -y @supabase/mcp-server-supabase --read-only --project-ref YOUR_PROJECT_REF",
+    "tagline": "Project admin and SQL over P2P — expose introspection, keep DDL locked.",
+    "intro": "Supabase's MCP server authenticates with a personal access token and can run arbitrary SQL plus management APIs. Teleport the introspection tools (tables, logs) and keep execute_sql behind --confirm or blocked entirely.",
+    "tools": [
+      {
+        "name": "list_tables",
+        "risk": "safe",
+        "note": "Schema inventory."
+      },
+      {
+        "name": "query_logs",
+        "risk": "caution",
+        "note": "Logs can embed request data."
+      },
+      {
+        "name": "get_advisors",
+        "risk": "safe",
+        "note": "Advisor findings."
+      },
+      {
+        "name": "execute_sql",
+        "risk": "high",
+        "note": "Arbitrary SQL against your database."
+      },
+      {
+        "name": "apply_migration",
+        "risk": "high",
+        "note": "Schema migrations."
+      },
+      {
+        "name": "create_branch",
+        "risk": "high",
+        "note": "Branch management."
+      },
+      {
+        "name": "pause_project",
+        "risk": "high",
+        "note": "Pauses the whole project."
+      }
+    ],
+    "requirements": "Set SUPABASE_ACCESS_TOKEN in the host environment and replace YOUR_PROJECT_REF with your project reference.",
+    "docs": "https://github.com/supabase/mcp"
+  },
+  {
+    "slug": "context7",
+    "name": "Context7 (Docs)",
+    "category": "Knowledge",
+    "source": "community",
+    "package": "@upstash/context7-mcp",
+    "command": "npx -y @upstash/context7-mcp",
+    "tagline": "Up-to-date library docs for any agent — fully safe to teleport.",
+    "intro": "Context7 resolves library documentation for LLMs. Every tool is read-only web access, so it's the classic 'capability share': your subscription/quota serves the peer, the key never moves, and zero destructive surface exists.",
+    "tools": [
+      {
+        "name": "resolve-library-id",
+        "risk": "safe",
+        "note": "Maps a name to a Context7 library."
+      },
+      {
+        "name": "query-docs",
+        "risk": "safe",
+        "note": "Fetches versioned docs."
+      }
+    ],
+    "requirements": "Network access is required. Configure a Context7 API key if your plan requires one.",
+    "docs": "https://github.com/upstash/context7"
+  },
+  {
+    "slug": "google-maps",
+    "name": "Google Maps",
+    "category": "Web",
+    "source": "official",
+    "package": "@modelcontextprotocol/server-google-maps",
+    "command": "npx -y @modelcontextprotocol/server-google-maps",
+    "tagline": "Geocoding and directions powered by your API key, not theirs.",
+    "intro": "The official Google Maps server needs a billable API key. Share the capability instead of the credential: a remote agent geocodes and plans routes through your tunnel with a --max-calls ceiling so the bill stays boring.",
+    "tools": [
+      {
+        "name": "maps_geocode",
+        "risk": "safe",
+        "note": "Address to coordinates."
+      },
+      {
+        "name": "maps_reverse_geocode",
+        "risk": "safe",
+        "note": "Coordinates to address."
+      },
+      {
+        "name": "maps_search_places",
+        "risk": "safe",
+        "note": "POI search."
+      },
+      {
+        "name": "maps_place_details",
+        "risk": "safe",
+        "note": "Place metadata."
+      },
+      {
+        "name": "maps_directions",
+        "risk": "safe",
+        "note": "Routing."
+      },
+      {
+        "name": "maps_distance_matrix",
+        "risk": "safe",
+        "note": "Distance/time matrix."
+      },
+      {
+        "name": "maps_elevation",
+        "risk": "safe",
+        "note": "Elevation lookup."
+      }
+    ],
+    "docs": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/google-maps",
+    "requirements": "Set GOOGLE_MAPS_API_KEY in the host environment. This is the archived reference server."
+  },
+  {
+    "slug": "time",
+    "name": "Time",
+    "category": "Utility",
+    "source": "official",
+    "package": "mcp-server-time",
+    "command": "uvx mcp-server-time",
+    "tagline": "Timezone math for agents — the hello-world of safe teleports.",
+    "intro": "The official Time server converts times across zones. It is completely stateless and read-only: a perfect smoke test that a peer's MCP client is wired to your tunnel correctly.",
+    "tools": [
+      {
+        "name": "get_current_time",
+        "risk": "safe",
+        "note": "Current time in a timezone."
+      },
+      {
+        "name": "convert_time",
+        "risk": "safe",
+        "note": "Timezone conversion."
+      }
+    ],
+    "requirements": "Install uv (which provides uvx). No credentials required.",
+    "docs": "https://github.com/modelcontextprotocol/servers/tree/main/src/time"
+  },
+  {
+    "slug": "everything",
+    "name": "Everything (Test Server)",
+    "category": "Utility",
+    "source": "official",
+    "package": "@modelcontextprotocol/server-everything",
+    "command": "npx -y @modelcontextprotocol/server-everything",
+    "tagline": "The MCP reference server — teleport it to test every protocol feature.",
+    "intro": "The Everything reference server exercises MCP tools, resources, prompts and notifications. Expose the basic demonstration tools while keeping environment inspection and file access tools outside the allowlist.",
+    "tools": [
+      {
+        "name": "echo",
+        "risk": "safe",
+        "note": "Echoes a message."
+      },
+      {
+        "name": "get-sum",
+        "risk": "safe",
+        "note": "Adds numbers."
+      },
+      {
+        "name": "get-annotated-message",
+        "risk": "safe",
+        "note": "Returns annotated content."
+      },
+      {
+        "name": "get-structured-content",
+        "risk": "safe",
+        "note": "Returns structured output."
+      },
+      {
+        "name": "get-tiny-image",
+        "risk": "safe",
+        "note": "Returns a tiny image."
+      },
+      {
+        "name": "trigger-long-running-operation",
+        "risk": "caution",
+        "note": "Runs a delayed operation."
+      },
+      {
+        "name": "get-env",
+        "risk": "high",
+        "note": "Exposes host environment variables."
+      },
+      {
+        "name": "gzip-file-as-resource",
+        "risk": "high",
+        "note": "Reads and compresses a local file."
+      }
+    ]
+  },
+  {
+    "slug": "notion",
+    "name": "Notion",
+    "category": "Knowledge",
+    "source": "official",
+    "package": "@notionhq/notion-mcp-server",
+    "command": "npx -y @notionhq/notion-mcp-server",
+    "tagline": "Second-brain search for remote collaborators — edits need your approval.",
+    "intro": "Notion's MCP server authenticates against your workspace with an integration token. Teleport search/fetch so a teammate's agent can ground answers in your docs, and keep create/update endpoints out of the tools/list entirely.",
+    "tools": [
+      {
+        "name": "API-post-search",
+        "risk": "safe",
+        "note": "Searches pages shared with the integration."
+      },
+      {
+        "name": "API-retrieve-a-page",
+        "risk": "safe",
+        "note": "Reads page properties."
+      },
+      {
+        "name": "API-get-block-children",
+        "risk": "safe",
+        "note": "Reads page blocks."
+      },
+      {
+        "name": "API-post-page",
+        "risk": "high",
+        "note": "Creates pages."
+      },
+      {
+        "name": "API-update-a-block",
+        "risk": "high",
+        "note": "Updates block content."
+      },
+      {
+        "name": "API-patch-page",
+        "risk": "high",
+        "note": "Updates page properties, including archive state."
+      }
+    ],
+    "requirements": "Set NOTION_TOKEN in the host environment, and share the intended pages with that Notion integration.",
+    "docs": "https://github.com/makenotion/notion-mcp-server"
+  },
+  {
+    "slug": "figma",
+    "name": "Figma",
+    "category": "Design",
+    "source": "community",
+    "package": "figma-developer-mcp",
+    "command": "npx -y figma-developer-mcp --figma-api-key=$FIGMA_KEY --stdio",
+    "tagline": "Design-to-code context for outside agents — read-only by nature.",
+    "intro": "The Figma Context MCP server extracts layout and styling data from your Figma files so coding agents can implement designs. It's read-only against the Figma API, making it a safe, high-value teleport: your API key, their agent, zero credentials exchanged.",
+    "tools": [
+      {
+        "name": "get_figma_data",
+        "risk": "safe",
+        "note": "Extracts node tree + styles."
+      },
+      {
+        "name": "download_figma_images",
+        "risk": "safe",
+        "note": "Downloads image assets."
+      }
+    ],
+    "requirements": "Set FIGMA_KEY in the host environment before running the example.",
+    "docs": "https://github.com/GLips/Figma-Context-MCP"
+  },
+  {
+    "slug": "mongodb",
+    "name": "MongoDB",
+    "category": "Database",
+    "source": "official",
+    "package": "mongodb-mcp-server",
+    "command": "npx -y mongodb-mcp-server --readOnly",
+    "tagline": "Aggregate and inspect a remote cluster; inserts and deletes never leave home.",
+    "intro": "MongoDB's MCP server connects with your connection string — the single most sensitive credential in a stack. Teleport find/aggregate and the peer's agent explores data through your tunnel; the connection string never crosses the wire.",
+    "tools": [
+      {
+        "name": "list-databases",
+        "risk": "safe",
+        "note": "Database inventory."
+      },
+      {
+        "name": "list-collections",
+        "risk": "safe",
+        "note": "Collection inventory."
+      },
+      {
+        "name": "list-connections",
+        "risk": "safe",
+        "note": "Lists connection IDs for use with the database tools."
+      },
+      {
+        "name": "count",
+        "risk": "safe",
+        "note": "Counts matching documents."
+      },
+      {
+        "name": "find",
+        "risk": "caution",
+        "note": "Reads documents that may contain private data."
+      },
+      {
+        "name": "aggregate",
+        "risk": "caution",
+        "note": "Reads aggregation results; review access to private data."
+      },
+      {
+        "name": "insert-many",
+        "risk": "high",
+        "note": "Inserts documents; disabled by --readOnly."
+      },
+      {
+        "name": "update-many",
+        "risk": "high",
+        "note": "Updates documents; disabled by --readOnly."
+      },
+      {
+        "name": "delete-many",
+        "risk": "high",
+        "note": "Deletes documents; disabled by --readOnly."
+      },
+      {
+        "name": "create-index",
+        "risk": "high",
+        "note": "Creates an index; disabled by --readOnly."
+      }
+    ],
+    "requirements": "Set MDB_MCP_CONNECTION_STRING in the host environment. The example enables the server’s own read-only mode.",
+    "docs": "https://github.com/mongodb-js/mongodb-mcp-server"
+  },
+  {
+    "slug": "netlify",
+    "name": "Netlify",
+    "category": "Infra",
+    "source": "official",
+    "package": "@netlify/mcp",
+    "command": "npx -y @netlify/mcp --verbose",
+    "tagline": "Deploy logs and site status for collaborators — deploys stay behind the firewall.",
+    "intro": "Netlify's MCP server manages sites with your account token. Teleport the read/observability tools so a collaborator's agent can debug builds, and gate deploy operations behind Human-in-the-Loop approval.",
+    "tools": [
+      {
+        "name": "netlify-project-get-projects",
+        "risk": "safe",
+        "note": "Lists projects."
+      },
+      {
+        "name": "netlify-project-get-project",
+        "risk": "safe",
+        "note": "Reads project details."
+      },
+      {
+        "name": "netlify-deploy-get-deploy",
+        "risk": "safe",
+        "note": "Reads a deployment."
+      },
+      {
+        "name": "netlify-observability-get-request-logs",
+        "risk": "caution",
+        "note": "Reads request logs, which can contain private data."
+      },
+      {
+        "name": "netlify-deploy-site",
+        "risk": "high",
+        "note": "Deploys the site."
+      },
+      {
+        "name": "netlify-project-update-project-name",
+        "risk": "high",
+        "note": "Renames a project."
+      },
+      {
+        "name": "netlify-project-manage-env-vars",
+        "risk": "high",
+        "note": "Reads or modifies environment variables."
+      }
+    ],
+    "requirements": "Requires Node.js 22 or newer. Authenticate on the host, or set NETLIFY_PERSONAL_ACCESS_TOKEN. The --verbose flag exposes individual operation tools so they can be filtered separately.",
+    "docs": "https://github.com/netlify/netlify-mcp"
+  },
+  {
+    "slug": "redis",
+    "name": "Redis",
+    "category": "Database",
+    "source": "official",
+    "package": "redis-mcp-server",
+    "command": "uvx --from redis-mcp-server redis-mcp-server --url redis://localhost:6379/0",
+    "tagline": "Cache introspection over P2P — GET allowed, DEL and FLUSHALL never.",
+    "intro": "Redis MCP servers talk to your cache with full command power. The dangerous ones are exactly what they sound like: DEL and FLUSHALL against production. Whitelist reads and information commands, and let the firewall make everything else nonexistent to the peer.",
+    "tools": [
+      {
+        "name": "get",
+        "risk": "caution",
+        "note": "Reads a value; may contain private data."
+      },
+      {
+        "name": "scan_keys",
+        "risk": "safe",
+        "note": "Scans key names."
+      },
+      {
+        "name": "dbsize",
+        "risk": "safe",
+        "note": "Counts keys."
+      },
+      {
+        "name": "info",
+        "risk": "safe",
+        "note": "Reads Redis server information."
+      },
+      {
+        "name": "set",
+        "risk": "high",
+        "note": "Writes a value."
+      },
+      {
+        "name": "delete",
+        "risk": "high",
+        "note": "Deletes a key."
+      }
+    ],
+    "requirements": "Install uv (uvx) and point --url at a running Redis instance. Configure Redis ACL credentials to restrict the accessible data and operations.",
+    "docs": "https://redis.io/docs/latest/integrate/redis-mcp/install/"
+  }
+]

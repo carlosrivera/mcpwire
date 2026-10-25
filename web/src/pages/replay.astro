@@ -1,0 +1,271 @@
+---
+import Base from '../layouts/Base.astro';
+import LeadCapture from '../components/LeadCapture.astro';
+---
+
+<Base
+  title="Session replay — MCPWire"
+  description="Drag a session.wirelog file recorded by mcpwire share --record into this page and get a DevTools-style waterfall of every remote agent call: latency, blocked tools, redacted secrets. 100% client-side — the file never leaves your machine."
+>
+  <section class="section">
+    <div class="wrap">
+      <div class="eyebrow">Session replay</div>
+      <h1>See what their agent did.</h1>
+      <p class="page-intro">Open a <code class="inline">.wirelog</code> file recorded with <code class="inline">--record</code> to review tool calls, blocked requests, and redactions. The file is read locally in this browser.</p>
+
+      <div id="drop" class="drop panel">
+        <div class="panel-body drop-inner">
+          <div class="drop-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m-4 4 4-4 4 4M4 16v4h16v-4"/></svg></div>
+          <div class="drop-title">Drop your session log here</div>
+          <div class="dim">or</div>
+          <div class="drop-actions">
+            <button class="btn ghost" id="pick" type="button">Choose a file</button>
+            <button class="btn" id="demo" type="button">Load demo session</button>
+          </div>
+          <input type="file" id="file" accept=".wirelog,.json,.ndjson,.jsonl" hidden />
+          <div class="err" id="err"></div>
+        </div>
+      </div>
+
+      <div id="report" style="display:none">
+        <div class="meta panel" style="margin-top:24px">
+          <div class="panel-head">Session details</div>
+          <div class="panel-body" id="meta"></div>
+        </div>
+
+        <div class="cards" id="cards"></div>
+
+        <div class="panel" style="margin-top:18px">
+          <div class="panel-head">Agent activity</div>
+          <div id="waterfall"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:44px;max-width:760px">
+        <LeadCapture />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  interface Ev {
+    ts: number;
+    t: string;
+    [k: string]: unknown;
+  }
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+
+  const demoWirelog = `{"ts":1761024000000,"t":"meta","v":1,"name":"teleported-sqlite","ticket":"wire://7f9a2b8c4e1d0a9b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3","cmd":"uvx --with mcp<2 mcp-server-sqlite --db-path ./app.db","policy":{"allow":"read_query,list_tables,describe_table","deny":null,"confirm":false},"redact":true,"ttlMs":1800000,"maxCalls":null,"version":"1.0.0"}
+{"ts":1761024001200,"t":"peer","event":"connected","fingerprint":"#a8f9...21c"}
+{"ts":1761024001300,"t":"req","id":1,"method":"initialize"}
+{"ts":1761024001310,"t":"res","id":1,"ok":true,"ms":10}
+{"ts":1761024001400,"t":"req","id":2,"method":"tools/list"}
+{"ts":1761024001420,"t":"res","id":2,"ok":true,"ms":20}
+{"ts":1761024005000,"t":"req","id":3,"method":"tools/call","tool":"list_tables","argsPreview":"{}"}
+{"ts":1761024005018,"t":"res","id":3,"ok":true,"ms":18,"tool":"list_tables"}
+{"ts":1761024009000,"t":"req","id":4,"method":"tools/call","tool":"read_query","argsPreview":"{\\"sql\\":\\"SELECT count(*) FROM orders\\"}"}
+{"ts":1761024009014,"t":"res","id":4,"ok":true,"ms":14,"tool":"read_query"}
+{"ts":1761024011000,"t":"req","id":5,"method":"tools/call","tool":"drop_table","argsPreview":"{\\"name\\":\\"customers\\"}"}
+{"ts":1761024011001,"t":"blocked","tool":"drop_table","reason":"firewall"}
+{"ts":1761024011500,"t":"req","id":6,"method":"tools/call","tool":"read_query","argsPreview":"{\\"sql\\":\\"SELECT email, api_key FROM users LIMIT 5\\"}"}
+{"ts":1761024011525,"t":"redacted","id":6,"count":4,"kinds":["email","openai-key","jwt","credit-card"]}
+{"ts":1761024011526,"t":"res","id":6,"ok":true,"ms":26,"tool":"read_query"}
+{"ts":1761024022000,"t":"req","id":7,"method":"tools/call","tool":"describe_table","argsPreview":"{\\"name\\":\\"orders\\"}"}
+{"ts":1761024022012,"t":"res","id":7,"ok":true,"ms":12,"tool":"describe_table"}
+{"ts":1761024028000,"t":"req","id":8,"method":"tools/call","tool":"write_query","argsPreview":"{\\"sql\\":\\"UPDATE users SET role='admin'\\"}"}
+{"ts":1761024028001,"t":"blocked","tool":"write_query","reason":"firewall"}
+{"ts":1761024040000,"t":"peer","event":"disconnected","fingerprint":"#a8f9...21c"}
+{"ts":1761024180000,"t":"end","reason":"ttl","durationMs":180000,"calls":5,"blocked":2,"redactions":4,"peers":1}`;
+
+  function parse(text: string): Ev[] {
+    return text
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .map((l) => {
+        try {
+          return JSON.parse(l);
+        } catch {
+          return null;
+        }
+      })
+      .filter(Boolean);
+  }
+
+  function fmtT(ts: number, base: number): string {
+    const d = new Date(ts);
+    const off = ((ts - base) / 1000).toFixed(1);
+    return `${d.toTimeString().slice(0, 8)} <span class="off">+${off}s</span>`;
+  }
+
+  interface Row {
+    ts: number;
+    id: unknown;
+    label: string;
+    ms: number | null;
+    status: 'ok' | 'err' | 'blocked' | 'info';
+    reason?: string;
+    redacted?: number;
+    kinds?: string[];
+  }
+
+  function render(events: Ev[]): void {
+    const meta = events.find((e) => e.t === 'meta') as any;
+    const end = events.findLast((e) => e.t === 'end') as any;
+    if (!meta) {
+      $('err').textContent = '⚠️ No {"t":"meta"} line found — is this a mcpwire .wirelog file?';
+      $('err').style.display = 'block';
+      return;
+    }
+    $('err').style.display = 'none';
+    $('report').style.display = 'block';
+
+    // metadata panel
+    const durS = end ? (end.durationMs / 1000).toFixed(0) : ((events[events.length - 1].ts - meta.ts) / 1000).toFixed(0);
+    $('meta').innerHTML = `
+      <table class="tbl">
+        <tr><td style="width:180px">tunnel</td><td><code>${meta.name ?? '—'}</code></td></tr>
+        <tr><td>host command</td><td><code>${esc(String(meta.cmd ?? '—'))}</code></td></tr>
+        <tr><td>firewall</td><td>${meta.policy?.allow ? `<code>--allow ${esc(meta.policy.allow)}</code>` : 'unrestricted'}${meta.policy?.deny ? ` · <code>--deny ${esc(meta.policy.deny)}</code>` : ''}${meta.policy?.confirm ? ' · <code>--confirm</code>' : ''}</td></tr>
+        <tr><td>DLP scrubbing</td><td>${meta.redact ? 'On' : 'Off'}</td></tr>
+        <tr><td>closed because</td><td><span class="badge ${end?.reason === 'ttl' || end?.reason === 'max-calls' ? 'warn' : 'info'}">${esc(String(end?.reason ?? 'still open'))}</span> after ${durS}s</td></tr>
+      </table>`;
+
+    // pair requests with responses
+    const resById = new Map<string, Ev>();
+    for (const e of events) if (e.t === 'res') resById.set(String(e.id), e);
+    const rows: Row[] = [];
+    const base = meta.ts;
+    for (const e of events) {
+      if (e.t === 'req') {
+        const res = resById.get(String((e as any).id)) as any;
+        rows.push({
+          ts: e.ts,
+          id: (e as any).id,
+          label: (e as any).tool ?? (e as any).method,
+          ms: res?.ms ?? null,
+          status: res ? (res.ok ? 'ok' : 'err') : 'info',
+          redacted: res ? undefined : undefined,
+        });
+        if (res && (e as any).tool) {
+          const red = events.find((r) => r.t === 'redacted' && String(r.id) === String((e as any).id)) as any;
+          if (red) rows[rows.length - 1] = { ...rows[rows.length - 1], redacted: red.count, kinds: red.kinds };
+        }
+      } else if (e.t === 'blocked') {
+        rows.push({ ts: e.ts, id: null, label: `${(e as any).tool}`, ms: null, status: 'blocked', reason: String((e as any).reason) });
+      } else if (e.t === 'peer') {
+        rows.push({ ts: e.ts, id: null, label: `peer ${(e as any).event} (${esc(String((e as any).fingerprint ?? ''))})`, ms: null, status: 'info' });
+      }
+    }
+
+    // summary cards
+    const calls = events.filter((e) => e.t === 'req' && (e as any).tool).length;
+    const blocked = events.filter((e) => e.t === 'blocked').length;
+    const redactions = events.filter((e) => e.t === 'redacted').reduce((n, e) => n + Number((e as any).count ?? 0), 0);
+    const peers = events.filter((e) => e.t === 'peer' && (e as any).event === 'connected').length;
+    const msAll = rows.filter((r) => r.ms != null).map((r) => r.ms!);
+    const avg = msAll.length ? (msAll.reduce((a, b) => a + b, 0) / msAll.length).toFixed(0) + 'ms' : '—';
+    $('cards').innerHTML = [
+      ['Tool calls', String(calls), 'info'],
+      ['Blocked', String(blocked), blocked ? 'risk' : 'safe'],
+      ['Redactions', String(redactions), redactions ? 'warn' : 'safe'],
+      ['Avg. latency', avg, 'info'],
+      ['Peers', String(peers), 'info'],
+    ]
+      .map(
+        ([label, val, cls]) =>
+          `<div class="card statc"><div class="statv">${val}</div><div class="statl"><span class="badge ${cls}">${label}</span></div></div>`,
+      )
+      .join('');
+
+    // waterfall
+    const maxMs = Math.max(1, ...msAll);
+    $('waterfall').innerHTML = rows
+      .map((r) => {
+        const w = r.ms != null ? Math.max(2, Math.round((r.ms / maxMs) * 100)) : 0;
+        const status =
+          r.status === 'blocked'
+            ? '<span class="badge risk">BLOCKED</span>'
+            : r.status === 'err'
+              ? '<span class="badge risk">ERROR</span>'
+              : r.status === 'ok'
+                ? '<span class="badge safe">OK</span>'
+                : '<span class="badge info">—</span>';
+        const red = r.redacted ? `<span class="badge warn" title="${esc((r.kinds ?? []).join(', '))}">${r.redacted} redacted</span>` : '';
+        const ms = `<span class="ms">${r.ms != null ? `${r.ms}ms` : ''}</span>`;
+        return `<div class="wrow ${r.status}">
+          <span class="wtime">${fmtT(r.ts, base)}</span>
+          <span class="wlabel">${esc(r.label)}</span>
+          <span class="wbar"><i style="width:${w}%"></i></span>
+          ${ms}
+          <span class="wstatus">${status}</span><span class="wredactions">${red}</span>
+        </div>`;
+      })
+      .join('');
+  }
+
+  function esc(s: string): string {
+    return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  }
+
+  function loadFile(file: File): void {
+    const reader = new FileReader();
+    reader.onload = () => render(parse(String(reader.result)));
+    reader.readAsText(file);
+  }
+
+  const drop = $('drop');
+  drop.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    drop.classList.add('over');
+  });
+  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+  drop.addEventListener('drop', (e) => {
+    e.preventDefault();
+    drop.classList.remove('over');
+    const f = e.dataTransfer?.files?.[0];
+    if (f) loadFile(f);
+  });
+  $('pick').addEventListener('click', () => $('file').click());
+  $('file').addEventListener('change', () => {
+    const f = ($('file') as HTMLInputElement).files?.[0];
+    if (f) loadFile(f);
+  });
+  $('demo').addEventListener('click', () => render(parse(demoWirelog)));
+</script>
+
+<style>
+  .drop { margin-top:32px; transition:background .15s,box-shadow .15s; }
+  .drop.over { background:var(--surface-hover); outline:2px solid var(--accent); outline-offset:4px; }
+  .drop-inner { text-align:center; padding:48px 24px; }
+  .drop-icon { color:var(--accent); margin-bottom:18px; }
+  .drop-title { font-size:22px; font-weight:550; margin:8px 0 12px; letter-spacing:-.025em; }
+  .drop-actions { display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
+  .err { display:none; color:var(--red); margin-top:14px; font-size:14px; }
+  .cards { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:16px; margin-top:24px; }
+  :global(.statc) { text-align:center; padding:22px 12px; }
+  :global(.statv) { font-size:30px; font-weight:550; color:var(--text); margin-bottom:6px; }
+  :global(.statl .badge) { background:transparent; padding:0; font-size:14px; }
+  #waterfall { overflow-x:auto; }
+  #waterfall :global(.wrow) { display:grid; grid-template-columns:145px minmax(145px,1fr) minmax(90px,1fr) 55px 80px 110px; gap:14px; align-items:center; padding:14px 20px; border-bottom:1px solid var(--line-soft); font-size:14px; min-width:900px; }
+  #waterfall :global(.wrow:last-child) { border-bottom:0; }
+  #waterfall :global(.wrow.blocked) { background:rgb(224 161 161 / .04); }
+  #waterfall :global(.wtime) { color:var(--text-faint); font-size:13px; }
+  #waterfall :global(.off) { color:var(--text-muted); }
+  #waterfall :global(.wlabel) { color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #waterfall :global(.wrow.blocked .wlabel) { color:var(--red); }
+  #waterfall :global(.wbar) { background:var(--surface-code); border-radius:4px; height:8px; overflow:hidden; }
+  #waterfall :global(.wbar i) { display:block; height:100%; background:var(--accent); border-radius:4px; }
+  #waterfall :global(.ms) { color:var(--text-muted); text-align:right; font-size:13px; }
+  #meta { overflow-x:auto; }
+  @media(max-width:680px) {
+    #meta :global(.tbl tr) { display:grid; grid-template-columns:minmax(0,1fr); gap:8px; padding:16px 0; border-bottom:1px solid var(--line-soft); }
+    #meta :global(.tbl tr:last-child) { border-bottom:0; }
+    #meta :global(.tbl td) { width:auto !important; padding:0; border:0; }
+    #meta :global(.tbl td:first-child) { color:var(--text-faint); }
+  }
+  @media(max-width:900px) { .cards { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+  @media(max-width:680px) { .cards { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } .drop-inner { padding:32px 20px; } #waterfall :global(.wrow) { min-width:550px; grid-template-columns:125px minmax(150px,1fr) 80px 110px; } #waterfall :global(.wbar),#waterfall :global(.ms) { display:none; } }
+</style>

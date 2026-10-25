@@ -1,0 +1,250 @@
+---
+import serversRaw from '../data/servers.json';
+import CopyButton from './CopyButton.astro';
+const servers = (serversRaw as any[]).map((s) => ({
+  slug: s.slug,
+  name: s.name,
+  category: s.category,
+  command: s.command,
+  tools: s.tools.map((t: any) => ({ name: t.name, risk: t.risk })),
+}));
+---
+
+<section class="section" id="builder">
+  <div class="wrap">
+    <div class="eyebrow">Command builder</div>
+    <h1>Build a sharing command.</h1>
+    <p class="page-intro">
+      Choose a server and set its access policy. Copy the generated command into your terminal to start a session.
+    </p>
+
+    <div class="builder-grid">
+      <div class="panel">
+        <div class="panel-head">Access policy</div>
+        <div class="panel-body">
+          <label class="lbl" for="b-server">MCP server</label>
+          <select id="b-server">
+            {servers.map((s: any) => <option value={s.slug}>{s.name} — {s.category}</option>)}
+            <option value="custom">Custom server…</option>
+          </select>
+
+          <label class="lbl" for="b-cmd">Server command (what the host runs locally)</label>
+          <input type="text" id="b-cmd" spellcheck="false" />
+
+          <div id="b-tools-wrap">
+            <div class="lbl-row">
+              <span class="lbl">Tools exposed to the peer</span>
+              <span class="lbl-actions">
+                <button type="button" class="mini" id="b-safe-only">Safe only</button>
+                <button type="button" class="mini" id="b-all">Allow all</button>
+              </span>
+            </div>
+            <div class="tools" id="b-tools"></div>
+          </div>
+
+          <div id="b-custom-tools-wrap" style="display:none">
+            <label class="lbl" for="b-custom-tools">Allowed tools (comma separated)</label>
+            <input type="text" id="b-custom-tools" placeholder="read_query, list_tables, describe_table" spellcheck="false" />
+          </div>
+
+          <div class="switches">
+            <label class="switch"><input type="checkbox" id="b-redact" checked /><span class="track"></span><span>Redact secrets <span class="faint">(DLP)</span></span></label>
+            <label class="switch"><input type="checkbox" id="b-confirm" /><span class="track"></span><span>Approve each call <span class="faint">(--confirm)</span></span></label>
+          </div>
+
+          <div class="row2">
+            <div>
+              <label class="lbl" for="b-ttl">Session duration</label>
+              <select id="b-ttl">
+                <option value="">No limit</option>
+                <option value="5m">5 minutes</option>
+                <option value="15m">15 minutes</option>
+                <option value="30m" selected>30 minutes</option>
+                <option value="1h">1 hour</option>
+                <option value="24h">24 hours</option>
+              </select>
+            </div>
+            <div>
+              <label class="lbl" for="b-maxcalls">Max calls</label>
+              <input type="text" id="b-maxcalls" inputmode="numeric" placeholder="∞" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="outs">
+        <div class="panel">
+          <div class="panel-head"><span>On your machine · Terminal</span><CopyButton id="b-copy-cmd" text="" label="Copy generated host command" /></div>
+          <pre id="b-out-cmd"></pre>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><span>On their machine · MCP client</span><CopyButton id="b-copy-json" text="" label="Copy generated config template" /></div>
+          <pre id="b-out-json"></pre>
+        </div>
+        <p class="faint">The host prints your session ticket when it starts. Replace the placeholder with that ticket, or use the printed config. Keep it private: it can be reused while the session is running.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import serversJson from '../data/servers.json';
+
+  const servers: any[] = (serversJson as any[]).map((s) => ({
+    slug: s.slug,
+    name: s.name,
+    command: s.command,
+    tools: s.tools.map((t) => ({ name: t.name, risk: t.risk })),
+  }));
+
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+
+  const el = {
+    server: $('b-server') as unknown as HTMLSelectElement,
+    cmd: $('b-cmd'),
+    toolsWrap: $('b-tools-wrap'),
+    tools: $('b-tools'),
+    customWrap: $('b-custom-tools-wrap'),
+    customTools: $('b-custom-tools'),
+    redact: $('b-redact'),
+    confirm: $('b-confirm'),
+    ttl: $('b-ttl') as unknown as HTMLSelectElement,
+    maxcalls: $('b-maxcalls'),
+    outCmd: $('b-out-cmd'),
+    outJson: $('b-out-json'),
+    copyCmd: $('b-copy-cmd'),
+    copyJson: $('b-copy-json'),
+    safeOnly: $('b-safe-only'),
+    all: $('b-all'),
+  };
+
+  function current(): any {
+    return servers.find((s) => s.slug === el.server.value) ?? null;
+  }
+
+  function renderTools() {
+    const s = current();
+    el.tools.innerHTML = '';
+    if (!s) return;
+    for (const t of s.tools) {
+      const label = document.createElement('label');
+      label.className = `tool-chip ${t.risk === 'high' ? 'risky' : ''}`;
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = t.risk === 'safe';
+      cb.dataset.name = t.name;
+      cb.dataset.risk = t.risk;
+      const name = document.createElement('span');
+      name.className = 'tname';
+      name.textContent = t.name;
+      name.title = t.name;
+      const badge = document.createElement('span');
+      badge.className = `badge ${t.risk === 'safe' ? 'safe' : t.risk === 'caution' ? 'warn' : 'risk'}`;
+      badge.textContent = t.risk === 'safe' ? 'SAFE' : t.risk === 'caution' ? 'CAUTION' : 'HIGH RISK';
+      label.append(cb, name, badge);
+      label.addEventListener('change', update);
+      el.tools.appendChild(label);
+    }
+  }
+
+  function checkedTools(): string[] {
+    if (el.server.value === 'custom') {
+      return el.customTools.value
+        .split(',')
+        .map((x) => x.trim())
+        .filter(Boolean);
+    }
+    return [...el.tools.querySelectorAll('input:checked')].map((i) => (i as HTMLInputElement).dataset.name!);
+  }
+
+  function serverName(): string {
+    if (el.server.value === 'custom') return 'teleported-mcp';
+    return `teleported-${el.server.value}`;
+  }
+
+  function buildCmd(): string {
+    const parts = ['npx', '-y', 'mcpwire', 'share'];
+    const tools = checkedTools();
+    parts.push('--allow', `"${tools.join(',')}"`);
+    if (el.redact.checked) parts.push('--redact-secrets');
+    if (el.confirm.checked) parts.push('--confirm');
+    if (el.ttl.value) parts.push('--ttl', el.ttl.value);
+    const mc = el.maxcalls.value.trim();
+    if (mc && /^\d+$/.test(mc)) parts.push('--max-calls', mc);
+    const cmdLine = el.cmd.value.trim() || '<your mcp server command>';
+    return parts.join(' ') + ' -- ' + cmdLine;
+  }
+
+  function buildJson(): string {
+    const name = serverName();
+    return JSON.stringify(
+      {
+        mcpServers: {
+          [name]: { command: 'npx', args: ['-y', 'mcpwire', 'join', 'wire://<TICKET_FROM_HOST_BANNER>'] },
+        },
+      },
+      null,
+      2,
+    );
+  }
+
+  function update() {
+    const s = current();
+    el.customWrap.style.display = s ? 'none' : 'block';
+    el.toolsWrap.style.display = s ? 'block' : 'none';
+    document.querySelectorAll<HTMLElement>('.tool-chip').forEach((c) => {
+      const cb = c.querySelector('input') as HTMLInputElement;
+      c.classList.toggle('unchecked', !cb.checked);
+    });
+    el.outCmd.textContent = buildCmd();
+    el.outJson.textContent = buildJson();
+    el.copyCmd.dataset.copy = el.outCmd.textContent;
+    el.copyJson.dataset.copy = el.outJson.textContent;
+  }
+
+  el.server.addEventListener('change', () => {
+    const s = current();
+    if (s) el.cmd.value = s.command;
+    renderTools();
+    update();
+  });
+  [el.cmd, el.customTools, el.redact, el.confirm, el.ttl, el.maxcalls].forEach((i) =>
+    i.addEventListener('input', update),
+  );
+
+  el.safeOnly.addEventListener('click', () => {
+    el.tools.querySelectorAll('input').forEach((i) => {
+      (i as HTMLInputElement).checked = (i as HTMLInputElement).dataset.risk === 'safe';
+    });
+    update();
+  });
+  el.all.addEventListener('click', () => {
+    el.tools.querySelectorAll('input').forEach((i) => ((i as HTMLInputElement).checked = true));
+    update();
+  });
+
+  // init
+  el.server.value = servers[0].slug;
+  el.cmd.value = servers[0].command;
+  renderTools();
+  update();
+</script>
+
+<style>
+  .builder-grid { display:grid; grid-template-columns:1.05fr 1fr; gap:24px; margin-top:34px; align-items:start; }
+  .builder-grid > * { min-width:0; }
+  .lbl { display:block; font-size:14px; font-weight:500; color:var(--text-muted); margin:20px 0 8px; }
+  .panel-body > .lbl:first-child { margin-top:0; }
+  .lbl-row { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:8px; margin:20px 0 8px; }
+  .lbl-row .lbl { margin:0; }
+  .lbl-actions { display:flex; gap:8px; }
+  .mini { font-family:inherit; font-size:13px; cursor:pointer; background:var(--surface-code); color:var(--text-muted); border:0; border-radius:5px; padding:6px 10px; }
+  .mini:hover { background:var(--surface-hover); color:var(--accent); }
+  .tools { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; }
+  .switches { display:flex; gap:20px; flex-wrap:wrap; margin-top:24px; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .outs { display:flex; flex-direction:column; gap:24px; }
+  .outs pre { border-radius:0; font-size:14px; white-space:pre-wrap; overflow-wrap:anywhere; }
+  @media(max-width:900px) { .builder-grid { grid-template-columns:1fr; } }
+  @media(max-width:380px) { .row2 { grid-template-columns:1fr; gap:0; } .tools { grid-template-columns:minmax(0,1fr); } }
+</style>

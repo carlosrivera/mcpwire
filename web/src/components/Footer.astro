@@ -1,0 +1,7 @@
+---
+const path = Astro.url.pathname;
+---
+<footer class="site-footer site-width">
+  <span>MCPWire <span aria-hidden="true">/</span> MIT licensed</span>
+  <nav aria-label="Footer navigation"><a href="/docs" aria-current={path === "/docs" ? "page" : undefined}>Docs</a><a href="/builder" aria-current={path === '/builder' ? 'page' : undefined}>Command builder</a><a href="/replay" aria-current={path === '/replay' ? 'page' : undefined}>Session replay</a><a href="https://github.com/carlosrivera/mcpwire">Read the source <span aria-hidden="true">↗</span></a></nav>
+</footer>

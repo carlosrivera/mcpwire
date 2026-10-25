@@ -1,0 +1,289 @@
+---
+import Base from '../layouts/Base.astro';
+import { Code } from 'astro:components';
+import servers from '../data/servers.json';
+import CopyButton from '../components/CopyButton.astro';
+const integrations = [
+  { name: 'PostgreSQL', slug: 'postgres', icon: 'postgresql' },
+  { name: 'GitHub', slug: 'github', icon: 'github' },
+  { name: 'Slack', slug: 'slack', icon: 'slack' },
+  { name: 'Docker', slug: 'docker', icon: 'docker' },
+  { name: 'SQLite', slug: 'sqlite', icon: 'sqlite' },
+  { name: 'Supabase', slug: 'supabase', icon: 'supabase' },
+  { name: 'Figma', slug: 'figma', icon: 'figma' },
+  { name: 'MongoDB', slug: 'mongodb', icon: 'mongodb' },
+  { name: 'Notion', slug: 'notion', icon: 'notion' },
+  { name: 'Kubernetes', slug: 'kubernetes', icon: 'kubernetes' },
+  { name: 'Stripe', slug: 'stripe', icon: 'stripe' },
+  { name: 'Redis', slug: 'redis', icon: 'redis' },
+  { name: 'Git', slug: 'git', icon: 'git' },
+  { name: 'Playwright', slug: 'playwright', icon: 'playwright' },
+  { name: 'Netlify', slug: 'netlify', icon: 'netlify' },
+  { name: 'Brave Search', slug: 'brave-search', icon: 'brave-browser' },
+  { name: 'Sentry', slug: 'sentry', icon: 'sentry' },
+  { name: 'Google Maps', slug: 'google-maps', icon: 'google-maps' },
+  { name: 'Filesystem', slug: 'filesystem', icon: 'folder' },
+  { name: 'Fetch', slug: 'fetch', icon: 'globe' },
+  { name: 'Memory', slug: 'memory', icon: 'brain' },
+  { name: 'Time', slug: 'time', icon: 'clock' },
+  { name: 'Sequential Thinking', slug: 'sequential-thinking', icon: 'workflow' },
+  { name: 'Everything', slug: 'everything', icon: 'blocks' },
+];
+const clients = [
+  { name: 'Claude Code', icon: 'claude' },
+  { name: 'Cursor', icon: 'cursor' },
+  { name: 'Codex', icon: 'codex' },
+  { name: 'Windsurf', icon: 'windsurf' },
+  { name: 'OpenCode', icon: 'opencode' },
+  { name: 'Kilo Code', icon: 'kilocode' },
+  { name: 'VS Code', icon: 'vscode' },
+  { name: 'GitHub Copilot', icon: 'copilot' },
+  { name: 'Gemini CLI', icon: 'gemini' },
+  { name: 'Zed', icon: 'zed' },
+  { name: 'Raycast', icon: 'raycast' },
+];
+const host = `npx -y mcpwire share \\
+  --allow read_file,list_directory \\
+  --redact-secrets --ttl 30m \\
+  -- npx -y \\
+  @modelcontextprotocol/server-filesystem .`;
+const heroCmd = host.split('\n').map((line) => line.trim().replace(/\\$/, '').trim()).join(' ');
+const guest = `{
+  "mcpServers": {
+    "teleported-filesystem": {
+      "command": "npx",
+      "args": [
+        "-y", "mcpwire", "join",
+        "wire://<ticket-from-host>"
+      ]
+    }
+  }
+}`;
+---
+
+<Base title="MCPWire — Share your local MCP server with a teammate’s agent" description="Give a teammate’s AI agent access to your local MCP tools over an encrypted peer-to-peer connection. Choose the tools, redact secrets, and set an expiry." minimal>
+  <section class="home-hero home-width">
+    <h1>Share your local MCP server<br class="wide-break" /> with a teammate’s agent.</h1>
+    <p>Give them access to your tools over an encrypted, peer-to-peer connection. Your MCP server runs locally, and your teammate connects through MCPWire.</p>
+    <div class="home-install" id="install">
+      <span class="install-prompt" aria-hidden="true">$</span><code>{heroCmd}</code>
+      <CopyButton text={heroCmd} label="Copy share command" />
+    </div>
+    <div class="home-install-note">Node.js 18+ <span aria-hidden="true">·</span> Noise-encrypted P2P <span aria-hidden="true">·</span> No account required</div>
+    <div class="home-clients" aria-label="Compatible MCP clients">
+      <span class="home-clients-label">Works with every MCP client</span>
+      <div class="clients-marquee">
+        <div class="clients-track">
+          <ul class="clients-list">
+            {clients.map((c) => (
+              <li><img src={`/icons/${c.icon}.svg`} alt="" width="17" height="17" loading="lazy" /><span>{c.name}</span></li>
+            ))}
+          </ul>
+          <ul class="clients-list" aria-hidden="true">
+            {clients.map((c) => (
+              <li><img src={`/icons/${c.icon}.svg`} alt="" width="17" height="17" loading="lazy" /><span>{c.name}</span></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-pipeline home-width" id="how-it-works" aria-label="How MCPWire connects your local server to a teammate's agent">
+    <!-- Step 1: Host Node -->
+    <div class="pipe-step">
+      <div class="pipe-copy">
+        <span class="home-kicker">01 · On your machine</span>
+        <h2>Wrap your local MCP server</h2>
+        <p>Run <code>mcpwire share</code> in front of any stdio server. The process runs on your machine, and the CLI prints a <code>wire://</code> session ticket. Keep it private: it can be reused while the session is running.</p>
+        <div class="pipe-badge">
+          <div class="flow-rotator" id="flow-tool-rotator" aria-hidden="true">
+            {integrations.slice(0, 12).map((s, idx) => (
+              <img src={`/icons/${s.icon}.svg`} alt="" width="22" height="22" class={idx === 0 ? 'is-active' : ''} />
+            ))}
+          </div>
+          <div>
+            <strong>Local MCP process</strong>
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Credentials configured locally</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipe-node">
+        <div class="home-code-panel">
+          <div class="home-code-header"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m5 6 6 6-6 6m9 0h6"/></svg>Terminal · Host</span><CopyButton text={host} label="Copy host command" /></div>
+          <Code code={host} lang="bash" theme="github-dark-dimmed" />
+        </div>
+        <span id="pipe-host-out" class="pipe-port pipe-port-out" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <!-- Wire Connector 1: Host -> shared policy gate -->
+    <div class="pipe-connector pipe-connector-split" data-wire-from="pipe-host-out" data-wire-to="pipe-gate-in" aria-hidden="true">
+      <svg viewBox="0 0 1120 210" preserveAspectRatio="none" fill="none">
+        <path class="wire-base" d="M 798 0 L 798 85 Q 798 105 778 105 L 580 105 Q 560 105 560 125 L 560 210" />
+        <path class="wire-pulse" d="M 798 0 L 798 85 Q 798 105 778 105 L 580 105 Q 560 105 560 125 L 560 210" />
+      </svg>
+    </div>
+
+    <!-- One policy gate: all three controls apply to the same session. -->
+    <div class="pipe-gate" role="group" aria-labelledby="policy-gate-title">
+      <span id="pipe-gate-in" class="pipe-port pipe-port-in" aria-hidden="true"></span>
+      <div class="pipe-gate-heading"><span id="policy-gate-title">Session policy</span><span>All three controls apply</span></div>
+      <div class="pipe-features">
+        <article class="pipe-feature-node">
+          <code>--allow</code>
+          <h3>Expose only the tools they need</h3>
+          <p>Only named tools appear in their <code>tools/list</code>. Calls to <code>write_file</code> or anything else are blocked at the gate.</p>
+        </article>
+        <article class="pipe-feature-node">
+          <code>--redact-secrets</code>
+          <h3>Scrub secrets before they leave</h3>
+          <p>Recognized secret patterns in outbound responses are replaced with <code>[REDACTED_BY_MCPWIRE]</code> locally. Detection can miss unfamiliar formats.</p>
+        </article>
+        <article class="pipe-feature-node">
+          <code>--ttl 30m</code>
+          <h3>Set a hard time or call limit</h3>
+          <p>The session closes when its configured time or <code>--max-calls</code> budget runs out. End it sooner with Ctrl+C.</p>
+        </article>
+      </div>
+      <span id="pipe-gate-out" class="pipe-port pipe-port-out" aria-hidden="true"></span>
+    </div>
+
+    <!-- Wire Connector 2: Shared policy gate -> Guest -->
+    <div class="pipe-connector pipe-connector-merge" data-wire-from="pipe-gate-out" data-wire-to="pipe-guest-in" aria-hidden="true">
+      <svg viewBox="0 0 1120 230" preserveAspectRatio="none" fill="none">
+        <path class="wire-base" d="M 560 0 L 560 95 Q 560 115 580 115 L 778 115 Q 798 115 798 135 L 798 230" />
+        <path class="wire-pulse" d="M 560 0 L 560 95 Q 560 115 580 115 L 778 115 Q 798 115 798 135 L 798 230" />
+      </svg>
+      <span class="pipe-wire-label">Encrypted P2P tunnel · Noise protocol</span>
+    </div>
+
+    <!-- Step 3: Guest Node -->
+    <div class="pipe-step">
+      <div class="pipe-copy">
+        <span class="home-kicker">02 · On their machine</span>
+        <h2>Connect their agent in one paste</h2>
+        <p>Your teammate pastes the printed config into their MCP client. Once connected, their agent can call your allowed tools without installing your MCP server or configuring its API keys.</p>
+        <div class="pipe-badge">
+          <div class="flow-rotator" id="flow-client-rotator" aria-hidden="true">
+            {clients.map((c, idx) => (
+              <img src={`/icons/${c.icon}.svg`} alt="" width="22" height="22" class={idx === 0 ? 'is-active' : ''} />
+            ))}
+          </div>
+          <div>
+            <strong>Teammate’s agent</strong>
+            <span>Works with any stdio MCP client</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipe-node">
+        <span id="pipe-guest-in" class="pipe-port pipe-port-in" aria-hidden="true"></span>
+        <div class="home-code-panel">
+          <div class="home-code-header"><span><img src="/icons/mcp.svg" alt="" width="16" height="16" />MCP client config · Teammate</span><CopyButton text={guest} label="Copy guest config template" /></div>
+          <Code code={guest} lang="json" theme="github-dark-dimmed" />
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="home-integrations home-width" aria-labelledby="integrations-title">
+    <div class="home-integrations-copy">
+      <h2 id="integrations-title">Works with any<br /> stdio MCP server</h2>
+      <p>Wrap the databases, browsers, and internal tools you already run locally—no SDK changes required.</p>
+      <a href="/teleport">Browse all {servers.length} server guides <span aria-hidden="true">→</span></a>
+    </div>
+    {integrations.map((server) => (
+      <a class="home-integration" href={`/teleport/${server.slug}`} aria-label={`${server.name} server guide`} data-tooltip={server.name}>
+        <img src={`/icons/${server.icon}.svg`} alt="" width="38" height="38" loading="lazy" />
+      </a>
+    ))}
+  </section>
+
+  <section class="home-faq home-width" aria-labelledby="faq-title">
+    <div class="home-faq-head">
+      <span class="home-kicker">FAQ</span>
+      <h2 id="faq-title">Common questions</h2>
+      <p>How the tunnel, firewall, and local execution work under the hood.</p>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span>Why not just share an API key or use ngrok / SSH?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="faq-answer">
+          <p>An API key grants access within that key’s permissions. MCPWire adds MCP-aware tool filtering, response redaction, and session limits to the connection, while your server’s credentials remain configured on your machine. These controls would need to be added around a generic network tunnel.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span>Does my teammate need to install the MCP server or its dependencies?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="faq-answer">
+          <p>No. Your teammate only needs Node.js 18+ so their client can run <code>npx -y mcpwire join wire://...</code>. Even if your MCP server requires Python, Docker, local databases, or internal VPN access, all of that stays and executes on your machine.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span>How does peer-to-peer connection work behind NAT and firewalls?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="faq-answer">
+          <p>MCPWire uses the public Hyperswarm DHT for peer discovery and UDP hole-punching to attempt a Noise-encrypted peer connection. The <code>wire://</code> ticket identifies the session’s discovery topic; the Noise handshake establishes encryption. Restrictive NATs or firewalls can prevent a connection. MCPWire does not operate its own relay service or guarantee connectivity on every network.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span>Can I approve each tool call manually or audit what their agent did?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="faq-answer">
+          <p>Yes. Add <code>--confirm</code> to approve tool calls in your terminal. You can allow or deny a call, or approve that tool for the rest of the session. Add <code>--record session.wirelog</code> to save a local audit trail for the <a href="/replay">session replay viewer</a>.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span>What secrets does <code>--redact-secrets</code> catch?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="faq-answer">
+          <p>With <code>--redact-secrets</code> enabled, MCPWire scans outbound response payloads for recognized API keys, bearer tokens, JWTs, PEM private keys, email addresses, and card numbers. Matches are replaced with <code>[REDACTED_BY_MCPWIRE]</code>. Detection is pattern-based and can miss unfamiliar formats.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="home-docs home-width" aria-labelledby="docs-title">
+    <div><h2 id="docs-title">Connect your own tools</h2><p>Server setup, access policies, and the full CLI flag reference.</p></div>
+    <a href="/docs">Read the docs <span aria-hidden="true">→</span></a>
+  </section>
+</Base>
+
+<script>
+  import { connectPipelineWires } from '../scripts/pipeline-wires';
+  connectPipelineWires();
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const startRotator = (rotatorId: string, intervalMs: number, delayMs: number) => {
+      const items = document.getElementById(rotatorId)?.querySelectorAll<HTMLImageElement>('img');
+      if (!items || items.length < 2) return;
+      let idx = 0;
+      setTimeout(() => {
+        setInterval(() => {
+          items[idx].classList.remove('is-active');
+          idx = (idx + 1) % items.length;
+          items[idx].classList.add('is-active');
+        }, intervalMs);
+      }, delayMs);
+    };
+
+    startRotator('flow-client-rotator', 2600, 0);
+    startRotator('flow-tool-rotator', 2600, 1300);
+  }
+</script>

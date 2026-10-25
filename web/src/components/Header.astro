@@ -1,0 +1,7 @@
+---
+const inGuides = Astro.url.pathname.startsWith('/teleport');
+---
+<header class="site-nav site-width">
+  <a href="/" class="site-wordmark" aria-label="MCPWire home">mcpwire<span>.</span></a>
+  <nav aria-label="Main navigation"><a href="/docs" aria-current={Astro.url.pathname === "/docs" ? "page" : undefined}>Docs</a><a href="/teleport" aria-current={inGuides ? 'location' : undefined}>Server guides</a><a href="https://github.com/carlosrivera/mcpwire" class="site-source"><img src="/icons/github.svg" alt="" width="18" height="18" />Source <span aria-hidden="true">↗</span></a></nav>
+</header>

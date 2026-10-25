@@ -1,0 +1,16 @@
+---
+import { Code } from 'astro:components';
+import CopyButton from './CopyButton.astro';
+interface Props { title: string; code: string; lang?: 'bash' | 'json' | 'text'; copy?: boolean; }
+const { title, code, lang = 'bash', copy = true } = Astro.props;
+---
+<div class="panel doc-code">
+  <div class="panel-head"><span>{title}</span>{copy && <CopyButton text={code} label={`Copy ${title}`} />}</div>
+  <Code code={code} lang={lang} theme="github-dark-dimmed" />
+</div>
+<style>
+  .doc-code { margin-block:20px; }
+  .doc-code :global(pre) { background:var(--surface-code) !important; border-radius:0; font-size:14px; padding:20px 22px; }
+  .panel-head { min-height:52px; }
+  @media(max-width:680px) { .doc-code :global(pre) { padding:18px; } }
+</style>
