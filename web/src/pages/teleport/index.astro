@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import servers from '../../data/servers';
-import { serverIcon } from '../../data/server-icons';
 const categories = [...new Set(servers.map((server) => server.category))];
 ---
 <Base title="Server guides — MCPWire" description="Setup commands, tool access, and session policies for 26 MCP servers.">
@@ -19,7 +18,7 @@ const categories = [...new Set(servers.map((server) => server.category))];
             {servers.filter((server) => server.category === category).map((server) => {
               const defaults = server.defaults.allow.length;
               return <a class="card server-card" href={`/teleport/${server.slug}`}>
-                <div class="server-card-head"><img src={serverIcon(server.slug, server.icon)} alt="" width="32" height="32" loading="lazy" /><span aria-hidden="true">↗</span></div>
+                <div class="server-card-head"><img src={server.icon} alt="" width="32" height="32" loading="lazy" /><span aria-hidden="true">↗</span></div>
                 <h3>{server.name}</h3>
                 <p>{server.tagline}</p>
                 <div class="server-card-meta"><span>{defaults} default {defaults === 1 ? 'tool' : 'tools'}</span><span>{server.tools.length - defaults} to review</span></div>

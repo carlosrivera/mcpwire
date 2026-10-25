@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "context7",
+  "category": "Knowledge",
+  "source": "community",
+  "icon": "/icons/mcp.svg",
+  "tagline": "Up-to-date library docs for any agent — fully safe to teleport.",
+  "requirements": "Network access is required. Configure a Context7 API key if your plan requires one. Pinned package requires Node.js >=20.18.1.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "resolve-library-id",
+      "query-docs"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "resolve-library-id",
+      "risk": "safe",
+      "note": "Maps a name to a Context7 library."
+    },
+    {
+      "name": "query-docs",
+      "risk": "safe",
+      "note": "Fetches versioned docs."
+    }
+  ]
+}

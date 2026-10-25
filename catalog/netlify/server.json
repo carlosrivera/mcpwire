@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.netlify/netlify",
+  "title": "Netlify",
+  "description": "Stdio MCP server for Netlify.",
+  "version": "1.20.0",
+  "repository": {
+    "url": "https://github.com/netlify/netlify-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/netlify/netlify-mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@netlify/mcp",
+      "version": "1.20.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "named",
+          "name": "--verbose"
+        }
+      ],
+      "environmentVariables": [
+        {
+          "name": "NETLIFY_PERSONAL_ACCESS_TOKEN",
+          "description": "Inherited from the host environment: NETLIFY_PERSONAL_ACCESS_TOKEN.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

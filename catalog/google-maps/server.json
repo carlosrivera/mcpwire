@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.modelcontextprotocol/google-maps",
+  "title": "Google Maps",
+  "description": "Stdio MCP server for Google Maps.",
+  "version": "0.6.2",
+  "repository": {
+    "url": "https://github.com/modelcontextprotocol/servers-archived",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/google-maps",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@modelcontextprotocol/server-google-maps",
+      "version": "0.6.2",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "GOOGLE_MAPS_API_KEY",
+          "description": "Inherited from the host environment: GOOGLE_MAPS_API_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

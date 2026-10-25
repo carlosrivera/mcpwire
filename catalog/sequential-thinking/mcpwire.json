@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "sequential-thinking",
+  "category": "Knowledge",
+  "source": "official",
+  "icon": "/icons/workflow.svg",
+  "tagline": "The zero-risk demo: one stateless reasoning tool, perfect first teleport.",
+  "requirements": "Runs a reasoning helper on the host. Review arguments for sensitive information before sharing. Pinned package requires Node.js >=24.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "sequentialthinking"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "sequentialthinking",
+      "risk": "safe",
+      "note": "Stateless chain-of-thought scratchpad."
+    }
+  ]
+}

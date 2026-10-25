@@ -1,5 +1,5 @@
 {
-  "name": "mcpwire",
+  "name": "@mcpwire/cli",
   "version": "1.0.0",
   "description": "P2P tool teleportation for AI agents. Share an MCP server's capability over an E2EE Noise tunnel — never your credentials.",
   "bin": {
@@ -9,6 +9,19 @@
     "dist",
     "README.md"
   ],
+  "homepage": "https://mcpwire.co",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlosrivera/mcpwire.git",
+    "directory": "cli"
+  },
+  "bugs": {
+    "url": "https://github.com/carlosrivera/mcpwire/issues"
+  },
+  "author": "Carlos Rivera",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
@@ -16,7 +29,9 @@
     "test": "node test/run-tests.mjs",
     "test:e2e": "npm run build && node test/e2e-real.mjs",
     "test:e2e:sqlite": "npm run build && node test/e2e-real.mjs --sqlite",
-    "test:examples": "node test/examples.mjs"
+    "test:examples": "node test/examples.mjs",
+    "prepublishOnly": "npm run build && cp ../README.md ./README.md",
+    "postpublish": "rm -f ./README.md"
   },
   "keywords": [
     "mcp",

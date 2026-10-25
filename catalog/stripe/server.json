@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.stripe/stripe",
+  "title": "Stripe",
+  "description": "Stdio MCP server for Stripe.",
+  "version": "0.3.3",
+  "repository": {
+    "url": "https://github.com/stripe/ai",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/stripe/ai/tree/main/tools/modelcontextprotocol",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@stripe/mcp",
+      "version": "0.3.3",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "STRIPE_SECRET_KEY",
+          "description": "Inherited from the host environment: STRIPE_SECRET_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

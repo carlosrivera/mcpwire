@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.ckreiling/docker",
+  "title": "Docker",
+  "description": "Stdio MCP server for Docker.",
+  "version": "0.3.0",
+  "repository": {
+    "url": "https://github.com/ckreiling/mcp-server-docker",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/ckreiling/mcp-server-docker",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "mcp-server-docker",
+      "version": "0.3.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

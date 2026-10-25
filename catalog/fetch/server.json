@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.modelcontextprotocol/fetch",
+  "title": "Fetch",
+  "description": "Stdio MCP server for Fetch.",
+  "version": "2026.10.24",
+  "repository": {
+    "url": "https://github.com/modelcontextprotocol/servers",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "mcp-server-fetch",
+      "version": "2026.10.24",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

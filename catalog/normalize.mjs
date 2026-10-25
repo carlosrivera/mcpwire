@@ -11,10 +11,17 @@ export function resolveLaunch(server, policy, inputs = {}) {
   const command = {npm:'npx', pypi:'uvx'}[pkg.registryType];
   if (!command || (pkg.runtimeHint && pkg.runtimeHint !== command)) throw new Error(`${policy.slug}: unsupported package runtime`);
   if (pkg.registryBaseUrl && pkg.registryBaseUrl !== ({npm:'https://registry.npmjs.org',pypi:'https://pypi.org'}[pkg.registryType])) throw new Error(`${policy.slug}: custom registries are not supported`);
-  if (pkg.environmentVariables?.length) throw new Error(`${policy.slug}: environment inputs are not supported yet`);
+  const environment = new Set();
+  for (const variable of pkg.environmentVariables ?? []) {
+    if (!/^[A-Z_][A-Z0-9_]*$/.test(variable.name) || environment.has(variable.name)) throw new Error(`${policy.slug}: invalid or duplicate environment variable`);
+    if (variable.value !== undefined || variable.default !== undefined || variable.variables) throw new Error(`${policy.slug}: environment variables must be inherited, never stored in the catalog`);
+    environment.add(variable.name);
+  }
   const used = new Set();
   function argument(arg) {
     if (arg.isRepeated) throw new Error(`${policy.slug}: repeated arguments are not supported yet`);
+    if (arg.type === 'named' && !/^--?[A-Za-z0-9][A-Za-z0-9-]*$/.test(arg.name)) throw new Error(`${policy.slug}: invalid argument name`);
+    if (arg.type === 'named' && arg.value === undefined && !arg.variables) return [arg.name];
     if (!['named','positional'].includes(arg.type) || typeof arg.value !== 'string') throw new Error(`${policy.slug}: arguments need a type and explicit value`);
     const value = arg.value.replace(/\{([^{}]+)\}/g, (_, key) => {
       const definition = arg.variables?.[key];
@@ -52,13 +59,9 @@ export function normalizeEntry({server, policy}) {
   };
 }
 
-export function mergeCatalog(legacy, entries) {
-  const result = legacy.map(server => ({...server, defaults:{
-    allow:server.tools.filter(tool => tool.risk === 'safe').map(tool => tool.name),
-    redactSecrets:true, ttl:'30m',
-  }}));
-  const slugs = new Set(result.map(server => server.slug));
-  if (slugs.size !== result.length) throw new Error('Duplicate legacy server slugs');
+export function createCatalog(entries) {
+  const result = [];
+  const slugs = new Set();
   for (const entry of entries) {
     const server = normalizeEntry(entry);
     if (slugs.has(server.slug)) throw new Error(`Duplicate server slug: ${server.slug}`);

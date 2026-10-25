@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { mergeCatalog } from './normalize.mjs';
+import { createCatalog } from './normalize.mjs';
 const root = new URL('./', import.meta.url);
 export const readJSON = url => JSON.parse(readFileSync(url, 'utf8'));
 export function readEntries() {
@@ -12,5 +12,5 @@ export function readEntries() {
   }));
 }
 export function loadCatalog() {
-  return mergeCatalog(readJSON(new URL('../web/src/data/servers.json', root)), readEntries());
+  return createCatalog(readEntries());
 }

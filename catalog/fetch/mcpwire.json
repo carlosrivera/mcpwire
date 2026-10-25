@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "fetch",
+  "category": "Web",
+  "source": "official",
+  "icon": "/icons/globe.svg",
+  "tagline": "Give an agent URL fetching from your network position — rate-limited by your kill-switch.",
+  "requirements": "Install uv (which provides uvx). Requests need network access.",
+  "inputs": {},
+  "defaults": {
+    "allow": [],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "fetch",
+      "risk": "caution",
+      "note": "GETs any URL reachable from YOUR machine, including internal hosts."
+    }
+  ]
+}

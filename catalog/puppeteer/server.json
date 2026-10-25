@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.modelcontextprotocol/puppeteer",
+  "title": "Puppeteer",
+  "description": "Stdio MCP server for Puppeteer.",
+  "version": "2025.5.12",
+  "repository": {
+    "url": "https://github.com/modelcontextprotocol/servers-archived",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/puppeteer",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@modelcontextprotocol/server-puppeteer",
+      "version": "2025.5.12",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

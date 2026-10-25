@@ -1,0 +1,67 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "puppeteer",
+  "category": "Browser",
+  "source": "official",
+  "icon": "/icons/mcp.svg",
+  "tagline": "Drive a headless Chrome on your machine from a remote agent, safely sandboxed.",
+  "requirements": "Requires a supported browser installation. This is the archived reference server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "puppeteer_screenshot",
+      "puppeteer_resize",
+      "puppeteer_close"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "puppeteer_navigate",
+      "risk": "caution",
+      "note": "Opens URLs in your browser."
+    },
+    {
+      "name": "puppeteer_screenshot",
+      "risk": "safe",
+      "note": "Captures the page."
+    },
+    {
+      "name": "puppeteer_click",
+      "risk": "caution",
+      "note": "Clicks elements."
+    },
+    {
+      "name": "puppeteer_fill",
+      "risk": "caution",
+      "note": "Fills inputs — could type into logged-in sessions."
+    },
+    {
+      "name": "puppeteer_select",
+      "risk": "caution",
+      "note": "Selects options."
+    },
+    {
+      "name": "puppeteer_hover",
+      "risk": "caution",
+      "note": "Hovers elements."
+    },
+    {
+      "name": "puppeteer_evaluate",
+      "risk": "high",
+      "note": "Arbitrary JavaScript in page context."
+    },
+    {
+      "name": "puppeteer_resize",
+      "risk": "safe",
+      "note": "Viewport size."
+    },
+    {
+      "name": "puppeteer_close",
+      "risk": "safe",
+      "note": "Closes the page."
+    }
+  ]
+}

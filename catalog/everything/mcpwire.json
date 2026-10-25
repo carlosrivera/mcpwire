@@ -1,0 +1,64 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "everything",
+  "category": "Utility",
+  "source": "official",
+  "icon": "/icons/blocks.svg",
+  "tagline": "The MCP reference server — teleport it to test every protocol feature.",
+  "requirements": "This reference server also exposes resources, prompts, and notifications. MCPWire’s allowlist filters tools, not those other MCP methods. Pinned package requires Node.js >=24.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "echo",
+      "get-sum",
+      "get-annotated-message",
+      "get-structured-content",
+      "get-tiny-image"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "echo",
+      "risk": "safe",
+      "note": "Echoes a message."
+    },
+    {
+      "name": "get-sum",
+      "risk": "safe",
+      "note": "Adds numbers."
+    },
+    {
+      "name": "get-annotated-message",
+      "risk": "safe",
+      "note": "Returns annotated content."
+    },
+    {
+      "name": "get-structured-content",
+      "risk": "safe",
+      "note": "Returns structured output."
+    },
+    {
+      "name": "get-tiny-image",
+      "risk": "safe",
+      "note": "Returns a tiny image."
+    },
+    {
+      "name": "trigger-long-running-operation",
+      "risk": "caution",
+      "note": "Runs a delayed operation."
+    },
+    {
+      "name": "get-env",
+      "risk": "high",
+      "note": "Exposes host environment variables."
+    },
+    {
+      "name": "gzip-file-as-resource",
+      "risk": "high",
+      "note": "Reads and compresses a local file."
+    }
+  ]
+}

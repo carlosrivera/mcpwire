@@ -3,7 +3,6 @@ import Base from '../../layouts/Base.astro';
 import CopyButton from '../../components/CopyButton.astro';
 import { Code } from 'astro:components';
 import servers from '../../data/servers';
-import { serverIcon } from '../../data/server-icons';
 export function getStaticPaths() {
   return servers.map((server) => ({ params:{slug:server.slug}, props:{server} }));
 }
@@ -11,10 +10,11 @@ const s = Astro.props.server;
 const defaults = s.tools.filter((tool) => s.defaults.allow.includes(tool.name));
 const guides = import.meta.glob('../../../../catalog/*/guide.md', {eager:true});
 const Guide = (guides[`../../../../catalog/${s.slug}/guide.md`] as {Content?: any} | undefined)?.Content;
+if (!Guide) throw new Error(`Missing catalog guide for ${s.slug}`);
 const caution = s.tools.filter((tool) => !s.defaults.allow.includes(tool.name) && tool.risk !== 'high');
 const high = s.tools.filter((tool) => !s.defaults.allow.includes(tool.name) && tool.risk === 'high');
-const shareCmd = ['npx -y mcpwire share',`--allow "${defaults.map((tool) => tool.name).join(',')}"`,`${s.defaults.redactSecrets ? '--redact-secrets ' : ''}--ttl ${s.defaults.ttl}`,`-- ${s.command}`].join(' \\\n  ');
-const guestJson = JSON.stringify({mcpServers:{[`teleported-${s.slug}`]:{command:'npx',args:['-y','mcpwire','join','wire://<TICKET_FROM_HOST_BANNER>']}}},null,2);
+const shareCmd = ['npx -y @mcpwire/cli share',`--allow "${defaults.map((tool) => tool.name).join(',')}"`,`${s.defaults.redactSecrets ? '--redact-secrets ' : ''}--ttl ${s.defaults.ttl}`,`-- ${s.command}`].join(' \\\n  ');
+const guestJson = JSON.stringify({mcpServers:{[`teleported-${s.slug}`]:{command:'npx',args:['-y','@mcpwire/cli','join','wire://<TICKET_FROM_HOST_BANNER>']}}},null,2);
 const title = `Share ${s.name} MCP tools — MCPWire`;
 const description = `Set up ${s.name} with MCPWire. Review tool access and copy a sharing command with an explicit allowlist, recognized-secret redaction, and a session expiry.`;
 ---
@@ -25,7 +25,7 @@ const description = `Set up ${s.name} with MCPWire. Review tool access and copy 
       <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/teleport">Server guides</a><span aria-hidden="true">/</span><span>{s.name}</span></nav>
       <div class="page-head">
         <div class="eyebrow">{s.category} · {s.source} server</div>
-        <div class="guide-title"><img src={serverIcon(s.slug, s.icon)} alt="" width="46" height="46" /><h1>Share {s.name} tools.</h1></div>
+        <div class="guide-title"><img src={s.icon} alt="" width="46" height="46" /><h1>Share {s.name} tools.</h1></div>
         <p class="page-intro">Run {s.name} on your machine and connect a teammate’s agent to selected tools. Review the access list below before starting your session.</p>
       </div>
       <div class="guide-stats" aria-label="Guide summary">
@@ -55,7 +55,7 @@ const description = `Set up ${s.name} with MCPWire. Review tool access and copy 
           </div>
         </div>
       </div>
-      {Guide && <section class="catalog-guide card"><Guide /></section>}
+      <section class="catalog-guide card"><Guide /></section>
       <div class="grid cols-3 guide-notes">
         <article class="card"><h2>Keep setup on your machine.</h2><p>Your teammate uses the shared tools through MCPWire. They don’t need to install this server or configure its API keys.</p></article>
         <article class="card"><h2>Review the session.</h2><p>Add <code class="inline">--record session.wirelog</code> to save a local log, then open it in the <a href="/replay">session replay viewer</a>.</p></article>

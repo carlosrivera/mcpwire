@@ -1,0 +1,56 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "redis",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/redis.svg",
+  "tagline": "Cache introspection over P2P — GET allowed, DEL and FLUSHALL never.",
+  "requirements": "Install uv (uvx) and point --url at a running Redis instance. Configure Redis ACL credentials to restrict the accessible data and operations.",
+  "inputs": {
+    "redis_url": {
+      "example": "redis://localhost:6379/0"
+    }
+  },
+  "defaults": {
+    "allow": [
+      "scan_keys",
+      "dbsize",
+      "info"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "get",
+      "risk": "caution",
+      "note": "Reads a value; may contain private data."
+    },
+    {
+      "name": "scan_keys",
+      "risk": "safe",
+      "note": "Scans key names."
+    },
+    {
+      "name": "dbsize",
+      "risk": "safe",
+      "note": "Counts keys."
+    },
+    {
+      "name": "info",
+      "risk": "safe",
+      "note": "Reads Redis server information."
+    },
+    {
+      "name": "set",
+      "risk": "high",
+      "note": "Writes a value."
+    },
+    {
+      "name": "delete",
+      "risk": "high",
+      "note": "Deletes a key."
+    }
+  ]
+}

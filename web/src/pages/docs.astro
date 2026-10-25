@@ -59,7 +59,7 @@ const sqlite = `node cli/dist/index.js share \\
         <h2>Run the CLI</h2>
         <p>You need Node.js 18 or newer and an MCP server that speaks JSON-RPC over stdio. Start in the root of this repository:</p>
         <DocCode title="Build from source" code={setup} />
-        <p class="note">The examples below use this checkout. <code class="inline">mcpwire</code> is still the placeholder package name; the public npm package currently belongs to another project. Use the source build to run this implementation.</p>
+        <p class="note">Run directly with <code class="inline">npx -y @mcpwire/cli</code> or install globally via <code class="inline">npm install -g @mcpwire/cli</code>. You can also build from source using the steps above.</p>
         <p>Run <code class="inline">node cli/dist/index.js --help</code> for usage. The two commands are <code class="inline">share</code> on the host and <code class="inline">join</code> on the guest.</p>
       </section>
 

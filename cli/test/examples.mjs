@@ -1,4 +1,5 @@
-import { loadCatalog } from '../../catalog/load.mjs';
+import { loadCatalog, readEntries } from '../../catalog/load.mjs';
+import { resolveLaunch } from '../../catalog/normalize.mjs';
 // Initialize published examples and validate selected allowlist names, without
 // making calls to credential-backed services. Requires uvx for Python servers.
 import assert from 'node:assert/strict';
@@ -11,16 +12,24 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 const servers = loadCatalog();
 const folder = mkdtempSync(path.join(tmpdir(), 'mcpwire-git-example-'));
 execFileSync('git', ['init', '-q', folder]);
-const configs = [
-  ['git', 'uvx', ['mcp-server-git', '--repository', folder]],
-  ['fetch', 'uvx', ['mcp-server-fetch']],
-  ['time', 'uvx', ['mcp-server-time']],
-  ['sequential-thinking', 'npx', ['-y', '@modelcontextprotocol/server-sequential-thinking']],
-  ['everything', 'npx', ['-y', '@modelcontextprotocol/server-everything']],
-  ['notion', 'npx', ['-y', '@notionhq/notion-mcp-server'], { NOTION_TOKEN: 'test-token' }],
-  ['context7', 'npx', ['-y', '@upstash/context7-mcp']],
-  ['supabase', 'npx', ['-y', '@supabase/mcp-server-supabase', '--read-only'], { SUPABASE_ACCESS_TOKEN: 'sbp_' + 'a'.repeat(40) }],
+const entries = readEntries();
+// Only this reviewed set is executed; adding a catalog folder does not run code.
+const fixtures = [
+  ['git', {repository:folder}],
+  ['fetch', {}],
+  ['time', {}],
+  ['sequential-thinking', {}],
+  ['everything', {}],
+  ['notion', {}, {NOTION_TOKEN:'test-token'}],
+  ['context7', {}],
+  ['supabase', {project_ref:'test-project'}, {SUPABASE_ACCESS_TOKEN:'sbp_' + 'a'.repeat(40)}],
+  ['figma', {}, {FIGMA_API_KEY:'test-token'}],
 ];
+const configs = fixtures.map(([slug, inputs, credentials]) => {
+  const entry = entries.find(entry => entry.folder === slug);
+  const launch = resolveLaunch(entry.server, entry.policy, inputs);
+  return [slug, launch.command, launch.args, credentials];
+});
 try {
   const results = await Promise.allSettled(configs.map(async ([slug, command, args, credentials]) => {
     const client = new Client({ name: 'mcpwire-example-test', version: '1' });
@@ -34,7 +43,8 @@ try {
       await Promise.race([client.connect(transport), new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`${slug}: initialization timed out`)), 45000); })]);
       const response = await client.listTools();
       const actual = new Set(response.tools.map((tool) => tool.name));
-      for (const tool of servers.find((server) => server.slug === slug).tools.filter((tool) => servers.find((server) => server.slug === slug).defaults.allow.includes(tool.name))) {
+      const server = servers.find((server) => server.slug === slug);
+      for (const tool of server.tools.filter((tool) => server.defaults.allow.includes(tool.name))) {
         assert(actual.has(tool.name), `${slug}: allowlisted tool ${tool.name} does not exist`);
       }
       console.log(`PASS ${slug}: MCP initialization and guide allowlist verified`);

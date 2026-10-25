@@ -41,7 +41,7 @@ EXAMPLES
     -- npx -y @modelcontextprotocol/server-github
 
   # Guest side (inside claude_desktop_config.json / .cursor/mcp.json):
-  npx -y mcpwire join wire://7f9a2b8c4e1d0a...
+  npx -y @mcpwire/cli join wire://7f9a2b8c4e1d0a...
 
 Full docs & visual policy builder: https://mcpwire.co
 `.trim();

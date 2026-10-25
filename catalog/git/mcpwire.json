@@ -1,0 +1,84 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "git",
+  "category": "DevOps",
+  "source": "official",
+  "icon": "/icons/git.svg",
+  "tagline": "Remote code review over P2P: git_log and git_diff in, git_commit and git_reset out.",
+  "requirements": "Install uv (which provides uvx). Point --repository at an existing Git checkout.",
+  "inputs": {
+    "repository": {
+      "example": "."
+    }
+  },
+  "defaults": {
+    "allow": [
+      "git_status",
+      "git_log",
+      "git_diff_unstaged",
+      "git_diff_staged",
+      "git_diff",
+      "git_show"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "git_status",
+      "risk": "safe",
+      "note": "Working tree status."
+    },
+    {
+      "name": "git_log",
+      "risk": "safe",
+      "note": "Commit history."
+    },
+    {
+      "name": "git_diff_unstaged",
+      "risk": "safe",
+      "note": "Diff of unstaged changes."
+    },
+    {
+      "name": "git_diff_staged",
+      "risk": "safe",
+      "note": "Diff of staged changes."
+    },
+    {
+      "name": "git_diff",
+      "risk": "safe",
+      "note": "Diff between refs."
+    },
+    {
+      "name": "git_show",
+      "risk": "safe",
+      "note": "Shows a commit."
+    },
+    {
+      "name": "git_add",
+      "risk": "high",
+      "note": "Stages files."
+    },
+    {
+      "name": "git_commit",
+      "risk": "high",
+      "note": "Creates commits."
+    },
+    {
+      "name": "git_reset",
+      "risk": "high",
+      "note": "Unstages/resets state."
+    },
+    {
+      "name": "git_create_branch",
+      "risk": "caution",
+      "note": "Branch creation."
+    },
+    {
+      "name": "git_checkout",
+      "risk": "caution",
+      "note": "Switches branches."
+    }
+  ]
+}

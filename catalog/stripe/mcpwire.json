@@ -1,0 +1,66 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "stripe",
+  "category": "Business",
+  "source": "official",
+  "icon": "/icons/stripe.svg",
+  "tagline": "Revenue research for remote agents — refunds and customer creation stay local.",
+  "requirements": "Set STRIPE_SECRET_KEY in the host environment. Use a restricted API key with only the permissions you intend to share. Pinned package requires Node.js >=18.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "list_products",
+      "list_prices"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list_customers",
+      "risk": "caution",
+      "note": "Customer records contain PII — keep DLP on."
+    },
+    {
+      "name": "list_products",
+      "risk": "safe",
+      "note": "Product catalog."
+    },
+    {
+      "name": "list_prices",
+      "risk": "safe",
+      "note": "Price catalog."
+    },
+    {
+      "name": "list_invoices",
+      "risk": "caution",
+      "note": "Invoice history."
+    },
+    {
+      "name": "list_balance_transactions",
+      "risk": "caution",
+      "note": "Financial ledger."
+    },
+    {
+      "name": "create_customer",
+      "risk": "high",
+      "note": "Mutates billing data."
+    },
+    {
+      "name": "create_product",
+      "risk": "high",
+      "note": "Mutates catalog."
+    },
+    {
+      "name": "create_payment_link",
+      "risk": "high",
+      "note": "Creates live payment links."
+    },
+    {
+      "name": "create_refund",
+      "risk": "high",
+      "note": "Moves money. Never teleport this."
+    }
+  ]
+}

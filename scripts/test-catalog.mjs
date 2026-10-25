@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { readEntries, loadCatalog } from '../catalog/load.mjs';
-import { mergeCatalog, resolveLaunch, shellQuote } from '../catalog/normalize.mjs';
+import { readEntries } from '../catalog/load.mjs';
+import { createCatalog, resolveLaunch, shellQuote } from '../catalog/normalize.mjs';
 import { validateEntry } from './check-catalog.mjs';
 const entries = readEntries();
 const fs = entries.find(entry => entry.folder === 'filesystem');
@@ -18,10 +18,24 @@ assert.throws(() => validateEntry(mutate(e => e.server.packages[0].transport = {
 assert.throws(() => validateEntry(mutate(e => e.policy.inputs.directory.example = '{unresolved}')), /unresolved/);
 assert.throws(() => validateEntry(mutate(e => e.policy.inputs.unused = {example:'x'})), /unused input/);
 assert.throws(() => validateEntry(mutate(e => e.policy.defaults.ttl = '0s')), /positive/);
-assert.throws(() => mergeCatalog(loadCatalog(), [fs]), /Duplicate server slug/);
+assert.throws(() => createCatalog([...entries, fs]), /Duplicate server slug/);
 // Adding a low-risk tool cannot grant access implicitly.
 const added = mutate(e => e.policy.tools.push({name:'new_read_tool',risk:'safe',note:'Still not approved by default.'}));
 assert(!validateEntry(added).defaults.allow.includes('new_read_tool'));
+const empty = mutate(e => e.policy.defaults.allow = []);
+assert.deepEqual(validateEntry(empty).defaults.allow, []);
+// Named flags remain standalone; credentials are inherited and never serialized.
+const figma = entries.find(entry => entry.folder === 'figma');
+const supabase = entries.find(entry => entry.folder === 'supabase');
+assert(resolveLaunch(figma.server, figma.policy).args.includes('--stdio'));
+assert(!validateEntry(figma).command.includes('$FIGMA'));
+assert(resolveLaunch(supabase.server, supabase.policy).args.includes('--read-only'));
+const credential = structuredClone(figma); delete credential.directory;
+credential.server.packages[0].environmentVariables[0].value = 'DO_NOT_STORE_CREDENTIALS';
+assert.throws(() => validateEntry(credential), /inherited/);
+const duplicateEnv = structuredClone(figma); delete duplicateEnv.directory;
+duplicateEnv.server.packages[0].environmentVariables.push(duplicateEnv.server.packages[0].environmentVariables[0]);
+assert.throws(() => validateEntry(duplicateEnv), /duplicate environment/);
 // Displayed shell commands must preserve argument boundaries, including hostile input.
 const directory = "/tmp/a folder/'quoted' $HOME $(echo should-not-run); *";
 const launch = resolveLaunch(fs.server, fs.policy, {directory});

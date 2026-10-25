@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.upstash/context7",
+  "title": "Context7 (Docs)",
+  "description": "Stdio MCP server for Context7 (Docs).",
+  "version": "4.4.4",
+  "repository": {
+    "url": "https://github.com/upstash/context7",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/upstash/context7",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@upstash/context7-mcp",
+      "version": "4.4.4",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.modelcontextprotocol/postgres",
+  "title": "PostgreSQL",
+  "description": "Stdio MCP server for PostgreSQL.",
+  "version": "0.6.2",
+  "repository": {
+    "url": "https://github.com/modelcontextprotocol/servers-archived",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@modelcontextprotocol/server-postgres",
+      "version": "0.6.2",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "valueHint": "database_url",
+          "value": "{database_url}",
+          "variables": {
+            "database_url": {
+              "description": "PostgreSQL URL on the host",
+              "format": "string",
+              "isRequired": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

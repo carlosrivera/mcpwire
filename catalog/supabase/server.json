@@ -1,0 +1,49 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.supabase/supabase",
+  "title": "Supabase",
+  "description": "Stdio MCP server for Supabase.",
+  "version": "0.14.0",
+  "repository": {
+    "url": "https://github.com/supabase/mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/supabase/mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@supabase/mcp-server-supabase",
+      "version": "0.14.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "named",
+          "name": "--read-only"
+        },
+        {
+          "type": "named",
+          "name": "--project-ref",
+          "value": "{project_ref}",
+          "variables": {
+            "project_ref": {
+              "description": "Supabase project reference",
+              "format": "string",
+              "isRequired": true
+            }
+          }
+        }
+      ],
+      "environmentVariables": [
+        {
+          "name": "SUPABASE_ACCESS_TOKEN",
+          "description": "Inherited from the host environment: SUPABASE_ACCESS_TOKEN.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

@@ -28,7 +28,7 @@ MCPWire teleports a local [MCP](https://modelcontextprotocol.io) server (Postgre
 **Host** (SQLite example; requires [uv](https://docs.astral.sh/uv/) for `uvx`):
 
 ```bash
-npx -y mcpwire share \
+npx -y @mcpwire/cli share \
   --allow "read_query,list_tables,describe_table" \
   --redact-secrets \
   --ttl 30m \
@@ -44,7 +44,7 @@ The command prints a `wire://…` ticket and a ready-to-paste `mcpServers` snipp
   "mcpServers": {
     "teleported-sqlite": {
       "command": "npx",
-      "args": ["-y", "mcpwire", "join", "wire://7f9a2b8c4e1d0a…"]
+      "args": ["-y", "@mcpwire/cli", "join", "wire://7f9a2b8c4e1d0a…"]
     }
   }
 }
@@ -117,12 +117,12 @@ The CLI injects HyperDHT **6.32.0** explicitly into Hyperswarm. Releases 6.33–
 
 An explicit empty `--allow ""` exposes no tools. Omitting `--allow` still permits every tool not denied. The site builder always emits an explicit allowlist, including an empty one.
 
-`npx mcpwire` remains a placeholder package name for this checkout; use `node cli/dist/index.js` for local testing until the intended npm package is published.
+Run directly via `npx -y @mcpwire/cli` or install globally via `npm install -g @mcpwire/cli`.
 
 To exercise public DHT discovery with the real filesystem server, run `MCPWIRE_E2E_RUNS=1 node cli/test/e2e-real.mjs --public` from the repository root. This tests the public discovery path from one host; a two-machine NAT traversal test is still a separate check.
 
 ## Contributing server definitions
 
-Filesystem and SQLite now live in the shared `catalog/`. Their pinned launch commands, explicit tool defaults, and metadata drive both server guides and the command builder. The remaining entries use a compatibility adapter during migration.
+All 26 servers live in the shared `catalog/`. Their pinned launch commands, explicit tool defaults, environment requirements, icons, and Markdown guides drive both server guides and the command builder.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the format, schemas, local checks, and reviewed runtime verification. Run `npm ci` at the repository root before building the website to install catalog validation dependencies.

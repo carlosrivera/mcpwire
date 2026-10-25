@@ -179,7 +179,7 @@ const servers = (serversRaw as any[]).map((s) => ({
   }
 
   function buildCmd(): string {
-    const parts = ['npx', '-y', 'mcpwire', 'share'];
+    const parts = ['npx', '-y', '@mcpwire/cli', 'share'];
     const tools = checkedTools();
     parts.push('--allow', `"${tools.join(',')}"`);
     if (el.redact.checked) parts.push('--redact-secrets');
@@ -196,7 +196,7 @@ const servers = (serversRaw as any[]).map((s) => ({
     return JSON.stringify(
       {
         mcpServers: {
-          [name]: { command: 'npx', args: ['-y', 'mcpwire', 'join', 'wire://<TICKET_FROM_HOST_BANNER>'] },
+          [name]: { command: 'npx', args: ['-y', '@mcpwire/cli', 'join', 'wire://<TICKET_FROM_HOST_BANNER>'] },
         },
       },
       null,

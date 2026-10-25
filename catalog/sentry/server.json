@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.getsentry/sentry",
+  "title": "Sentry",
+  "description": "Stdio MCP server for Sentry.",
+  "version": "0.42.0",
+  "repository": {
+    "url": "https://github.com/getsentry/sentry-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/getsentry/sentry-mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@sentry/mcp-server",
+      "version": "0.42.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "SENTRY_ACCESS_TOKEN",
+          "description": "Inherited from the host environment: SENTRY_ACCESS_TOKEN.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

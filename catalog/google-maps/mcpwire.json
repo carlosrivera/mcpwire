@@ -1,0 +1,61 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "google-maps",
+  "category": "Web",
+  "source": "official",
+  "icon": "/icons/google-maps.svg",
+  "tagline": "Geocoding and directions powered by your API key, not theirs.",
+  "requirements": "Set GOOGLE_MAPS_API_KEY in the host environment. This is the archived reference server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "maps_geocode",
+      "maps_reverse_geocode",
+      "maps_search_places",
+      "maps_place_details",
+      "maps_directions",
+      "maps_distance_matrix",
+      "maps_elevation"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "maps_geocode",
+      "risk": "safe",
+      "note": "Address to coordinates."
+    },
+    {
+      "name": "maps_reverse_geocode",
+      "risk": "safe",
+      "note": "Coordinates to address."
+    },
+    {
+      "name": "maps_search_places",
+      "risk": "safe",
+      "note": "POI search."
+    },
+    {
+      "name": "maps_place_details",
+      "risk": "safe",
+      "note": "Place metadata."
+    },
+    {
+      "name": "maps_directions",
+      "risk": "safe",
+      "note": "Routing."
+    },
+    {
+      "name": "maps_distance_matrix",
+      "risk": "safe",
+      "note": "Distance/time matrix."
+    },
+    {
+      "name": "maps_elevation",
+      "risk": "safe",
+      "note": "Elevation lookup."
+    }
+  ]
+}

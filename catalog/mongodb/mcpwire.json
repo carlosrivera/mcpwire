@@ -1,0 +1,73 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "mongodb",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/mongodb.svg",
+  "tagline": "Aggregate and inspect a remote cluster; inserts and deletes never leave home.",
+  "requirements": "Set MDB_MCP_CONNECTION_STRING in the host environment. The example enables the server’s own read-only mode. Pinned package requires Node.js ^20.19.0 || ^22.13.0 || >= 24.0.0.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "list-databases",
+      "list-collections",
+      "list-connections",
+      "count"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list-databases",
+      "risk": "safe",
+      "note": "Database inventory."
+    },
+    {
+      "name": "list-collections",
+      "risk": "safe",
+      "note": "Collection inventory."
+    },
+    {
+      "name": "list-connections",
+      "risk": "safe",
+      "note": "Lists connection IDs for use with the database tools."
+    },
+    {
+      "name": "count",
+      "risk": "safe",
+      "note": "Counts matching documents."
+    },
+    {
+      "name": "find",
+      "risk": "caution",
+      "note": "Reads documents that may contain private data."
+    },
+    {
+      "name": "aggregate",
+      "risk": "caution",
+      "note": "Reads aggregation results; review access to private data."
+    },
+    {
+      "name": "insert-many",
+      "risk": "high",
+      "note": "Inserts documents; disabled by --readOnly."
+    },
+    {
+      "name": "update-many",
+      "risk": "high",
+      "note": "Updates documents; disabled by --readOnly."
+    },
+    {
+      "name": "delete-many",
+      "risk": "high",
+      "note": "Deletes documents; disabled by --readOnly."
+    },
+    {
+      "name": "create-index",
+      "risk": "high",
+      "note": "Creates an index; disabled by --readOnly."
+    }
+  ]
+}

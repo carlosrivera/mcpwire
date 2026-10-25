@@ -1,0 +1,67 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "kubernetes",
+  "category": "Infra",
+  "source": "community",
+  "icon": "/icons/kubernetes.svg",
+  "tagline": "Debug a cluster from a teammate's terminal — scale and delete stay with you.",
+  "requirements": "Install kubectl and configure a kubeconfig with access to your cluster. Helm is optional. Pinned package requires Node.js >=18.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "kubectl_get",
+      "kubectl_describe",
+      "list_api_resources"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "kubectl_get",
+      "risk": "safe",
+      "note": "Reads Kubernetes resource state; use least-privilege kubeconfig credentials."
+    },
+    {
+      "name": "kubectl_describe",
+      "risk": "safe",
+      "note": "Describes a resource."
+    },
+    {
+      "name": "list_api_resources",
+      "risk": "safe",
+      "note": "Lists resource kinds."
+    },
+    {
+      "name": "kubectl_logs",
+      "risk": "caution",
+      "note": "Reads application logs, which may contain secrets."
+    },
+    {
+      "name": "kubectl_create",
+      "risk": "high",
+      "note": "Creates resources."
+    },
+    {
+      "name": "kubectl_apply",
+      "risk": "high",
+      "note": "Applies manifests."
+    },
+    {
+      "name": "kubectl_delete",
+      "risk": "high",
+      "note": "Deletes resources."
+    },
+    {
+      "name": "kubectl_scale",
+      "risk": "high",
+      "note": "Changes replicas."
+    },
+    {
+      "name": "kubectl_generic",
+      "risk": "high",
+      "note": "Runs general kubectl commands."
+    }
+  ]
+}

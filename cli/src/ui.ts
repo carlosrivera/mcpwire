@@ -99,7 +99,7 @@ export function printBanner(o: BannerOpts): void {
     `  "mcpServers": {`,
     `    "${o.serverName}": {`,
     `      "command": "npx",`,
-    `      "args": ["-y", "mcpwire", "join", "${o.ticket}"]`,
+    `      "args": ["-y", "@mcpwire/cli", "join", "${o.ticket}"]`,
     `    }`,
     `  }`,
   ];

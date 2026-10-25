@@ -1,0 +1,68 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "docker",
+  "category": "Infra",
+  "source": "community",
+  "icon": "/icons/docker.svg",
+  "tagline": "Inspect containers and images from a remote machine; no run/stop teleported.",
+  "requirements": "Install uv (uvx) and run a Docker daemon accessible to the host. The server uses the Docker SDK environment configuration.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "list_containers",
+      "list_images",
+      "list_networks",
+      "list_volumes"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list_containers",
+      "risk": "safe",
+      "note": "Lists containers."
+    },
+    {
+      "name": "list_images",
+      "risk": "safe",
+      "note": "Lists images."
+    },
+    {
+      "name": "list_networks",
+      "risk": "safe",
+      "note": "Lists networks."
+    },
+    {
+      "name": "list_volumes",
+      "risk": "safe",
+      "note": "Lists volumes."
+    },
+    {
+      "name": "fetch_container_logs",
+      "risk": "caution",
+      "note": "Logs can contain secrets."
+    },
+    {
+      "name": "run_container",
+      "risk": "high",
+      "note": "Runs containers."
+    },
+    {
+      "name": "stop_container",
+      "risk": "high",
+      "note": "Stops containers."
+    },
+    {
+      "name": "remove_container",
+      "risk": "high",
+      "note": "Deletes containers."
+    },
+    {
+      "name": "remove_image",
+      "risk": "high",
+      "note": "Deletes images."
+    }
+  ]
+}

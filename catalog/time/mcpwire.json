@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "time",
+  "category": "Utility",
+  "source": "official",
+  "icon": "/icons/clock.svg",
+  "tagline": "Timezone math for agents — the hello-world of safe teleports.",
+  "requirements": "Install uv (which provides uvx). No credentials required.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "get_current_time",
+      "convert_time"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "get_current_time",
+      "risk": "safe",
+      "note": "Current time in a timezone."
+    },
+    {
+      "name": "convert_time",
+      "risk": "safe",
+      "note": "Timezone conversion."
+    }
+  ]
+}

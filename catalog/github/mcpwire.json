@@ -1,0 +1,84 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "github",
+  "category": "DevOps",
+  "source": "official",
+  "icon": "/icons/github.svg",
+  "tagline": "Share repo research and issue triage — never push_files or fork_repository.",
+  "requirements": "Set GITHUB_PERSONAL_ACCESS_TOKEN in the host environment. This is the archived reference server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "search_repositories",
+      "get_file_contents",
+      "get_pull_request",
+      "list_issues",
+      "list_commits"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "search_repositories",
+      "risk": "safe",
+      "note": "Repo search."
+    },
+    {
+      "name": "get_file_contents",
+      "risk": "safe",
+      "note": "Reads files/dirs from a repo."
+    },
+    {
+      "name": "get_pull_request",
+      "risk": "safe",
+      "note": "PR details."
+    },
+    {
+      "name": "list_issues",
+      "risk": "safe",
+      "note": "Issue listing."
+    },
+    {
+      "name": "list_commits",
+      "risk": "safe",
+      "note": "Commit history."
+    },
+    {
+      "name": "create_issue",
+      "risk": "high",
+      "note": "Writes to your repos."
+    },
+    {
+      "name": "add_comment_to_issue",
+      "risk": "high",
+      "note": "Posts as your identity."
+    },
+    {
+      "name": "create_pull_request",
+      "risk": "high",
+      "note": "Opens PRs."
+    },
+    {
+      "name": "merge_pull_request",
+      "risk": "high",
+      "note": "Merges code."
+    },
+    {
+      "name": "fork_repository",
+      "risk": "high",
+      "note": "Forks under your account."
+    },
+    {
+      "name": "push_files",
+      "risk": "high",
+      "note": "Commits directly to branches."
+    },
+    {
+      "name": "create_branch",
+      "risk": "high",
+      "note": "Branch mutation."
+    }
+  ]
+}

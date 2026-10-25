@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "postgres",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/postgresql.svg",
+  "tagline": "Share a local Postgres replica with remote agents without handing over the keys to prod.",
+  "requirements": "Provide a working PostgreSQL connection URL. Use database credentials with read-only permissions. This is an archived reference server.",
+  "inputs": {
+    "database_url": {
+      "example": "postgresql://localhost:5432/mydb"
+    }
+  },
+  "defaults": {
+    "allow": [
+      "query"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "query",
+      "risk": "safe",
+      "note": "Runs SQL inside the reference server’s read-only transaction. Keep database credentials read-only as well."
+    }
+  ]
+}

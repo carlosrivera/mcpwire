@@ -2,7 +2,7 @@
 
 Add a server by contributing a catalog folder. Guides and the command builder read the same definitions; no Astro page or CLI changes are needed for supported packages.
 
-Filesystem and SQLite are the first migrated entries. The other 24 entries remain in `web/src/data/servers.json` behind a compatibility adapter. New contributions belong in `catalog/`, not that legacy file. When migrating an existing server, remove its legacy entry in the same change; duplicate slugs fail validation.
+All 26 server definitions live in `catalog/`. Add new contributions there. The same loader supplies the guides, directory, and builder; duplicate slugs fail validation.
 
 ## Get started
 
@@ -45,7 +45,7 @@ Currently supported: exactly one package, with `transport.type: "stdio"`, and ei
 
 Pin a specific numeric package version. Set `runtimeHint` to the runner. Use `runtimeArguments` for runner options (such as SQLite’s `--with mcp<2`), and `packageArguments` for options passed to the MCP server.
 
-Each argument has `type: "positional"` or `type: "named"`, an explicit string `value`, and a `name` for named arguments. Values can contain `{input_name}` placeholders. Declare each placeholder in that argument’s `variables` object and provide a non-secret example in `mcpwire.json`:
+Each argument has `type: "positional"` or `type: "named"`, a string `value`, and a `name` for named arguments. A named argument with no `value` is a standalone flag, such as `--read-only` or `--stdio`. Values can contain `{input_name}` placeholders. Declare each placeholder in that argument’s `variables` object and provide a non-secret example in `mcpwire.json`:
 
 ```json
 {
@@ -70,7 +70,9 @@ Each argument has `type: "positional"` or `type: "named"`, an explicit string `v
 
 The loader resolves examples into an executable plus an argument array. Display commands are shell-quoted; execution tests use argument arrays without a shell. The builder’s command field remains editable so users can substitute their own host paths.
 
-Remote transports, multiple packages, custom registries, environment-variable configuration, secret inputs, and repeated arguments are not supported by this initial adapter. Extend the adapter and its tests before contributing a server that needs them. Never put real credentials in a definition or example.
+Declare host environment requirements using the official package `environmentVariables` array. Give each variable a `name`, `description`, `isRequired`, and `isSecret`. Variables are inherited from the host process; the loader does not read their values, inject credentials, or embed them in generated commands. Document how the host supplies them. Stored `value`, `default`, and templated environment-variable values are rejected. See `catalog/figma/server.json` for an example.
+
+Remote transports, multiple packages, custom registries, secret argument inputs, and repeated arguments are not supported. Extend the loader and its tests before contributing a server that needs them. Never put real credentials in a definition or example.
 
 ### Choose default access explicitly
 
@@ -110,6 +112,6 @@ npm --prefix cli ci
 npm run test:catalog:integration
 ```
 
-This executes the pinned filesystem and SQLite packages from the catalog through a real SDK client → CLI join → local DHT/Noise connection → CLI share → MCP server. It checks tool discovery, reads/SELECT, redaction, denied writes, recording, startup failure, and final-response delivery at the call limit. It uses a local bootstrap node, not a cross-network NAT traversal test. Other entries need an equivalent reviewed integration fixture; adding a folder does not automatically execute it.
+This executes the pinned filesystem and SQLite packages from the catalog through a real SDK client → CLI join → local DHT/Noise connection → CLI share → MCP server. It checks tool discovery, reads/SELECT, redaction, denied writes, recording, startup failure, and final-response delivery at the call limit. It uses a local bootstrap node, not a cross-network NAT traversal test. For the reviewed set of additional initialization checks, run `npm --prefix cli run test:examples`. Some pinned packages require Node.js 24; check each entry’s prerequisites. These checks use catalog-pinned launch arguments; fixtures supply a temporary Git checkout or dummy credentials where needed. They check MCP initialization and default tool names without making authenticated service calls. Adding a folder does not automatically execute its package. Other entries still need a reviewed runtime fixture and any service prerequisites.
 
 Include the commands and results you actually ran in your PR. Do not mark a server verified solely because its metadata validates. Any package version or default-policy update needs another review and runtime check.

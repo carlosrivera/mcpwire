@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.makenotion/notion",
+  "title": "Notion",
+  "description": "Stdio MCP server for Notion.",
+  "version": "2.5.2",
+  "repository": {
+    "url": "https://github.com/makenotion/notion-mcp-server",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/makenotion/notion-mcp-server",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@notionhq/notion-mcp-server",
+      "version": "2.5.2",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "NOTION_TOKEN",
+          "description": "Inherited from the host environment: NOTION_TOKEN.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

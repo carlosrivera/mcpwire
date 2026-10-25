@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "brave-search",
+  "category": "Web",
+  "source": "official",
+  "icon": "/icons/brave-browser.svg",
+  "tagline": "Lend your Brave API quota to a teammate's agent — key never leaves your machine.",
+  "requirements": "Set BRAVE_API_KEY in the host environment. This is the archived reference server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "brave_web_search",
+      "brave_local_search"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "brave_web_search",
+      "risk": "safe",
+      "note": "Web search (consumes your quota)."
+    },
+    {
+      "name": "brave_local_search",
+      "risk": "safe",
+      "note": "POI / local search."
+    }
+  ]
+}

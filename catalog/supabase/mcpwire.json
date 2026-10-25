@@ -1,0 +1,60 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "supabase",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/supabase.svg",
+  "tagline": "Project admin and SQL over P2P — expose introspection, keep DDL locked.",
+  "requirements": "Set SUPABASE_ACCESS_TOKEN in the host environment and replace YOUR_PROJECT_REF with your project reference.",
+  "inputs": {
+    "project_ref": {
+      "example": "YOUR_PROJECT_REF"
+    }
+  },
+  "defaults": {
+    "allow": [
+      "list_tables",
+      "get_advisors"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list_tables",
+      "risk": "safe",
+      "note": "Schema inventory."
+    },
+    {
+      "name": "query_logs",
+      "risk": "caution",
+      "note": "Logs can embed request data."
+    },
+    {
+      "name": "get_advisors",
+      "risk": "safe",
+      "note": "Advisor findings."
+    },
+    {
+      "name": "execute_sql",
+      "risk": "high",
+      "note": "Arbitrary SQL against your database."
+    },
+    {
+      "name": "apply_migration",
+      "risk": "high",
+      "note": "Schema migrations."
+    },
+    {
+      "name": "create_branch",
+      "risk": "high",
+      "note": "Branch management."
+    },
+    {
+      "name": "pause_project",
+      "risk": "high",
+      "note": "Pauses the whole project."
+    }
+  ]
+}

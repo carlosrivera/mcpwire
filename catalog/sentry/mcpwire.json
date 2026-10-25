@@ -1,0 +1,57 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "sentry",
+  "category": "Observability",
+  "source": "official",
+  "icon": "/icons/sentry.svg",
+  "tagline": "Issue triage for on-call buddies — read-only by construction.",
+  "requirements": "Set SENTRY_ACCESS_TOKEN on the host, or complete the server’s device-code login. AI-powered search may additionally require an LLM provider key. Pinned package requires Node.js >=22.13.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "find_organizations",
+      "find_projects",
+      "search_issues"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "find_organizations",
+      "risk": "safe",
+      "note": "Lists accessible organizations."
+    },
+    {
+      "name": "find_projects",
+      "risk": "safe",
+      "note": "Lists projects."
+    },
+    {
+      "name": "search_issues",
+      "risk": "safe",
+      "note": "Searches issues; AI-powered search may require a provider key."
+    },
+    {
+      "name": "get_sentry_resource",
+      "risk": "caution",
+      "note": "Reads Sentry resources that can include private data."
+    },
+    {
+      "name": "search_events",
+      "risk": "caution",
+      "note": "Searches event data."
+    },
+    {
+      "name": "update_issue",
+      "risk": "high",
+      "note": "Changes issue fields or status."
+    },
+    {
+      "name": "execute_sentry_tool",
+      "risk": "high",
+      "note": "Generic operation dispatcher; do not expose it as a substitute for a narrow tool allowlist."
+    }
+  ]
+}

@@ -5,7 +5,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { readEntries, readJSON } from '../catalog/load.mjs';
-import { mergeCatalog, normalizeEntry } from '../catalog/normalize.mjs';
+import { createCatalog, normalizeEntry } from '../catalog/normalize.mjs';
 const root = new URL('../', import.meta.url);
 const ajv = new Ajv({allErrors:true, strict:false});
 addFormats(ajv);
@@ -34,7 +34,7 @@ export function validateEntry(entry) {
 export function checkCatalog() {
   const entries = readEntries();
   for (const entry of entries) validateEntry(entry);
-  const servers = mergeCatalog(readJSON(new URL('web/src/data/servers.json', root)), entries);
+  const servers = createCatalog(entries);
   console.log(`PASS catalog: ${entries.length} schema-validated entries, ${servers.length} servers total; launch arguments, explicit defaults, guides, and icons checked.`);
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) checkCatalog();

@@ -1,0 +1,52 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "slack",
+  "category": "Comms",
+  "source": "official",
+  "icon": "/icons/slack.svg",
+  "tagline": "Remote agents read your Slack history; posting stays behind your y/n.",
+  "requirements": "Set SLACK_BOT_TOKEN and SLACK_TEAM_ID in the host environment. This is the archived reference server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "slack_list_channels",
+      "slack_get_channel_history",
+      "slack_search_messages"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "slack_list_channels",
+      "risk": "safe",
+      "note": "Channel index."
+    },
+    {
+      "name": "slack_get_channel_history",
+      "risk": "safe",
+      "note": "Thread/message history."
+    },
+    {
+      "name": "slack_get_users",
+      "risk": "caution",
+      "note": "Member directory (PII — keep DLP on)."
+    },
+    {
+      "name": "slack_search_messages",
+      "risk": "safe",
+      "note": "Message search."
+    },
+    {
+      "name": "slack_post_message",
+      "risk": "high",
+      "note": "Posts to channels as your bot."
+    },
+    {
+      "name": "slack_reply_to_thread",
+      "risk": "high",
+      "note": "Replies as your bot."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "figma",
+  "category": "Design",
+  "source": "community",
+  "icon": "/icons/figma.svg",
+  "tagline": "Design-to-code context for outside agents — read-only by nature.",
+  "requirements": "Set FIGMA_API_KEY in the host environment. The example selects stdio transport without embedding credentials in arguments. Pinned package requires Node.js >=20.20.0.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "get_figma_data",
+      "download_figma_images"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "get_figma_data",
+      "risk": "safe",
+      "note": "Extracts node tree + styles."
+    },
+    {
+      "name": "download_figma_images",
+      "risk": "safe",
+      "note": "Downloads image assets."
+    }
+  ]
+}

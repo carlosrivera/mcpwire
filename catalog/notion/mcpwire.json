@@ -1,0 +1,52 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "notion",
+  "category": "Knowledge",
+  "source": "official",
+  "icon": "/icons/notion.svg",
+  "tagline": "Second-brain search for remote collaborators — edits need your approval.",
+  "requirements": "Set NOTION_TOKEN in the host environment, and share the intended pages with that Notion integration.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "API-post-search",
+      "API-retrieve-a-page",
+      "API-get-block-children"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "API-post-search",
+      "risk": "safe",
+      "note": "Searches pages shared with the integration."
+    },
+    {
+      "name": "API-retrieve-a-page",
+      "risk": "safe",
+      "note": "Reads page properties."
+    },
+    {
+      "name": "API-get-block-children",
+      "risk": "safe",
+      "note": "Reads page blocks."
+    },
+    {
+      "name": "API-post-page",
+      "risk": "high",
+      "note": "Creates pages."
+    },
+    {
+      "name": "API-update-a-block",
+      "risk": "high",
+      "note": "Updates block content."
+    },
+    {
+      "name": "API-patch-page",
+      "risk": "high",
+      "note": "Updates page properties, including archive state."
+    }
+  ]
+}

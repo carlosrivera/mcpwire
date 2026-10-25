@@ -1,0 +1,73 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "playwright",
+  "category": "Browser",
+  "source": "official",
+  "icon": "/icons/playwright.svg",
+  "tagline": "Accessibility-tree browser automation, teleported with a call ceiling.",
+  "requirements": "Install Node.js and a supported browser on the host. Browser automation can access authenticated sessions and perform actions on websites. Pinned package requires Node.js >=18.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "browser_snapshot",
+      "browser_screenshot",
+      "browser_console_messages",
+      "browser_close"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "browser_navigate",
+      "risk": "caution",
+      "note": "Opens URLs on your machine."
+    },
+    {
+      "name": "browser_snapshot",
+      "risk": "safe",
+      "note": "Accessibility tree capture."
+    },
+    {
+      "name": "browser_screenshot",
+      "risk": "safe",
+      "note": "Screenshot capture."
+    },
+    {
+      "name": "browser_click",
+      "risk": "caution",
+      "note": "Clicks page elements."
+    },
+    {
+      "name": "browser_type",
+      "risk": "caution",
+      "note": "Types into fields — could type credentials."
+    },
+    {
+      "name": "browser_fill_form",
+      "risk": "caution",
+      "note": "Batch form filling."
+    },
+    {
+      "name": "browser_press_key",
+      "risk": "caution",
+      "note": "Key events."
+    },
+    {
+      "name": "browser_evaluate",
+      "risk": "high",
+      "note": "Runs arbitrary JS in the page."
+    },
+    {
+      "name": "browser_console_messages",
+      "risk": "safe",
+      "note": "Reads console output."
+    },
+    {
+      "name": "browser_close",
+      "risk": "safe",
+      "note": "Closes the page."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.modelcontextprotocol/time",
+  "title": "Time",
+  "description": "Stdio MCP server for Time.",
+  "version": "2026.10.19",
+  "repository": {
+    "url": "https://github.com/modelcontextprotocol/servers",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/time",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "mcp-server-time",
+      "version": "2026.10.19",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

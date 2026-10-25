@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.flux159/kubernetes",
+  "title": "Kubernetes",
+  "description": "Stdio MCP server for Kubernetes.",
+  "version": "4.1.9",
+  "repository": {
+    "url": "https://github.com/Flux159/mcp-server-kubernetes",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/Flux159/mcp-server-kubernetes",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "mcp-server-kubernetes",
+      "version": "4.1.9",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

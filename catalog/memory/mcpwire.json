@@ -1,0 +1,67 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "memory",
+  "category": "Knowledge",
+  "source": "official",
+  "icon": "/icons/brain.svg",
+  "tagline": "Share a knowledge graph read-only — or let trusted agents write to theirs.",
+  "requirements": "Choose a host working directory for the server’s memory store. Knowledge-graph contents can contain private data. Pinned package requires Node.js >=24.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "read_graph",
+      "search_nodes",
+      "open_nodes"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "read_graph",
+      "risk": "safe",
+      "note": "Full graph dump."
+    },
+    {
+      "name": "search_nodes",
+      "risk": "safe",
+      "note": "Fuzzy node search."
+    },
+    {
+      "name": "open_nodes",
+      "risk": "safe",
+      "note": "Reads specific nodes."
+    },
+    {
+      "name": "create_entities",
+      "risk": "caution",
+      "note": "Writes to the graph."
+    },
+    {
+      "name": "create_relations",
+      "risk": "caution",
+      "note": "Writes relations."
+    },
+    {
+      "name": "add_observations",
+      "risk": "caution",
+      "note": "Appends observations."
+    },
+    {
+      "name": "delete_entities",
+      "risk": "high",
+      "note": "Destroys graph data."
+    },
+    {
+      "name": "delete_observations",
+      "risk": "high",
+      "note": "Destroys observations."
+    },
+    {
+      "name": "delete_relations",
+      "risk": "high",
+      "note": "Destroys relations."
+    }
+  ]
+}

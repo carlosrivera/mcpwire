@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.glips/figma",
+  "title": "Figma",
+  "description": "Stdio MCP server for Figma.",
+  "version": "0.13.2",
+  "repository": {
+    "url": "https://github.com/GLips/Figma-Context-MCP",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/GLips/Figma-Context-MCP",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "figma-developer-mcp",
+      "version": "0.13.2",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "named",
+          "name": "--stdio"
+        }
+      ],
+      "environmentVariables": [
+        {
+          "name": "FIGMA_API_KEY",
+          "description": "Inherited from the host environment: FIGMA_API_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

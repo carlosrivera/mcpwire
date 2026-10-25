@@ -1,0 +1,57 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "netlify",
+  "category": "Infra",
+  "source": "official",
+  "icon": "/icons/netlify.svg",
+  "tagline": "Deploy logs and site status for collaborators — deploys stay behind the firewall.",
+  "requirements": "Requires Node.js 22 or newer. Authenticate on the host, or set NETLIFY_PERSONAL_ACCESS_TOKEN. The --verbose flag exposes individual operation tools so they can be filtered separately.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "netlify-project-get-projects",
+      "netlify-project-get-project",
+      "netlify-deploy-get-deploy"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "netlify-project-get-projects",
+      "risk": "safe",
+      "note": "Lists projects."
+    },
+    {
+      "name": "netlify-project-get-project",
+      "risk": "safe",
+      "note": "Reads project details."
+    },
+    {
+      "name": "netlify-deploy-get-deploy",
+      "risk": "safe",
+      "note": "Reads a deployment."
+    },
+    {
+      "name": "netlify-observability-get-request-logs",
+      "risk": "caution",
+      "note": "Reads request logs, which can contain private data."
+    },
+    {
+      "name": "netlify-deploy-site",
+      "risk": "high",
+      "note": "Deploys the site."
+    },
+    {
+      "name": "netlify-project-update-project-name",
+      "risk": "high",
+      "note": "Renames a project."
+    },
+    {
+      "name": "netlify-project-manage-env-vars",
+      "risk": "high",
+      "note": "Reads or modifies environment variables."
+    }
+  ]
+}
