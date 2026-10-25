@@ -47,7 +47,7 @@ const host = `npx -y @mcpwire/cli share \\
   --redact-secrets --ttl 30m \\
   -- npx -y \\
   @modelcontextprotocol/server-filesystem .`;
-const heroCmd = host.split('\n').map((line) => line.trim().replace(/\\$/, '').trim()).join(' ');
+const heroCmd = 'npx -y @mcpwire/cli';
 const guest = `{
   "mcpServers": {
     "teleported-filesystem": {
@@ -67,7 +67,7 @@ const guest = `{
     <p>Give them access to your tools over an encrypted, peer-to-peer connection. Your MCP server runs locally, and your teammate connects through MCPWire.</p>
     <div class="home-install" id="install">
       <span class="install-prompt" aria-hidden="true">$</span><code>{heroCmd}</code>
-      <CopyButton text={heroCmd} label="Copy share command" />
+      <CopyButton text={heroCmd} label="Copy command" />
     </div>
     <div class="home-install-note">Node.js 18+ <span aria-hidden="true">·</span> Noise-encrypted P2P <span aria-hidden="true">·</span> No account required</div>
     <div class="home-clients" aria-label="Compatible MCP clients">

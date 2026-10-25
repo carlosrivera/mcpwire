@@ -6,20 +6,18 @@ const contents = [
   ['verify', 'Try a tool call'], ['controls', 'Choose your controls'], ['sqlite', 'SQLite example'],
   ['record', 'Record a session'], ['troubleshooting', 'Troubleshooting'],
 ];
-const setup = `npm --prefix cli ci
-npm run build:cli
-node cli/dist/index.js --version`;
+const setup = `npx -y @mcpwire/cli`;
 const fixture = `mkdir -p "$HOME/mcpwire-demo"
 printf 'Revenue: 42\\nContact: root@corp.example.com\\n' \\
   > "$HOME/mcpwire-demo/report.txt"`;
-const share = `node cli/dist/index.js share \\
+const share = `npx -y @mcpwire/cli share \\
   --name shared-files \\
   --allow "read_file,list_directory" \\
   --redact-secrets \\
   --ttl 30m \\
   -- npx -y @modelcontextprotocol/server-filesystem@2.0.1 \\
   "$HOME/mcpwire-demo"`;
-const config = JSON.stringify({mcpServers: {'shared-files': { command: 'node', args: ['/absolute/path/to/mcpwire/cli/dist/index.js', 'join', 'wire://PASTE_THE_HOST_TICKET_HERE']}}}, null, 2);
+const config = JSON.stringify({mcpServers: {'shared-files': { command: 'npx', args: ['-y', '@mcpwire/cli', 'join', 'wire://PASTE_THE_HOST_TICKET_HERE']}}}, null, 2);
 const flags = [
   ['--allow <list>', 'All tools not denied', 'Expose only these comma-separated tool names. An explicit empty string exposes no tools.'],
   ['--deny <list>', 'None', 'Block these tool names. Deny takes precedence over allow.'],
@@ -30,7 +28,7 @@ const flags = [
   ['--record <file>', 'Off', 'Write JSONL session events to this path, replacing any existing file.'],
   ['--name <name>', 'Derived from the server command', 'Set the server key in the printed client configuration.'],
 ];
-const sqlite = `node cli/dist/index.js share \\
+const sqlite = `npx -y @mcpwire/cli share \\
   --name shared-sqlite \\
   --allow "read_query,list_tables,describe_table" \\
   --redact-secrets \\
@@ -57,10 +55,10 @@ const sqlite = `node cli/dist/index.js share \\
 
       <section id="start">
         <h2>Run the CLI</h2>
-        <p>You need Node.js 18 or newer and an MCP server that speaks JSON-RPC over stdio. Start in the root of this repository:</p>
-        <DocCode title="Build from source" code={setup} />
-        <p class="note">Run directly with <code class="inline">npx -y @mcpwire/cli</code> or install globally via <code class="inline">npm install -g @mcpwire/cli</code>. You can also build from source using the steps above.</p>
-        <p>Run <code class="inline">node cli/dist/index.js --help</code> for usage. The two commands are <code class="inline">share</code> on the host and <code class="inline">join</code> on the guest.</p>
+        <p>You need Node.js 18 or newer and an MCP server that speaks JSON-RPC over stdio. Run directly with npx or install globally:</p>
+        <DocCode title="Terminal · Run with npx" code={setup} />
+        <p class="note">Running <code class="inline">npx -y @mcpwire/cli</code> prints the help menu. You can also install globally via <code class="inline">npm install -g @mcpwire/cli</code> to use the <code class="inline">mcpwire</code> command directly.</p>
+        <p>The two main subcommands are <code class="inline">share</code> on the host and <code class="inline">join</code> on the guest.</p>
       </section>
 
       <section id="share">
@@ -68,7 +66,7 @@ const sqlite = `node cli/dist/index.js share \\
         <h2>Share a folder from your machine</h2>
         <p>Create a small test file. The email is intentional: you’ll see what redaction changes on the guest side.</p>
         <DocCode title="Host · prepare a test folder" code={fixture} />
-        <p>From the repository root, start the share command and leave this terminal running:</p>
+        <p>Start the share command and leave this terminal running:</p>
         <DocCode title="Host · share two filesystem tools" code={share} />
         <p>Everything after <code class="inline">--</code> is the command that launches your MCP server. The folder path is on the <strong>host</strong>. Only <code class="inline">read_file</code> and <code class="inline">list_directory</code> are exposed.</p>
         <p>After DHT discovery is ready, MCPWire prints a <code class="inline">wire://</code> ticket containing 64 hexadecimal characters and a client config fragment. Keep the ticket private. A new share process creates a new ticket.</p>
@@ -77,9 +75,9 @@ const sqlite = `node cli/dist/index.js share \\
 
       <section id="connect">
         <h2>Connect their agent</h2>
-        <p>The guest needs Node.js and a built copy of the CLI too. Add this entry to an MCP client that supports stdio servers, such as Claude Desktop or Cursor:</p>
+        <p>The guest only needs Node.js 18+. Add this entry to an MCP client that supports stdio servers, such as Claude Desktop or Cursor:</p>
         <DocCode title="Guest · MCP client configuration" code={config} lang="json" />
-        <p>Replace the absolute CLI path with its location on the <strong>guest</strong> machine and paste the full ticket from the host. Merge the entry into an existing <code class="inline">mcpServers</code> object rather than replacing other servers. Reload the client’s MCP configuration.</p>
+        <p>Paste the full ticket from the host into <code class="inline">wire://...</code>. Merge the entry into an existing <code class="inline">mcpServers</code> object rather than replacing other servers. Reload the client’s MCP configuration.</p>
         <p>The client launches <code class="inline">join</code> and sends MCP messages through its stdin/stdout. Running <code class="inline">join</code> in a terminal alone doesn’t open a chat or list tools. Diagnostics go to stderr.</p>
       </section>
 

@@ -11,14 +11,16 @@ const pkg = createRequire(import.meta.url)('../package.json') as { version: stri
 const VERSION = pkg.version;
 
 const HELP = `
-${'⚡'} mcpwire v${VERSION} — P2P Tool Teleportation for AI Agents
+${'⚡'} @mcpwire/cli v${VERSION} — P2P Tool Teleportation for AI Agents
 ${'─'.repeat(62)}
 Share a local MCP server with a remote peer over an E2EE
 Noise-encrypted P2P tunnel. No cloud. No relay servers. $0 infra.
 
 USAGE
-  mcpwire share [flags] -- <command to run your MCP server>
-  mcpwire join wire://<ticket>
+  npx -y @mcpwire/cli share [flags] -- <command to run your MCP server>
+  npx -y @mcpwire/cli join wire://<ticket>
+
+  (or if installed globally via 'npm i -g @mcpwire/cli': mcpwire share ...)
 
 SHARE FLAGS
   --allow <list>      Comma-separated tool whitelist (peer can't even see others)
@@ -31,13 +33,16 @@ SHARE FLAGS
   --name <name>       Name shown in the generated mcpServers config snippet
 
 EXAMPLES
+  # Run directly with npx to see help:
+  npx -y @mcpwire/cli
+
   # Share SQLite read tools with secret scrubbing for 30 minutes (requires uvx):
-  mcpwire share --allow "read_query,list_tables,describe_table" \\
+  npx -y @mcpwire/cli share --allow "read_query,list_tables,describe_table" \\
     --redact-secrets --ttl 30m -- uvx --with 'mcp<2' mcp-server-sqlite --db-path \\
     ./app.db
 
   # Share GitHub MCP but never allow destructive tools, approve every call:
-  mcpwire share --deny "push_files,fork_repository,create_repository" --confirm \\
+  npx -y @mcpwire/cli share --deny "push_files,fork_repository,create_repository" --confirm \\
     -- npx -y @modelcontextprotocol/server-github
 
   # Guest side (inside claude_desktop_config.json / .cursor/mcp.json):

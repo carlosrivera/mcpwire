@@ -1,128 +1,109 @@
-# ⚡ MCPWire — P2P Tool Teleportation for AI Agents
+# MCPWire
 
-> **Share the capability, never the credentials.**
+Share a local MCP server with a teammate’s AI agent over a Noise-encrypted peer connection. The server runs on your machine; you choose which tools their agent can call and when the session ends.
 
-MCPWire teleports a local [MCP](https://modelcontextprotocol.io) server (Postgres, GitHub, Filesystem, Docker…) to a remote teammate's AI agent over an E2EE peer-to-peer Noise tunnel — with a layer-7 JSON-RPC firewall, real-time secret redaction (DLP), human-in-the-loop approval and a self-destruct timer.
+[Documentation](https://mcpwire.co/docs) · [Server guides](https://mcpwire.co/teleport) · [Command builder](https://mcpwire.co/builder)
 
-**No cloud. No relay servers. No accounts. $0 infrastructure, forever.**
+## Get started
 
-```
-┌──────────────────────────────────────────────────────────────────────────┐
-│ ⚡ MCPWIRE P2P TELEPORTER v1.0.0 — E2EE NOISE TUNNEL ACTIVE              │
-├──────────────────────────────────────────────────────────────────────────┤
-│ Status:      🟢 Listening on Distributed Hash Table (Zero-Server P2P)    │
-│ Firewall:    🛡️ 3 tools allowed (read_query, list_tables, describe_table)│
-│ DLP Shield:  🔒 Secret Scrubbing ON | TTL: 29m 58s remaining             │
-└──────────────────────────────────────────────────────────────────────────┘
+To see all options and usage:
+
+```bash
+npx -y @mcpwire/cli
 ```
 
-## Repo layout
+Both machines need Node.js 18 or newer and an MCP client that supports stdio servers. The filesystem server used in this example requires **Node.js 24 or newer on the host**.
 
-| Path | What it is |
-|---|---|
-| [`cli/`](./cli) | The `mcpwire` npm package (TypeScript + hyperswarm). This is the product. |
-| [`web/`](./web) | [mcpwire.co](https://mcpwire.co) — static Astro site (builder, SEO pages, wirelog replay). Deploys to GitHub Pages via GitHub Actions. |
+### On your machine
 
-## Quick start
+Create a folder with a test file:
 
-**Host** (SQLite example; requires [uv](https://docs.astral.sh/uv/) for `uvx`):
+```bash
+mkdir -p "$HOME/mcpwire-demo"
+printf 'Hello from the host.\n' > "$HOME/mcpwire-demo/hello.txt"
+```
+
+Share its read and directory-listing tools for 30 minutes:
 
 ```bash
 npx -y @mcpwire/cli share \
-  --allow "read_query,list_tables,describe_table" \
+  --name shared-files \
+  --allow "read_file,list_directory" \
   --redact-secrets \
   --ttl 30m \
-  -- uvx --with 'mcp<2' mcp-server-sqlite --db-path ./app.db
+  -- npx -y @modelcontextprotocol/server-filesystem@2.0.1 \
+  "$HOME/mcpwire-demo"
 ```
 
-The command prints a `wire://…` ticket and a ready-to-paste `mcpServers` snippet.
+Keep this terminal running. MCPWire prints a `wire://` ticket and a client configuration snippet. Send them privately to your teammate. Everything after `--` is the command that launches the MCP server on your machine.
 
-**Guest** (your peer, inside `claude_desktop_config.json` / `.cursor/mcp.json`):
+### On their machine
+
+Add the printed server entry to the MCP client’s configuration. For example, in Claude Desktop’s `claude_desktop_config.json` or Cursor’s `.cursor/mcp.json`:
 
 ```json
 {
   "mcpServers": {
-    "teleported-sqlite": {
+    "shared-files": {
       "command": "npx",
-      "args": ["-y", "@mcpwire/cli", "join", "wire://7f9a2b8c4e1d0a…"]
+      "args": [
+        "-y", "@mcpwire/cli", "join",
+        "wire://PASTE_THE_FULL_TICKET_FROM_THE_HOST"
+      ]
     }
   }
 }
 ```
 
-That's it. The peer's agent sees only the 3 whitelisted tools; everything else is filtered out of `tools/list` and blocked if forced. The server runs on your machine. Tool names and their arguments must match that server; MCPWire filters tool names, not SQL statements. The archived SQLite server requires MCP Python SDK v1, hence the `--with` constraint.
+Replace the ticket placeholder with the complete ticket. If the client already has an `mcpServers` object, add the entry to it. Reload the client’s MCP configuration.
 
-## Security model
+The agent should see `read_file` and `list_directory`. Give it the **absolute path on the host** to the demo folder and ask it to read `hello.txt`. It should return `Hello from the host.` A `write_file` request is blocked.
 
-1. **Tool Whitelisting / Blacklisting** (`--allow`, `--deny`) — the peer's LLM cannot even *discover* non-authorized tools: `tools/list` responses are rewritten on the host before entering the tunnel.
-2. **Human-in-the-Loop** (`--confirm`) — every `tools/call` freezes on the wire until you answer `[y/n/a]` in the host terminal.
-3. **Ephemeral access** (`--ttl 15m`, `--max-calls 20`) — the tunnel self-destructs mathematically; no dangling access to remember.
-4. **Secret Scrubbing / DLP** (`--redact-secrets`) — OpenAI/Anthropic/GitHub/GitLab/Slack/Stripe/AWS/Google keys, JWTs, Bearer headers, emails and Luhn-valid card numbers in tool output are replaced with `[REDACTED_BY_MCPWIRE]` before crossing the tunnel.
-5. **Audit** (`--record session.wirelog`) — full flight-recorder trail: every request, response, latency, block and redaction. Replay it in your browser at **[mcpwire.co/replay](https://mcpwire.co/replay)** (the file never leaves your machine — parsing is pure DOM).
+### End the session
 
-The `wire://` ticket is a 256-bit capability token: whoever holds it can connect until the TTL or call budget expires. Treat it like a password.
+Press Ctrl+C in the host terminal, or let the 30-minute limit expire. Restarting the host creates a new ticket.
 
-## CLI reference
+For other servers, choose a [server guide](https://mcpwire.co/teleport) or use the [command builder](https://mcpwire.co/builder). Their prerequisites and tool names vary.
 
-```
-mcpwire share [flags] -- <command that runs your MCP server>
-mcpwire join wire://<ticket>
+## Session controls
 
---allow <list>      Comma-separated tool whitelist
---deny <list>       Comma-separated tool blacklist (wins over --allow)
---redact-secrets    DLP redaction of secrets in responses
---confirm           Approve every tools/call in the host terminal
---ttl <duration>    Self-destruct after 15m / 30s / 1h …
---max-calls <n>     Self-destruct after n tool calls
---record <file>     Write a .wirelog audit trail
---name <name>       Name shown in the generated config snippet
-```
+Put these flags before `--` in the host command:
 
-Environment: `MCPWIRE_BOOTSTRAP=host:port[,host:port]` points both sides at your own DHT bootstrap nodes (air-gapped labs, CI, corporate networks).
+| Flag | What it does |
+| --- | --- |
+| `--allow "tool_a,tool_b"` | Expose only the named tools. `--allow ""` exposes none. |
+| `--deny "tool_a"` | Block named tools, including tools also listed in `--allow`. |
+| `--redact-secrets` | Replace recognized secrets in outbound responses with `[REDACTED_BY_MCPWIRE]`. |
+| `--confirm` | Ask for approval in the host terminal before forwarding an allowed tool call. |
+| `--ttl 30m` | End the session after a duration, such as `30m`, `90s`, or `1h30m`. |
+| `--max-calls 20` | Limit the total forwarded tool calls across the session’s peers. |
+| `--record session.wirelog` | Save local session events for the [replay viewer](https://mcpwire.co/replay). Replaces an existing file at that path. |
+| `--name shared-files` | Set the server name in the printed client configuration. |
 
-## Development
+Without an allowlist, every tool not explicitly denied is available. Redaction and approvals are off by default, and sessions have no expiry or call budget unless you set one.
 
-```bash
-# CLI — build + test
-cd cli && npm install && npm run build && npm test
-# Real SDK/client/server regression: ten cold-start sessions, plus SQLite (needs uvx)
-npm run test:e2e:sqlite
-# Verify live server initialization and guide allowlists (needs uvx)
-npm run test:examples
+With `--confirm`, answer `y` to allow a call, `n` to deny it, or `a` to allow that tool without further prompts for the current session. Approval requires an interactive host terminal.
 
-# Web — dev + build
-cd web && npm install && npm run dev       # http://localhost:4321
-cd web && npm run build                    # -> dist/ (29 static pages)
-npm run check:servers                      # check all example packages against npm/PyPI
+You can also install the CLI globally with `npm install -g @mcpwire/cli`, then run `mcpwire share` or `mcpwire join`. Run `npx -y @mcpwire/cli --help` for usage.
 
-# Deploy web: push to main triggers GitHub Pages deployment via GitHub Actions
-git push origin main
-```
+## Understand the access you’re sharing
 
-The test suite covers: scrubbing (keys/JWT/email/cards + Luhn false-positive guard), firewall allow/deny semantics, duration parsing, and an end-to-end session through the **real** tunnel code path (`share` firewall + DLP + recorder over a duplex pair against a fake MCP server), plus a full P2P test through hyperswarm when the DHT is reachable.
+Keep session tickets private. A ticket can be reused while its host session is active. The guest uses the host’s server, environment, and service permissions, so use restricted credentials and share only the tools and data you intend to expose.
 
-## How the zero-server trick works
+The allowlist controls **tool names**. It does not inspect SQL, validate tool arguments, filter MCP resources or prompts, or sandbox the server process. An allowed read tool can still return private data.
 
-- Discovery: the public [Hyperswarm DHT](https://github.com/holepunchto/hyperswarm) (the network behind Holepunch). The host announces a random 32-byte topic; the guest resolves it; UDP hole punching opens a direct socket.
-- Encryption: every connection is encrypted end-to-end with the Noise protocol (Ed25519 keypairs, per-connection keys). Community relays, when hole punching fails, only ever see ciphertext.
-- This repo contains **zero server code**. Even if 50,000 developers teleport a database tomorrow, the traffic rides their own laptops — the static site stays $0.00 on Cloudflare Pages.
+Secret redaction matches known patterns and can miss sensitive information. It does not scrub incoming arguments or local logs. Recordings include the ticket, server command, and unredacted argument previews; treat them as sensitive. They contain event and response metadata, not full response bodies.
+
+## Connection problems
+
+Keep the host running and use its current ticket. If joining times out, check network access on both machines; restrictive firewalls or NAT configurations can prevent a connection. If a connection closes immediately, check the host terminal for server startup errors.
+
+Calls are not automatically replayed after a disconnect. Check whether an operation completed before retrying a tool with side effects. See [troubleshooting](https://mcpwire.co/docs#troubleshooting) for more help.
+
+## Contributing
+
+To add a server guide or contribute code, see [CONTRIBUTING.md](https://github.com/carlosrivera/mcpwire/blob/main/CONTRIBUTING.md).
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
-
-## Connection reliability
-
-The CLI injects HyperDHT **6.32.0** explicitly into Hyperswarm. Releases 6.33–6.34 have a documented [cold-start LAN handshake race](https://github.com/holepunchto/hyperdht/issues/304) that can report a client socket as open while the server never receives it. Keep this pin until a newer release passes `test:e2e` on cold, separate processes. Host tickets are printed after discovery is flushed; join waits for DHT bootstrap and fails after 30 seconds without a host response. Calls are never automatically replayed after disconnection.
-
-An explicit empty `--allow ""` exposes no tools. Omitting `--allow` still permits every tool not denied. The site builder always emits an explicit allowlist, including an empty one.
-
-Run directly via `npx -y @mcpwire/cli` or install globally via `npm install -g @mcpwire/cli`.
-
-To exercise public DHT discovery with the real filesystem server, run `MCPWIRE_E2E_RUNS=1 node cli/test/e2e-real.mjs --public` from the repository root. This tests the public discovery path from one host; a two-machine NAT traversal test is still a separate check.
-
-## Contributing server definitions
-
-All 26 servers live in the shared `catalog/`. Their pinned launch commands, explicit tool defaults, environment requirements, icons, and Markdown guides drive both server guides and the command builder.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the format, schemas, local checks, and reviewed runtime verification. Run `npm ci` at the repository root before building the website to install catalog validation dependencies.
+[MIT](https://github.com/carlosrivera/mcpwire/blob/main/LICENSE).
