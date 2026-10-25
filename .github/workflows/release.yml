@@ -3,28 +3,28 @@ name: Publish to npm
 on:
   release:
     types: [published]
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 permissions:
+  id-token: write # Required for OIDC
   contents: read
-  id-token: write
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false # never use caching in release builds
 
-      - name: Install dependencies
+      - name: Install CLI dependencies
         run: npm --prefix cli ci
 
       - name: Build CLI
@@ -34,10 +34,5 @@ jobs:
         run: npm --prefix cli test
 
       - name: Publish @mcpwire/cli
-        run: |
-          rm -f "$NPM_CONFIG_USERCONFIG"
-          rm -f ~/.npmrc
-          cd cli
-          npm publish --access public
-        env:
-          NPM_CONFIG_USERCONFIG: ""
+        run: cd cli && npm publish --access public
+
