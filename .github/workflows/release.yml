@@ -34,7 +34,14 @@ jobs:
         run: npm --prefix cli test
 
       - name: Publish @mcpwire/cli
-        run: cd cli && npm publish --access public --verbose
+        run: |
+          CURRENT_VERSION=$(node -p "require('./cli/package.json').version")
+          if npm view "@mcpwire/cli@${CURRENT_VERSION}" version >/dev/null 2>&1; then
+            echo "@mcpwire/cli@${CURRENT_VERSION} is already published on npm. Skipping publish."
+            exit 0
+          fi
+          cd cli
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ""
 
