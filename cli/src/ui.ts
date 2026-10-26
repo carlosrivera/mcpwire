@@ -1,5 +1,5 @@
 /**
- * TUI helpers — cyberpunk-flavoured banner + timestamped stderr logging.
+ * Shared formatting and plain-text output for non-interactive sessions.
  * Everything goes to stderr: stdout stays reserved for MCP stdio transport.
  */
 
@@ -17,7 +17,11 @@ export const ANSI = {
   grey: isTTY ? '\x1b[38;5;245m' : '',
 };
 
+let logSink: ((message: string) => void) | null = null;
+export function setLogSink(sink: typeof logSink): void { logSink = sink; }
+
 export function log(msg: string): void {
+  if (logSink) { logSink(msg); return; }
   const ts = new Date().toTimeString().slice(0, 8);
   process.stderr.write(`${ANSI.grey}[${ts}]${ANSI.reset} ${msg}\n`);
 }
@@ -65,47 +69,24 @@ export interface BannerOpts {
   confirm: boolean;
 }
 
+export function clientConfig(o: BannerOpts): string {
+  const args = JSON.stringify(['-y', '@mcpwire/cli', 'join', o.ticket]);
+  return [
+    '{', '  "mcpServers": {', `    ${JSON.stringify(o.serverName)}: {`,
+    '      "command": "npx",', `      "args": ${args}`,
+    '    }', '  }', '}',
+  ].join('\n');
+}
+
 export function printBanner(o: BannerOpts): void {
-  const W = 76;
-  const strip = (s: string) => s.replace(/\x1b\[[0-9;]*m/g, '');
-
-  const ttlLine = o.ttlMs !== null ? `${fmtCountdown(o.ttlMs)} remaining` : 'no limit';
-  const shield = o.redact
-    ? `${ANSI.green}🔒 Secret Scrubbing ON${ANSI.reset}`
-    : `${ANSI.yellow}🔓 Secret Scrubbing OFF${ANSI.reset}`;
-
-  const box: string[] = [];
-  box.push(`┌${'─'.repeat(W)}┐`);
-  const title = `⚡ MCPWIRE P2P TELEPORTER v${o.version} — E2EE NOISE TUNNEL READY`;
-  box.push(`│${title}${' '.repeat(Math.max(0, W - strip(title).length))}│`);
-  box.push(`├${'─'.repeat(W)}┤`);
-  const rows: Array<[string, string]> = [
-    ['Status', '🟢 Listening on Distributed Hash Table (Zero-Server P2P)'],
-    ['Firewall', `🛡️  ${strip(o.policyLine)}`],
-    ['DLP Shield', `${strip(shield)} | TTL: ${ttlLine}`],
-  ];
-  if (o.confirm) rows.push(['HITL', '⚠️  Human-in-the-Loop: every tools/call needs [y/n] in this terminal']);
-  if (o.maxCalls !== null) rows.push(['Kill-Switch', `⚛️  Auto-destroy after ${o.maxCalls} tool calls`]);
-  if (o.recordPath) rows.push(['Recorder', `🎥 ${o.recordPath}`]);
-  for (const [label, value] of rows) {
-    const content = `${label.padEnd(13)}${value}`;
-    box.push(`│ ${content}${' '.repeat(Math.max(0, W - 1 - strip(content).length))}│`);
-  }
-  box.push(`├${'─'.repeat(W)}┤`);
-  const head = '👉 SHARE THIS CONFIG WITH YOUR PEER (Cursor / Claude Desktop):';
-  box.push(`│ ${head}${' '.repeat(Math.max(0, W - 1 - strip(head).length))}│`);
-  box.push(`│${' '.repeat(W)}│`);
-  const cfg = [
-    `  "mcpServers": {`,
-    `    "${o.serverName}": {`,
-    `      "command": "npx",`,
-    `      "args": ["-y", "@mcpwire/cli", "join", "${o.ticket}"]`,
-    `    }`,
-    `  }`,
-  ];
-  for (const c of cfg) box.push(`│${ANSI.cyan}${c}${' '.repeat(Math.max(0, W - strip(c).length))}${ANSI.reset}│`);
-  box.push(`└${'─'.repeat(W)}┘`);
-  process.stderr.write('\n' + box.join('\n') + '\n\n');
+  process.stderr.write([
+    `MCPWire v${o.version} · ${o.serverName} · Listening`,
+    o.policyLine,
+    `Secret scrubbing: ${o.redact ? 'on' : 'off'} · Approvals: ${o.confirm ? 'on' : 'off'}`,
+    `TTL: ${o.ttlMs === null ? 'unlimited' : fmtCountdown(o.ttlMs)} · Call budget: ${o.maxCalls ?? 'unlimited'}`,
+    ...(o.recordPath ? [`Recording: ${o.recordPath}`] : []),
+    'Share this config with your peer:', clientConfig(o), '',
+  ].join('\n') + '\n');
 }
 
 export function shortFingerprint(publicKey: Buffer | undefined): string {

@@ -35,7 +35,7 @@ npx -y @mcpwire/cli share \
   "$HOME/mcpwire-demo"
 ```
 
-Keep this terminal running. MCPWire prints a `wire://` ticket and a client configuration snippet. Send them privately to your teammate. Everything after `--` is the command that launches the MCP server on your machine.
+Keep this terminal running. MCPWire opens an interactive session console with live connection status, counters, and a client configuration snippet. Press `c` to copy the complete config or `t` to copy the `wire://` ticket. Use `Tab` to switch between config and activity, and the arrow keys to scroll. Press `q` or Ctrl+C to stop. Piped sessions use plain text output. Send them privately to your teammate. Everything after `--` is the command that launches the MCP server on your machine.
 
 ### On their machine
 

@@ -24,7 +24,7 @@ import {
 import { scrubSecrets, scrubMessage } from './scrub.js';
 import { Recorder } from './recorder.js';
 import { createSwarm } from './dht.js';
-import { ANSI, log, fmtMs, parseDuration, fmtCountdown, printBanner, shortFingerprint } from './ui.js';
+import { ANSI, log, fmtMs, parseDuration, fmtCountdown, printBanner, shortFingerprint, type BannerOpts } from './ui.js';
 
 export interface SessionStats {
   startedAt: number;
@@ -44,6 +44,7 @@ export interface ShareContext {
   maxCalls: number | null;
   recorder: Recorder;
   stats: SessionStats;
+  console?: { log: (message: string) => void; confirm: (tool: string, args: unknown) => Promise<'allow' | 'deny' | 'always'> };
   onLimit?: (reason: 'max-calls') => void;
 }
 
@@ -110,12 +111,14 @@ export function handlePeerConnection(socket: Duplex, fingerprint: string, ctx: S
   recorder.peer('connected', { fingerprint });
   stats.peers++;
 
-  const child = spawn(ctx.cmd, ctx.cmdArgs, { stdio: ['pipe', 'pipe', 'inherit'] });
+  const child = spawn(ctx.cmd, ctx.cmdArgs, { stdio: ['pipe', 'pipe', ctx.console ? 'pipe' : 'inherit'] });
   if (!child.stdin || !child.stdout) {
     log(`${ANSI.red}💀 Failed to open pipes to child process.${ANSI.reset}`);
     socket.destroy();
     return;
   }
+  const childErrors = child.stderr ? readline.createInterface({ input: child.stderr }) : null;
+  childErrors?.on('line', line => ctx.console?.log(`server: ${line}`));
   const pending = new Map<string, { tool?: string; start: number }>();
 
   child.on('error', (err) => {
@@ -127,6 +130,8 @@ export function handlePeerConnection(socket: Duplex, fingerprint: string, ctx: S
     if (code !== null && code !== 0) log(`${ANSI.yellow}🔌 MCP child exited with code ${code}${ANSI.reset}`);
     socket.end();
   });
+
+  let cleanedUp = false;
 
   // HITL decisions are serialized so concurrent calls never interleave prompts.
   let confirmTail: Promise<void> = Promise.resolve();
@@ -157,7 +162,7 @@ export function handlePeerConnection(socket: Duplex, fingerprint: string, ctx: S
 
   const peerLines = readline.createInterface({ input: socket });
   peerLines.on('line', (line) => {
-    if (!line.trim()) return;
+    if (cleanedUp || !line.trim()) return;
     let msg: any;
     try {
       msg = JSON.parse(line);
@@ -182,9 +187,11 @@ export function handlePeerConnection(socket: Duplex, fingerprint: string, ctx: S
       }
 
       if (ctx.confirm && !policy.sessionAllowed.has(tool)) {
-        process.stderr.write('\x07'); // terminal beep
+        if (!ctx.console) process.stderr.write('\x07'); // terminal beep
         confirmTail = confirmTail.then(async () => {
-          const decision = await askConfirm(tool, msg.params?.arguments);
+          if (socket.destroyed) return;
+          const decision = await (ctx.console ? ctx.console.confirm(tool, msg.params?.arguments) : askConfirm(tool, msg.params?.arguments));
+          if (socket.destroyed) return;
           if (decision === 'deny') {
             stats.blocked++;
             log(`${ANSI.red}🛑 [DENIED BY HOST] ${tool}${ANSI.reset}`);
@@ -214,7 +221,7 @@ export function handlePeerConnection(socket: Duplex, fingerprint: string, ctx: S
 
   const childLines = readline.createInterface({ input: child.stdout });
   childLines.on('line', (line) => {
-    if (!line.trim()) return;
+    if (cleanedUp || !line.trim()) return;
     let msg: any;
     try {
       msg = JSON.parse(line);
@@ -274,18 +281,30 @@ export function handlePeerConnection(socket: Duplex, fingerprint: string, ctx: S
     }
   });
 
-  let cleanedUp = false;
   const cleanup = () => {
     if (cleanedUp) return;
     cleanedUp = true;
     log(`🔌 Peer disconnected ${ANSI.dim}(${fingerprint})${ANSI.reset} — killing isolated child process.`);
     recorder.peer('disconnected', { fingerprint });
+    stats.peers = Math.max(0, stats.peers - 1);
+    stats.inFlight = Math.max(0, (stats.inFlight ?? 0) - pending.size);
     child.kill();
     peerLines.close();
     childLines.close();
+    childErrors?.close();
   };
+  const connectionError = (error: Error) => {
+    if (!cleanedUp) log(`Peer ${fingerprint} connection closed: ${error.message}`);
+    cleanup();
+    socket.destroy();
+  };
+  // readline re-emits input stream errors on its own Interface. Handling the
+  // socket alone leaves these errors unhandled and crashes the entire host.
+  peerLines.on('error', connectionError);
+  childLines.on('error', connectionError);
+  childErrors?.on('error', connectionError);
   socket.on('close', cleanup);
-  socket.on('error', cleanup);
+  socket.on('error', connectionError);
 }
 
 // ---------------------------------------------------------------------------
@@ -318,10 +337,13 @@ export async function runShare(args: ShareArgs, version: string): Promise<void> 
 
   const swarm = createSwarm();
   let stopped = false;
+  let terminal: ReturnType<typeof import('./tui.js')['startConsole']> | undefined;
 
   const shutdown = (reason: string) => {
     if (stopped) return;
     stopped = true;
+    terminal?.stop();
+    hitlReader?.close();
     recorder.end(reason, {
       durationMs: Date.now() - stats.startedAt,
       calls: stats.calls,
@@ -361,19 +383,29 @@ export async function runShare(args: ShareArgs, version: string): Promise<void> 
   });
   swarm.on('error', (err: Error) => log(`${ANSI.red}🌩️  Swarm error: ${err.message}${ANSI.reset}`));
 
-  await discovery.flushed();
-
-  printBanner({
-    version,
-    ticket,
-    policyLine: policySummary(policy),
-    redact: args.redact,
-    ttlMs,
-    maxCalls: args.maxCalls,
-    serverName,
-    recordPath: args.record ?? null,
-    confirm: args.confirm,
-  });
+  const banner: BannerOpts = {
+    version, ticket, policyLine: policySummary(policy), redact: args.redact,
+    ttlMs, maxCalls: args.maxCalls, serverName,
+    recordPath: args.record ?? null, confirm: args.confirm,
+  };
+  process.on('SIGINT', () => shutdown('sigint'));
+  process.on('SIGTERM', () => shutdown('sigterm'));
+  if (process.stdin.isTTY && process.stderr.isTTY && process.env.TERM !== 'dumb') {
+    const { startConsole } = await import('./tui.js');
+    if (stopped) return;
+    terminal = startConsole(banner, stats, () => shutdown('user'));
+    ctx.console = terminal.model;
+  }
+  try {
+    await discovery.flushed();
+  } catch (error) {
+    terminal?.stop();
+    await swarm.destroy();
+    throw error;
+  }
+  if (stopped) return;
+  if (terminal) { terminal.model.ready = true; terminal.model.update(); }
+  else printBanner(banner);
 
   recorder.meta({
     name: serverName,
@@ -401,6 +433,4 @@ export async function runShare(args: ShareArgs, version: string): Promise<void> 
     tick.unref?.();
   }
 
-  process.on('SIGINT', () => shutdown('sigint'));
-  process.on('SIGTERM', () => shutdown('sigterm'));
 }

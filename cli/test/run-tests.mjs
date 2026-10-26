@@ -214,6 +214,34 @@ async function offlineE2e() {
 }
 await ok('offline e2e: firewall + DLP + wirelog over duplex pair', offlineE2e);
 
+// Reproduce readline's synchronous re-emission of a Noise stream reset.
+await ok('peer reset: cleans up once and accepts another peer', async () => {
+  const stats = { startedAt: Date.now(), calls: 0, blocked: 0, redactions: 0, peers: 0 };
+  const events = [];
+  const recorder = { peer: (event) => events.push(event) };
+  for (let i = 0; i < 2; i++) {
+    const [peer, host] = duplexPair();
+    const connectionClosed = new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error('Reset connection did not close')), 3000);
+      host.once('close', () => { clearTimeout(timer); resolve(); });
+    });
+    handlePeerConnection(host, '#reset', {
+      cmd: process.execPath,
+      cmdArgs: [path.join(root, 'fake-server.mjs')],
+      policy: parsePolicy(), redact: false, confirm: false,
+      maxCalls: null, recorder, stats,
+    });
+    assert.equal(stats.peers, 1);
+    // destroy(error) emits error through BOTH socket and readline.
+    host.destroy(Object.assign(new Error('connection reset by peer'), { code: 'ECONNRESET' }));
+    await connectionClosed;
+    peer.destroy();
+    assert.equal(stats.peers, 0);
+    assert.equal(stats.inFlight, 0);
+  }
+  assert.deepEqual(events, ['connected', 'disconnected', 'connected', 'disconnected']);
+});
+
 // --------------------------------------------------- real P2P e2e (hyperswarm)
 // Boots a private local DHT bootstrap node (loopback UDP) so the full
 // share -> DHT -> join -> Noise-encrypted tunnel path runs even offline.
