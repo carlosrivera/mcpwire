@@ -11,6 +11,7 @@
     "check:catalog": "node scripts/check-catalog.mjs",
     "test:catalog": "node scripts/test-catalog.mjs",
     "test:builder": "node scripts/test-builder.mjs",
+    "test:replay": "node scripts/test-replay.mjs",
     "test:catalog:integration": "pnpm run build:cli && node scripts/test-catalog-integration.mjs",
     "test:seo": "node scripts/test-seo.mjs",
     "generate:social": "node scripts/generate-social-images.mjs"

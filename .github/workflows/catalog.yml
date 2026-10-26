@@ -19,5 +19,6 @@ jobs:
       - run: pnpm run check:catalog
       - run: pnpm run test:catalog
       - run: pnpm run test:builder
+      - run: pnpm run test:replay
       - run: pnpm run build:web
       - run: pnpm run test:seo
