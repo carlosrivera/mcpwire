@@ -1,8 +1,15 @@
 # MCPWire
 
+[![npm version](https://img.shields.io/npm/v/%40mcpwire%2Fcli?style=flat-square&color=d4e66a)](https://www.npmjs.com/package/@mcpwire/cli)
+[![npm downloads](https://img.shields.io/npm/dm/%40mcpwire%2Fcli?style=flat-square&color=d4e66a)](https://www.npmjs.com/package/@mcpwire/cli)
+[![CLI release](https://img.shields.io/github/actions/workflow/status/carlosrivera/mcpwire/release.yml?style=flat-square&label=release)](https://github.com/carlosrivera/mcpwire/actions/workflows/release.yml)
+[![MIT license](https://img.shields.io/github/license/carlosrivera/mcpwire?style=flat-square&color=d4e66a)](https://github.com/carlosrivera/mcpwire/blob/main/LICENSE)
+
 Share a local MCP server with a teammate’s AI agent over a Noise-encrypted peer connection. The server runs on your machine; you choose which tools their agent can call and when the session ends.
 
 [Documentation](https://mcpwire.co/docs) · [Server guides](https://mcpwire.co/teleport) · [Command builder](https://mcpwire.co/builder)
+
+![MCPWire interactive console showing live tool calls, connection status, and session controls](https://raw.githubusercontent.com/carlosrivera/mcpwire/main/img/mcpwire.webp)
 
 ## Get started
 
