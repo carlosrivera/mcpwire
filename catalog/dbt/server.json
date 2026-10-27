@@ -1,0 +1,43 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.dbt-labs/dbt-mcp",
+  "title": "dbt",
+  "description": "Stdio MCP server for dbt.",
+  "version": "2.8.0",
+  "repository": {
+    "url": "https://github.com/dbt-labs/dbt-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/dbt-labs/dbt-mcp",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "dbt-mcp",
+      "version": "2.8.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "DBT_HOST",
+          "description": "Inherited from the host environment: DBT_HOST.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "DBT_TOKEN",
+          "description": "Inherited from the host environment: DBT_TOKEN.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "DBT_PROJECT_DIR",
+          "description": "Inherited from the host environment: DBT_PROJECT_DIR.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

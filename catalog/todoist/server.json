@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.doist/todoist-mcp",
+  "title": "Todoist",
+  "description": "Stdio MCP server for Todoist.",
+  "version": "13.6.3",
+  "repository": {
+    "url": "https://github.com/doist/todoist-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/doist/todoist-mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@doist/todoist-mcp",
+      "version": "13.6.3",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "TODOIST_API_KEY",
+          "description": "Inherited from the host environment: TODOIST_API_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

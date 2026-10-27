@@ -1,0 +1,193 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "chrome-devtools",
+  "category": "Browser",
+  "source": "official",
+  "icon": "/icons/chrome-devtools.svg",
+  "tagline": "Live page debugging — console, network, performance — with page actions behind approval.",
+  "requirements": "No credentials needed; the server launches and drives a local Chrome instance. This is the official server from the Chrome DevTools team. Pages the guest opens see the host's browser session and cookies — share deliberately.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "list_pages",
+      "select_page",
+      "new_page",
+      "navigate_page",
+      "close_page",
+      "resize_page",
+      "take_screenshot",
+      "take_snapshot",
+      "take_heapsnapshot",
+      "get_console_message",
+      "list_console_messages",
+      "get_network_request",
+      "list_network_requests",
+      "get_css_styles",
+      "performance_start_trace",
+      "performance_stop_trace",
+      "performance_analyze_insight",
+      "lighthouse_audit",
+      "screencast_start",
+      "screencast_stop",
+      "emulate"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list_pages",
+      "risk": "safe",
+      "note": "Lists open tabs."
+    },
+    {
+      "name": "select_page",
+      "risk": "safe",
+      "note": "Switches the active tab."
+    },
+    {
+      "name": "new_page",
+      "risk": "safe",
+      "note": "Opens a new tab."
+    },
+    {
+      "name": "navigate_page",
+      "risk": "safe",
+      "note": "Navigates to a URL."
+    },
+    {
+      "name": "close_page",
+      "risk": "safe",
+      "note": "Closes a tab."
+    },
+    {
+      "name": "resize_page",
+      "risk": "safe",
+      "note": "Resizes the viewport."
+    },
+    {
+      "name": "take_screenshot",
+      "risk": "safe",
+      "note": "Captures the page."
+    },
+    {
+      "name": "take_snapshot",
+      "risk": "safe",
+      "note": "Captures the accessibility tree."
+    },
+    {
+      "name": "take_heapsnapshot",
+      "risk": "safe",
+      "note": "Captures a heap snapshot."
+    },
+    {
+      "name": "get_console_message",
+      "risk": "safe",
+      "note": "Reads one console message."
+    },
+    {
+      "name": "list_console_messages",
+      "risk": "safe",
+      "note": "Reads console output."
+    },
+    {
+      "name": "get_network_request",
+      "risk": "safe",
+      "note": "Reads one network request — may include authenticated payloads."
+    },
+    {
+      "name": "list_network_requests",
+      "risk": "safe",
+      "note": "Lists network activity."
+    },
+    {
+      "name": "get_css_styles",
+      "risk": "safe",
+      "note": "Reads computed styles."
+    },
+    {
+      "name": "performance_start_trace",
+      "risk": "safe",
+      "note": "Records a performance trace."
+    },
+    {
+      "name": "performance_stop_trace",
+      "risk": "safe",
+      "note": "Stops the performance trace."
+    },
+    {
+      "name": "performance_analyze_insight",
+      "risk": "safe",
+      "note": "Analyzes a trace insight."
+    },
+    {
+      "name": "lighthouse_audit",
+      "risk": "safe",
+      "note": "Runs a Lighthouse audit."
+    },
+    {
+      "name": "screencast_start",
+      "risk": "safe",
+      "note": "Starts a screen capture."
+    },
+    {
+      "name": "screencast_stop",
+      "risk": "safe",
+      "note": "Stops the screen capture."
+    },
+    {
+      "name": "emulate",
+      "risk": "safe",
+      "note": "Throttles CPU or network for the session."
+    },
+    {
+      "name": "click",
+      "risk": "caution",
+      "note": "Clicks page elements — real actions on whatever page is open."
+    },
+    {
+      "name": "fill",
+      "risk": "caution",
+      "note": "Types into form fields."
+    },
+    {
+      "name": "fill_form",
+      "risk": "caution",
+      "note": "Fills multiple form fields."
+    },
+    {
+      "name": "hover",
+      "risk": "caution",
+      "note": "Hovers page elements."
+    },
+    {
+      "name": "drag",
+      "risk": "caution",
+      "note": "Drags page elements."
+    },
+    {
+      "name": "press_key",
+      "risk": "caution",
+      "note": "Sends key presses to the page."
+    },
+    {
+      "name": "type_text",
+      "risk": "caution",
+      "note": "Types text into the page."
+    },
+    {
+      "name": "handle_dialog",
+      "risk": "caution",
+      "note": "Accepts or dismisses browser dialogs."
+    },
+    {
+      "name": "evaluate_script",
+      "risk": "high",
+      "note": "Runs arbitrary JavaScript in the page context."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Chrome DevTools MCP server with MCPWire. Let teammates debug console, network, and performance of local pages over P2P, and keep page actions and script evaluation behind approval."
+  }
+}

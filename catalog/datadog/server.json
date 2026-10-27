@@ -1,0 +1,43 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.winor30/mcp-server-datadog",
+  "title": "Datadog",
+  "description": "Stdio MCP server for Datadog.",
+  "version": "1.8.0",
+  "repository": {
+    "url": "https://github.com/winor30/mcp-server-datadog",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/winor30/mcp-server-datadog",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@winor30/mcp-server-datadog",
+      "version": "1.8.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "DATADOG_API_KEY",
+          "description": "Inherited from the host environment: DATADOG_API_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "DATADOG_APP_KEY",
+          "description": "Inherited from the host environment: DATADOG_APP_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "DD_SITE",
+          "description": "Inherited from the host environment: DD_SITE.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "clickup",
+  "category": "Business",
+  "source": "community",
+  "icon": "/icons/clickup.svg",
+  "tagline": "Tasks, docs, and spaces for remote teammates — writes need your approval.",
+  "requirements": "Set CLICKUP_API_TOKEN in the host environment, from a ClickUp personal token scoped to the intended workspaces. ClickUp has no official stdio server, so this entry uses a maintained community server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "get_workspace_seats",
+      "get_workspaces",
+      "get_spaces",
+      "get_space",
+      "get_lists",
+      "get_folderless_lists",
+      "get_list",
+      "get_tasks",
+      "get_task_details",
+      "get_task_comments",
+      "get_list_comments",
+      "get_threaded_comments",
+      "get_chat_view_comments",
+      "get_doc_content",
+      "get_docs_from_workspace",
+      "get_doc_pages",
+      "search_docs"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "get_workspace_seats",
+      "risk": "safe",
+      "note": "Reports workspace seat usage."
+    },
+    {
+      "name": "get_workspaces",
+      "risk": "safe",
+      "note": "Lists workspaces."
+    },
+    {
+      "name": "get_spaces",
+      "risk": "safe",
+      "note": "Lists spaces."
+    },
+    {
+      "name": "get_space",
+      "risk": "safe",
+      "note": "Reads space details."
+    },
+    {
+      "name": "get_lists",
+      "risk": "safe",
+      "note": "Lists lists in a folder."
+    },
+    {
+      "name": "get_folderless_lists",
+      "risk": "safe",
+      "note": "Lists lists without folders."
+    },
+    {
+      "name": "get_list",
+      "risk": "safe",
+      "note": "Reads list details."
+    },
+    {
+      "name": "get_tasks",
+      "risk": "safe",
+      "note": "Lists tasks with filters."
+    },
+    {
+      "name": "get_task_details",
+      "risk": "safe",
+      "note": "Reads task details."
+    },
+    {
+      "name": "get_task_comments",
+      "risk": "safe",
+      "note": "Reads task comments."
+    },
+    {
+      "name": "get_list_comments",
+      "risk": "safe",
+      "note": "Reads list comments."
+    },
+    {
+      "name": "get_threaded_comments",
+      "risk": "safe",
+      "note": "Reads comment threads."
+    },
+    {
+      "name": "get_chat_view_comments",
+      "risk": "safe",
+      "note": "Reads chat view comments."
+    },
+    {
+      "name": "get_doc_content",
+      "risk": "safe",
+      "note": "Reads a ClickUp doc."
+    },
+    {
+      "name": "get_docs_from_workspace",
+      "risk": "safe",
+      "note": "Lists workspace docs."
+    },
+    {
+      "name": "get_doc_pages",
+      "risk": "safe",
+      "note": "Reads doc page structure."
+    },
+    {
+      "name": "search_docs",
+      "risk": "safe",
+      "note": "Searches docs."
+    },
+    {
+      "name": "create_task",
+      "risk": "high",
+      "note": "Creates tasks."
+    },
+    {
+      "name": "update_task",
+      "risk": "high",
+      "note": "Updates task fields, status, and assignees."
+    },
+    {
+      "name": "create_list",
+      "risk": "high",
+      "note": "Creates lists."
+    },
+    {
+      "name": "update_list",
+      "risk": "high",
+      "note": "Edits lists."
+    },
+    {
+      "name": "delete_list",
+      "risk": "high",
+      "note": "Deletes lists."
+    },
+    {
+      "name": "create_task_comment",
+      "risk": "high",
+      "note": "Posts comments as your identity."
+    },
+    {
+      "name": "delete_comment",
+      "risk": "high",
+      "note": "Deletes comments."
+    },
+    {
+      "name": "create_checklist_item",
+      "risk": "high",
+      "note": "Adds checklist items."
+    }
+  ],
+  "seo": {
+    "description": "Share ClickUp MCP tools with MCPWire. Configure a personal token on the host, let teammates read tasks and docs over P2P, and keep task writes behind approval."
+  }
+}

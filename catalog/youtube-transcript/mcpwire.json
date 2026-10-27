@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "youtube-transcript",
+  "category": "Media",
+  "source": "community",
+  "icon": "/icons/youtube.svg",
+  "tagline": "Pull video transcripts for summaries and quotes — public data, one tool, no credentials.",
+  "requirements": "No credentials needed — the server fetches public YouTube transcripts. This is one of the original community MCP servers and remains the most referenced transcript server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "get_transcript"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "get_transcript",
+      "risk": "safe",
+      "note": "Fetches a video's transcript with timestamps."
+    }
+  ],
+  "seo": {
+    "description": "Share the YouTube transcript MCP server with MCPWire. Let teammates pull video transcripts for summaries and research over P2P — one read-only tool, no credentials."
+  }
+}

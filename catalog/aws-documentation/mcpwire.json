@@ -1,0 +1,52 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "aws-documentation",
+  "category": "Knowledge",
+  "source": "official",
+  "icon": "/icons/aws-docs.svg",
+  "tagline": "Official AWS docs search and reading for remote teammates — no credentials, public data only.",
+  "requirements": "No credentials needed — the server reads public AWS documentation (set AWS_DOCUMENTATION_PARTITION to cn or us-gov for those partitions). This is the official AWS Labs server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "search_documentation",
+      "read_documentation",
+      "read_sections",
+      "recommend",
+      "search_table"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "search_documentation",
+      "risk": "safe",
+      "note": "Searches the AWS docs."
+    },
+    {
+      "name": "read_documentation",
+      "risk": "safe",
+      "note": "Reads a docs page as markdown."
+    },
+    {
+      "name": "read_sections",
+      "risk": "safe",
+      "note": "Reads selected sections of a long page."
+    },
+    {
+      "name": "recommend",
+      "risk": "safe",
+      "note": "Suggests related docs pages."
+    },
+    {
+      "name": "search_table",
+      "risk": "safe",
+      "note": "Searches structured doc content."
+    }
+  ],
+  "seo": {
+    "description": "Share the official AWS Documentation MCP server with MCPWire. No credentials required — let teammates search and read AWS docs over P2P with a fully read-only toolset."
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "neon",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/neon.svg",
+  "tagline": "Cloud Postgres projects and branches for remote teammates — SQL runs need your approval.",
+  "requirements": "Set NEON_API_KEY in the host environment, from a Neon API key scoped to the intended organization or projects. This is the official server from Neon; it manages the control plane and can run SQL against branches.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "list_projects",
+      "list_organizations",
+      "list_shared_projects",
+      "describe_project",
+      "describe_branch",
+      "list_branch_computes",
+      "get_database_tables",
+      "describe_table_schema",
+      "explain_sql_statement",
+      "list_slow_queries"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list_projects",
+      "risk": "safe",
+      "note": "Lists projects the key can reach."
+    },
+    {
+      "name": "list_organizations",
+      "risk": "safe",
+      "note": "Lists organizations."
+    },
+    {
+      "name": "list_shared_projects",
+      "risk": "safe",
+      "note": "Lists projects shared with the key."
+    },
+    {
+      "name": "describe_project",
+      "risk": "safe",
+      "note": "Reads project details."
+    },
+    {
+      "name": "describe_branch",
+      "risk": "safe",
+      "note": "Reads branch details."
+    },
+    {
+      "name": "list_branch_computes",
+      "risk": "safe",
+      "note": "Lists computes for a branch."
+    },
+    {
+      "name": "get_database_tables",
+      "risk": "safe",
+      "note": "Lists tables in a branch database."
+    },
+    {
+      "name": "describe_table_schema",
+      "risk": "safe",
+      "note": "Reads a table's schema."
+    },
+    {
+      "name": "explain_sql_statement",
+      "risk": "safe",
+      "note": "Explains a query plan without executing it."
+    },
+    {
+      "name": "list_slow_queries",
+      "risk": "safe",
+      "note": "Reads the consumer-side slow query history."
+    },
+    {
+      "name": "run_sql",
+      "risk": "caution",
+      "note": "Executes SQL against a branch — the statement can write data."
+    },
+    {
+      "name": "run_sql_transaction",
+      "risk": "caution",
+      "note": "Executes a SQL transaction — statements can write."
+    },
+    {
+      "name": "get_connection_string",
+      "risk": "caution",
+      "note": "Returns a connection string containing credentials."
+    },
+    {
+      "name": "create_branch",
+      "risk": "high",
+      "note": "Creates database branches."
+    },
+    {
+      "name": "delete_branch",
+      "risk": "high",
+      "note": "Deletes branches and their data."
+    },
+    {
+      "name": "reset_from_parent",
+      "risk": "high",
+      "note": "Overwrites a branch with its parent's data."
+    },
+    {
+      "name": "create_project",
+      "risk": "high",
+      "note": "Creates projects."
+    },
+    {
+      "name": "delete_project",
+      "risk": "high",
+      "note": "Deletes projects."
+    },
+    {
+      "name": "prepare_database_migration",
+      "risk": "caution",
+      "note": "Starts a schema migration by creating a backup branch."
+    },
+    {
+      "name": "complete_database_migration",
+      "risk": "high",
+      "note": "Finishes a migration and deletes the backup branch."
+    },
+    {
+      "name": "provision_neon_auth",
+      "risk": "high",
+      "note": "Provisions Neon Auth for a project."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Neon MCP server with MCPWire. Configure an API key on the host, let teammates inspect Postgres projects and schemas over P2P, and keep SQL runs and branch writes behind approval."
+  }
+}

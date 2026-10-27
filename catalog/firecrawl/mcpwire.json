@@ -1,0 +1,92 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "firecrawl",
+  "category": "Web",
+  "source": "official",
+  "icon": "/icons/firecrawl.svg",
+  "tagline": "Web scraping and search for remote teammates — every call burns API credits.",
+  "requirements": "Set FIRECRAWL_API_KEY in the host environment (set FIRECRAWL_API_URL for a self-hosted instance). The official server registers about 29 tools; this guide documents the most relevant ones. Every request consumes Firecrawl credits.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "firecrawl_scrape",
+      "firecrawl_search",
+      "firecrawl_map",
+      "firecrawl_check_crawl_status",
+      "firecrawl_credit_usage"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "firecrawl_scrape",
+      "risk": "safe",
+      "note": "Fetches one page as markdown or structured data."
+    },
+    {
+      "name": "firecrawl_search",
+      "risk": "safe",
+      "note": "Web search with scraped page content in the results."
+    },
+    {
+      "name": "firecrawl_map",
+      "risk": "safe",
+      "note": "Lists the URL structure of a site."
+    },
+    {
+      "name": "firecrawl_check_crawl_status",
+      "risk": "safe",
+      "note": "Checks the status of a running crawl job."
+    },
+    {
+      "name": "firecrawl_credit_usage",
+      "risk": "safe",
+      "note": "Reports remaining API credits."
+    },
+    {
+      "name": "firecrawl_crawl",
+      "risk": "caution",
+      "note": "Crawls many pages — can consume significant credits."
+    },
+    {
+      "name": "firecrawl_extract",
+      "risk": "caution",
+      "note": "LLM-powered structured extraction across URLs."
+    },
+    {
+      "name": "firecrawl_agent",
+      "risk": "caution",
+      "note": "Launches a multi-step agentic research job that runs unsupervised and burns credits."
+    },
+    {
+      "name": "firecrawl_research_search_papers",
+      "risk": "caution",
+      "note": "Deep research over academic papers; expensive in credits."
+    },
+    {
+      "name": "firecrawl_monitor_create",
+      "risk": "high",
+      "note": "Creates persistent site monitors that keep polling."
+    },
+    {
+      "name": "firecrawl_monitor_delete",
+      "risk": "high",
+      "note": "Deletes site monitors."
+    },
+    {
+      "name": "firecrawl_interact",
+      "risk": "high",
+      "note": "Drives a live browser session on a remote page — clicks and form input included."
+    },
+    {
+      "name": "firecrawl_feedback",
+      "risk": "high",
+      "note": "Submits feedback associated with your account."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Firecrawl MCP server with MCPWire. Configure the API key on the host, let teammates scrape and search the web over P2P, and keep crawl and agent jobs behind approval."
+  }
+}

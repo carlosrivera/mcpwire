@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.browserbase/browserbase-mcp",
+  "title": "Browserbase",
+  "description": "Stdio MCP server for Browserbase.",
+  "version": "3.0.0",
+  "repository": {
+    "url": "https://github.com/browserbase/mcp-server-browserbase",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/browserbase/mcp-server-browserbase",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@browserbasehq/mcp",
+      "version": "3.0.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "BROWSERBASE_API_KEY",
+          "description": "Inherited from the host environment: BROWSERBASE_API_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "BROWSERBASE_PROJECT_ID",
+          "description": "Inherited from the host environment: BROWSERBASE_PROJECT_ID.",
+          "isRequired": true,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

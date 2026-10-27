@@ -1,0 +1,108 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "obsidian",
+  "category": "Knowledge",
+  "source": "community",
+  "icon": "/icons/obsidian.svg",
+  "tagline": "Vault search and reading for remote teammates — note edits need your approval.",
+  "requirements": "Install the Obsidian Local REST API community plugin on the host, enable it, and set OBSIDIAN_API_KEY to the plugin's key. The whole vault is reachable over the plugin, so only share vaults whose contents may be disclosed.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "obsidian_get_file_contents",
+      "obsidian_batch_get_file_contents",
+      "obsidian_get_frontmatter",
+      "obsidian_list_files_in_vault",
+      "obsidian_list_files_in_dir",
+      "obsidian_simple_search",
+      "obsidian_complex_search",
+      "obsidian_search_by_tag",
+      "obsidian_get_recent_changes",
+      "obsidian_get_recent_periodic_notes",
+      "obsidian_get_periodic_note"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "obsidian_get_file_contents",
+      "risk": "safe",
+      "note": "Reads one note."
+    },
+    {
+      "name": "obsidian_batch_get_file_contents",
+      "risk": "safe",
+      "note": "Reads several notes at once."
+    },
+    {
+      "name": "obsidian_get_frontmatter",
+      "risk": "safe",
+      "note": "Reads a note's frontmatter."
+    },
+    {
+      "name": "obsidian_list_files_in_vault",
+      "risk": "safe",
+      "note": "Lists vault files."
+    },
+    {
+      "name": "obsidian_list_files_in_dir",
+      "risk": "safe",
+      "note": "Lists files in a folder."
+    },
+    {
+      "name": "obsidian_simple_search",
+      "risk": "safe",
+      "note": "Plain-text search across the vault."
+    },
+    {
+      "name": "obsidian_complex_search",
+      "risk": "safe",
+      "note": "Structured JsonLogic search across the vault."
+    },
+    {
+      "name": "obsidian_search_by_tag",
+      "risk": "safe",
+      "note": "Finds notes by tag."
+    },
+    {
+      "name": "obsidian_get_recent_changes",
+      "risk": "safe",
+      "note": "Lists recently modified notes."
+    },
+    {
+      "name": "obsidian_get_recent_periodic_notes",
+      "risk": "safe",
+      "note": "Lists recent daily/weekly notes."
+    },
+    {
+      "name": "obsidian_get_periodic_note",
+      "risk": "safe",
+      "note": "Reads a daily or weekly note."
+    },
+    {
+      "name": "obsidian_append_content",
+      "risk": "high",
+      "note": "Appends text to notes."
+    },
+    {
+      "name": "obsidian_patch_content",
+      "risk": "high",
+      "note": "Inserts or edits parts of a note."
+    },
+    {
+      "name": "obsidian_put_content",
+      "risk": "high",
+      "note": "Overwrites note content."
+    },
+    {
+      "name": "obsidian_delete_file",
+      "risk": "high",
+      "note": "Deletes notes."
+    }
+  ],
+  "seo": {
+    "description": "Share an Obsidian vault with MCPWire. Run the Local REST API plugin on the host, let teammates search and read notes over P2P, and keep note edits behind approval."
+  }
+}

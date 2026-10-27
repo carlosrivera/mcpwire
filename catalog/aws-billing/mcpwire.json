@@ -1,0 +1,81 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "aws-billing",
+  "category": "Infra",
+  "source": "official",
+  "icon": "/icons/aws-billing.svg",
+  "tagline": "Cost, budget, and anomaly analysis for remote teammates — every Cost Explorer query bills about a cent.",
+  "requirements": "Configure AWS credentials on the host (a profile via AWS_PROFILE or the standard credential chain) with read-only Billing and Cost Management permissions such as ce:GetCostAndUsage. This is the official AWS Labs server; Cost Explorer API calls cost roughly $0.01 each.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "status",
+      "cost-explorer",
+      "cost-comparison",
+      "cost-anomaly",
+      "budget",
+      "free-tier-usage",
+      "storage-lens",
+      "compute-optimizer",
+      "cost-optimization"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "status",
+      "risk": "safe",
+      "note": "Reports the configured identity and billing views."
+    },
+    {
+      "name": "cost-explorer",
+      "risk": "safe",
+      "note": "Cost and usage queries grouped by service, region, or tags (action-based)."
+    },
+    {
+      "name": "cost-comparison",
+      "risk": "safe",
+      "note": "Compares spend between two periods and lists the top change drivers."
+    },
+    {
+      "name": "cost-anomaly",
+      "risk": "safe",
+      "note": "Lists cost anomalies and their root causes."
+    },
+    {
+      "name": "budget",
+      "risk": "safe",
+      "note": "Reads budgets and their status against actual spend."
+    },
+    {
+      "name": "free-tier-usage",
+      "risk": "safe",
+      "note": "Tracks Free Tier usage."
+    },
+    {
+      "name": "storage-lens",
+      "risk": "safe",
+      "note": "S3 storage metrics and cost breakdowns (action-based)."
+    },
+    {
+      "name": "compute-optimizer",
+      "risk": "safe",
+      "note": "Right-sizing recommendations for EC2, Lambda, and EBS."
+    },
+    {
+      "name": "cost-optimization",
+      "risk": "safe",
+      "note": "Cost Optimization Hub recommendations."
+    },
+    {
+      "name": "session-sql",
+      "risk": "caution",
+      "note": "Runs SQL over data fetched earlier in the same session."
+    }
+  ],
+  "seo": {
+    "description": "Share the official AWS Billing MCP server with MCPWire. Configure read-only credentials on the host, let teammates analyze spend, budgets, and anomalies over P2P, and keep the toolset read-only."
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "prisma",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/prisma.svg",
+  "tagline": "Schema status and migrations for remote teammates — migrate-dev needs your approval.",
+  "requirements": "No catalog setup; the server reads the host's Prisma project (schema and DATABASE_URL from the project directory). This is the official MCP mode of the Prisma CLI, launched via the `mcp` subcommand. Launch it from the project root.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "migrate-status"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "migrate-status",
+      "risk": "safe",
+      "note": "Reports migration status for the project."
+    },
+    {
+      "name": "migrate-dev",
+      "risk": "high",
+      "note": "Creates and applies migrations — changes the development database schema."
+    },
+    {
+      "name": "Prisma-Studio",
+      "risk": "caution",
+      "note": "Launches Prisma Studio to browse the database — its contents surface to the guest."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Prisma MCP server with MCPWire. Let teammates check migration status over P2P, and keep schema migrations and database browsing behind approval."
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "browserbase",
+  "category": "Browser",
+  "source": "official",
+  "icon": "/icons/browserbase.svg",
+  "tagline": "Cloud browser sessions for remote teammates — page actions need your approval.",
+  "requirements": "Set BROWSERBASE_API_KEY and BROWSERBASE_PROJECT_ID in the host environment. This is the official server from Browserbase; sessions run in your project and meter to your plan. Playwright-driven reading and acting on live web pages.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "start",
+      "navigate",
+      "observe",
+      "extract",
+      "end"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "start",
+      "risk": "safe",
+      "note": "Starts a cloud browser session."
+    },
+    {
+      "name": "navigate",
+      "risk": "safe",
+      "note": "Opens a URL in the session."
+    },
+    {
+      "name": "observe",
+      "risk": "safe",
+      "note": "Lists actionable elements on the current page."
+    },
+    {
+      "name": "extract",
+      "risk": "safe",
+      "note": "Reads structured content from the current page."
+    },
+    {
+      "name": "end",
+      "risk": "safe",
+      "note": "Ends the browser session."
+    },
+    {
+      "name": "act",
+      "risk": "caution",
+      "note": "Clicks, types, and submits on live pages — a prompt-injected page can steer it, so review each action."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Browserbase MCP server with MCPWire. Configure the API key on the host, let teammates read pages in a cloud browser over P2P, and keep page actions behind approval."
+  }
+}

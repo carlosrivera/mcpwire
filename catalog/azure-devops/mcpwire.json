@@ -1,0 +1,196 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "azure-devops",
+  "category": "DevOps",
+  "source": "official",
+  "icon": "/icons/azure-devops.svg",
+  "tagline": "Work items, repos, pipelines, and wikis for remote teammates — writes and runs need your approval.",
+  "requirements": "Set PERSONAL_ACCESS_TOKEN in the host environment, scoped to the shared organization and read-only areas, and provide the organization name as the builder input. The launch pins --authentication pat; the local server registers many more tools than documented here.",
+  "inputs": {
+    "organization": {
+      "example": "contoso"
+    }
+  },
+  "defaults": {
+    "allow": [
+      "core_list_projects",
+      "core_list_project_teams",
+      "work",
+      "wit_work_item",
+      "wit_query",
+      "wiki",
+      "repo_repository",
+      "repo_pull_request",
+      "repo_pull_request_org",
+      "repo_branch",
+      "repo_file",
+      "repo_search_commits",
+      "search_code",
+      "search_wiki",
+      "search_workitem",
+      "pipelines_build",
+      "pipelines_build_log",
+      "pipelines_definition",
+      "pipelines_run",
+      "pipelines_artifact"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "core_list_projects",
+      "risk": "safe",
+      "note": "Lists projects in the organization."
+    },
+    {
+      "name": "core_list_project_teams",
+      "risk": "safe",
+      "note": "Lists teams within a project."
+    },
+    {
+      "name": "work",
+      "risk": "safe",
+      "note": "Lists iterations and reads team settings and capacity (action-based)."
+    },
+    {
+      "name": "wit_work_item",
+      "risk": "safe",
+      "note": "Reads work items, comments, and revisions (action-based)."
+    },
+    {
+      "name": "wit_query",
+      "risk": "safe",
+      "note": "Runs saved and ad-hoc WIQL queries."
+    },
+    {
+      "name": "wiki",
+      "risk": "safe",
+      "note": "Lists wikis and reads page content."
+    },
+    {
+      "name": "repo_repository",
+      "risk": "safe",
+      "note": "Gets and lists repositories (action-based)."
+    },
+    {
+      "name": "repo_pull_request",
+      "risk": "safe",
+      "note": "Reads pull requests (action-based)."
+    },
+    {
+      "name": "repo_pull_request_org",
+      "risk": "safe",
+      "note": "Lists your active pull requests organization-wide."
+    },
+    {
+      "name": "repo_branch",
+      "risk": "safe",
+      "note": "Lists and reads branches (action-based)."
+    },
+    {
+      "name": "repo_file",
+      "risk": "safe",
+      "note": "Reads file contents and directory listings (action-based)."
+    },
+    {
+      "name": "repo_search_commits",
+      "risk": "safe",
+      "note": "Searches commits with filters."
+    },
+    {
+      "name": "search_code",
+      "risk": "safe",
+      "note": "Searches code across repositories."
+    },
+    {
+      "name": "search_wiki",
+      "risk": "safe",
+      "note": "Searches wiki pages."
+    },
+    {
+      "name": "search_workitem",
+      "risk": "safe",
+      "note": "Searches work items."
+    },
+    {
+      "name": "pipelines_build",
+      "risk": "safe",
+      "note": "Lists builds and reads status and changes (action-based)."
+    },
+    {
+      "name": "pipelines_build_log",
+      "risk": "safe",
+      "note": "Reads build logs."
+    },
+    {
+      "name": "pipelines_definition",
+      "risk": "safe",
+      "note": "Lists pipeline definitions."
+    },
+    {
+      "name": "pipelines_run",
+      "risk": "safe",
+      "note": "Reads pipeline runs (action-based)."
+    },
+    {
+      "name": "pipelines_artifact",
+      "risk": "safe",
+      "note": "Lists and downloads build artifacts."
+    },
+    {
+      "name": "wit_backlog",
+      "risk": "caution",
+      "note": "Lists backlog levels and items, but its reorder action can reorder work items."
+    },
+    {
+      "name": "wit_work_item_write",
+      "risk": "high",
+      "note": "Creates and updates work items (action-based)."
+    },
+    {
+      "name": "wit_work_item_comment_write",
+      "risk": "high",
+      "note": "Posts work item comments as your identity."
+    },
+    {
+      "name": "wit_work_item_link_write",
+      "risk": "high",
+      "note": "Links work items, artifacts, and pull requests."
+    },
+    {
+      "name": "wiki_upsert_page",
+      "risk": "high",
+      "note": "Creates or updates wiki pages."
+    },
+    {
+      "name": "repo_file_write",
+      "risk": "high",
+      "note": "Commits file changes to a branch."
+    },
+    {
+      "name": "repo_pull_request_write",
+      "risk": "high",
+      "note": "Creates and updates pull requests, including votes and reviewers."
+    },
+    {
+      "name": "repo_create_branch",
+      "risk": "high",
+      "note": "Creates branches."
+    },
+    {
+      "name": "pipelines_write",
+      "risk": "high",
+      "note": "Queues pipeline runs and edits pipeline definitions."
+    },
+    {
+      "name": "wit_work_item_attachment_upload",
+      "risk": "high",
+      "note": "Uploads attachments to work items."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Azure DevOps MCP server with MCPWire. Configure a scoped PAT on the host, let teammates read work items, repos, and pipelines over P2P, and keep writes behind approval."
+  }
+}

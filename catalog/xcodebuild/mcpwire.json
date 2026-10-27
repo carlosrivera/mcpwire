@@ -1,0 +1,160 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "xcodebuild",
+  "category": "DevOps",
+  "source": "official",
+  "icon": "/icons/xcode.svg",
+  "tagline": "iOS simulators, builds, and UI snapshots for remote teammates — app runs need your approval.",
+  "requirements": "No credentials; the host needs macOS with Xcode installed. XcodeBuildMCP is maintained under Sentry's GitHub org and drives local simulators via xcodebuild. The launch pins the `mcp` subcommand.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "session_show_defaults",
+      "session_use_defaults_profile",
+      "session_set_defaults",
+      "session_clear_defaults",
+      "discover_projs",
+      "list_schemes",
+      "show_build_settings",
+      "get_app_bundle_id",
+      "list_sims",
+      "boot_sim",
+      "open_sim",
+      "get_sim_app_path",
+      "screenshot",
+      "snapshot_ui",
+      "get_coverage_report",
+      "get_file_coverage",
+      "build_sim",
+      "record_sim_video"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "session_show_defaults",
+      "risk": "safe",
+      "note": "Shows the default project and scheme."
+    },
+    {
+      "name": "session_use_defaults_profile",
+      "risk": "safe",
+      "note": "Switches the defaults profile."
+    },
+    {
+      "name": "session_set_defaults",
+      "risk": "safe",
+      "note": "Sets the project and scheme for the session."
+    },
+    {
+      "name": "session_clear_defaults",
+      "risk": "safe",
+      "note": "Clears session defaults."
+    },
+    {
+      "name": "discover_projs",
+      "risk": "safe",
+      "note": "Finds Xcode projects on the host."
+    },
+    {
+      "name": "list_schemes",
+      "risk": "safe",
+      "note": "Lists build schemes."
+    },
+    {
+      "name": "show_build_settings",
+      "risk": "safe",
+      "note": "Reads build settings."
+    },
+    {
+      "name": "get_app_bundle_id",
+      "risk": "safe",
+      "note": "Reads an app's bundle ID."
+    },
+    {
+      "name": "list_sims",
+      "risk": "safe",
+      "note": "Lists simulators."
+    },
+    {
+      "name": "boot_sim",
+      "risk": "safe",
+      "note": "Boots a simulator."
+    },
+    {
+      "name": "open_sim",
+      "risk": "safe",
+      "note": "Opens the Simulator app."
+    },
+    {
+      "name": "get_sim_app_path",
+      "risk": "safe",
+      "note": "Reads an installed app's path."
+    },
+    {
+      "name": "screenshot",
+      "risk": "safe",
+      "note": "Captures the simulator screen."
+    },
+    {
+      "name": "snapshot_ui",
+      "risk": "safe",
+      "note": "Captures the accessibility hierarchy."
+    },
+    {
+      "name": "get_coverage_report",
+      "risk": "safe",
+      "note": "Reads code coverage results."
+    },
+    {
+      "name": "get_file_coverage",
+      "risk": "safe",
+      "note": "Reads per-file coverage."
+    },
+    {
+      "name": "build_sim",
+      "risk": "safe",
+      "note": "Builds for the simulator — local compile only."
+    },
+    {
+      "name": "record_sim_video",
+      "risk": "safe",
+      "note": "Records simulator video."
+    },
+    {
+      "name": "build_run_sim",
+      "risk": "caution",
+      "note": "Builds and launches the app on a simulator."
+    },
+    {
+      "name": "test_sim",
+      "risk": "caution",
+      "note": "Runs the test suite — can take a while and run real code."
+    },
+    {
+      "name": "install_app_sim",
+      "risk": "caution",
+      "note": "Installs an app bundle on a simulator."
+    },
+    {
+      "name": "launch_app_sim",
+      "risk": "caution",
+      "note": "Launches an app on a simulator."
+    },
+    {
+      "name": "stop_app_sim",
+      "risk": "caution",
+      "note": "Stops a running app."
+    },
+    {
+      "name": "clean",
+      "risk": "caution",
+      "note": "Cleans build artifacts."
+    }
+  ],
+  "seo": {
+    "description": "Share XcodeBuildMCP with MCPWire. Let teammates inspect projects, drive simulators, and read coverage over P2P, and keep app launches and test runs behind approval."
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.olivierdebeufderijcker/discord-mcp",
+  "title": "Discord",
+  "description": "Stdio MCP server for Discord.",
+  "version": "2.4.0",
+  "repository": {
+    "url": "https://github.com/olivierdebeufderijcker/discord-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/olivierdebeufderijcker/discord-mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "discord-mcp",
+      "version": "2.4.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "DISCORD_TOKEN",
+          "description": "Inherited from the host environment: DISCORD_TOKEN.",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "GUILD_ID",
+          "description": "Inherited from the host environment: GUILD_ID.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

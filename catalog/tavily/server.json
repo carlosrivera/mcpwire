@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.tavily/tavily-mcp",
+  "title": "Tavily",
+  "description": "Stdio MCP server for Tavily.",
+  "version": "0.2.22",
+  "repository": {
+    "url": "https://github.com/tavily-ai/tavily-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/tavily-ai/tavily-mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "tavily-mcp",
+      "version": "0.2.22",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "TAVILY_API_KEY",
+          "description": "Inherited from the host environment: TAVILY_API_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

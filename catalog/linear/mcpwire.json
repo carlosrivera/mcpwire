@@ -1,0 +1,140 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "linear",
+  "category": "Business",
+  "source": "community",
+  "icon": "/icons/linear.svg",
+  "tagline": "Issues, projects, and cycles for remote teammates — writes need your approval.",
+  "requirements": "Set LINEAR_API_KEY in the host environment, from a Linear API key scoped to the intended teams. Linear's own MCP server is remote-only, so this entry uses the widely used community server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "linear_get_issue",
+      "linear_search_issues",
+      "linear_search_issues_by_identifier",
+      "linear_get_teams",
+      "linear_get_user",
+      "linear_list_projects",
+      "linear_get_project",
+      "linear_get_project_milestones"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "linear_get_issue",
+      "risk": "safe",
+      "note": "Reads an issue by ID."
+    },
+    {
+      "name": "linear_search_issues",
+      "risk": "safe",
+      "note": "Searches issues with filters."
+    },
+    {
+      "name": "linear_search_issues_by_identifier",
+      "risk": "safe",
+      "note": "Reads issues by human key, e.g. ENG-123."
+    },
+    {
+      "name": "linear_get_teams",
+      "risk": "safe",
+      "note": "Lists teams."
+    },
+    {
+      "name": "linear_get_user",
+      "risk": "safe",
+      "note": "Reads a user profile."
+    },
+    {
+      "name": "linear_list_projects",
+      "risk": "safe",
+      "note": "Lists projects."
+    },
+    {
+      "name": "linear_get_project",
+      "risk": "safe",
+      "note": "Reads project details."
+    },
+    {
+      "name": "linear_get_project_milestones",
+      "risk": "safe",
+      "note": "Lists project milestones."
+    },
+    {
+      "name": "linear_create_issue",
+      "risk": "high",
+      "note": "Creates issues."
+    },
+    {
+      "name": "linear_create_issues",
+      "risk": "high",
+      "note": "Creates issues in bulk."
+    },
+    {
+      "name": "linear_edit_issue",
+      "risk": "high",
+      "note": "Updates issue fields, status, and assignees."
+    },
+    {
+      "name": "linear_bulk_update_issues",
+      "risk": "high",
+      "note": "Updates many issues at once."
+    },
+    {
+      "name": "linear_delete_issue",
+      "risk": "high",
+      "note": "Deletes issues."
+    },
+    {
+      "name": "linear_create_comment",
+      "risk": "high",
+      "note": "Posts comments as your identity."
+    },
+    {
+      "name": "linear_update_comment",
+      "risk": "high",
+      "note": "Edits comments."
+    },
+    {
+      "name": "linear_delete_comment",
+      "risk": "high",
+      "note": "Deletes comments."
+    },
+    {
+      "name": "linear_resolve_comment",
+      "risk": "high",
+      "note": "Resolves comment threads."
+    },
+    {
+      "name": "linear_create_project_with_issues",
+      "risk": "high",
+      "note": "Creates projects with issues."
+    },
+    {
+      "name": "linear_create_project_milestone",
+      "risk": "high",
+      "note": "Creates milestones."
+    },
+    {
+      "name": "linear_update_project_milestone",
+      "risk": "high",
+      "note": "Updates milestones."
+    },
+    {
+      "name": "linear_delete_project_milestone",
+      "risk": "high",
+      "note": "Deletes milestones."
+    },
+    {
+      "name": "linear_auth_callback",
+      "risk": "caution",
+      "note": "OAuth callback helper; only relevant when authenticating interactively."
+    }
+  ],
+  "seo": {
+    "description": "Share Linear MCP tools with MCPWire. Configure an API key on the host, let teammates read issues and projects over P2P, and keep writes behind approval."
+  }
+}

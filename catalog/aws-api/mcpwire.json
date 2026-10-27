@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "aws-api",
+  "category": "Infra",
+  "source": "official",
+  "icon": "/icons/aws-api.svg",
+  "tagline": "AWS CLI command suggestions and execution — every call runs against your account, so nothing is allowed by default.",
+  "requirements": "Configure AWS credentials on the host (AWS_PROFILE or the standard chain). This is the official AWS Labs server; call_aws executes real AWS CLI commands with the host's credentials, so every call requires explicit approval.",
+  "inputs": {},
+  "defaults": {
+    "allow": [],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "suggest_aws_commands",
+      "risk": "safe",
+      "note": "Suggests AWS CLI commands for a natural-language request — suggestions only, nothing executes."
+    },
+    {
+      "name": "call_aws",
+      "risk": "high",
+      "note": "Executes an AWS CLI command with the host's credentials. Can read, modify, or delete anything the credentials allow."
+    }
+  ],
+  "seo": {
+    "description": "Share the official AWS API MCP server with MCPWire. Starts with every tool denied — approve each AWS CLI call individually, or allow suggest_aws_commands for read-safe planning."
+  }
+}

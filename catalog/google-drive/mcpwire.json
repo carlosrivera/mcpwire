@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "google-drive",
+  "category": "Files",
+  "source": "official",
+  "icon": "/icons/google-drive.svg",
+  "tagline": "Document search for remote teammates — file contents ride along as resources.",
+  "requirements": "Complete the Google Drive OAuth setup on the host first: create Desktop-app OAuth credentials with the drive.readonly scope, save them as gcp-oauth.keys.json in the working directory (or point GDRIVE_OAUTH_PATH at the file), and authenticate once so the token is stored (GDRIVE_CREDENTIALS_PATH controls where). This is the archived reference server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "search"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "search",
+      "risk": "safe",
+      "note": "Searches Drive and returns file names and MIME types. File contents are exposed as MCP resources on the same connection, so guests can read documents the OAuth account can access."
+    }
+  ],
+  "seo": {
+    "description": "Share Google Drive MCP search with MCPWire. Set up read-only OAuth credentials on the host, let teammates search shared documents over P2P, and keep the session read-only."
+  }
+}

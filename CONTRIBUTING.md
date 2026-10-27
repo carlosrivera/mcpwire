@@ -2,7 +2,7 @@
 
 Add a server by contributing a catalog folder. Guides and the command builder read the same definitions; no Astro page or CLI changes are needed for supported packages.
 
-All 26 server definitions live in `catalog/`. Add new contributions there. The same loader supplies the guides, directory, and builder; duplicate slugs fail validation.
+All 71 server definitions live in `catalog/`. Add new contributions there. The same loader supplies the guides, directory, and builder; duplicate slugs fail validation.
 
 ## Get started
 

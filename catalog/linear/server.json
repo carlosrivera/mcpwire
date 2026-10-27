@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.dvcrn/mcp-server-linear",
+  "title": "Linear",
+  "description": "Stdio MCP server for Linear.",
+  "version": "1.6.0",
+  "repository": {
+    "url": "https://github.com/dvcrn/mcp-server-linear",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/dvcrn/mcp-server-linear",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "mcp-server-linear",
+      "version": "1.6.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "LINEAR_API_KEY",
+          "description": "Inherited from the host environment: LINEAR_API_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

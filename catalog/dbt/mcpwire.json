@@ -1,0 +1,154 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "dbt",
+  "category": "Analytics",
+  "source": "official",
+  "icon": "/icons/dbt.svg",
+  "tagline": "Metrics, models, and lineage for remote teammates — a fully read-only window into your warehouse project.",
+  "requirements": "Point the host at your dbt environment: DBT_HOST and DBT_TOKEN for dbt Cloud features, or DBT_PROJECT_DIR for a local project. This is the official server from dbt Labs; every tool is read-only.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "search_product_docs",
+      "list_metrics",
+      "list_saved_queries",
+      "get_dimensions",
+      "get_entities",
+      "get_dimension_values",
+      "query_metrics",
+      "get_metrics_compiled_sql",
+      "get_mart_models",
+      "get_all_models",
+      "get_node_details",
+      "get_model_details",
+      "get_model_parents",
+      "get_model_children",
+      "get_model_health",
+      "get_model_performance",
+      "get_lineage",
+      "get_exposures",
+      "get_exposure_details",
+      "get_all_sources",
+      "get_source_details",
+      "get_all_macros"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "search_product_docs",
+      "risk": "safe",
+      "note": "Searches dbt documentation."
+    },
+    {
+      "name": "list_metrics",
+      "risk": "safe",
+      "note": "Lists semantic-layer metrics."
+    },
+    {
+      "name": "list_saved_queries",
+      "risk": "safe",
+      "note": "Lists saved queries."
+    },
+    {
+      "name": "get_dimensions",
+      "risk": "safe",
+      "note": "Lists metric dimensions."
+    },
+    {
+      "name": "get_entities",
+      "risk": "safe",
+      "note": "Lists semantic entities."
+    },
+    {
+      "name": "get_dimension_values",
+      "risk": "safe",
+      "note": "Lists values for a dimension."
+    },
+    {
+      "name": "query_metrics",
+      "risk": "safe",
+      "note": "Reads metric results — warehouse reads only."
+    },
+    {
+      "name": "get_metrics_compiled_sql",
+      "risk": "safe",
+      "note": "Shows the SQL behind a metric query."
+    },
+    {
+      "name": "get_mart_models",
+      "risk": "safe",
+      "note": "Lists mart models."
+    },
+    {
+      "name": "get_all_models",
+      "risk": "safe",
+      "note": "Lists all models."
+    },
+    {
+      "name": "get_node_details",
+      "risk": "safe",
+      "note": "Reads any DAG node."
+    },
+    {
+      "name": "get_model_details",
+      "risk": "safe",
+      "note": "Reads model details."
+    },
+    {
+      "name": "get_model_parents",
+      "risk": "safe",
+      "note": "Lists a model's upstream models."
+    },
+    {
+      "name": "get_model_children",
+      "risk": "safe",
+      "note": "Lists a model's downstream models."
+    },
+    {
+      "name": "get_model_health",
+      "risk": "safe",
+      "note": "Reads model freshness and health."
+    },
+    {
+      "name": "get_model_performance",
+      "risk": "safe",
+      "note": "Reads model run performance."
+    },
+    {
+      "name": "get_lineage",
+      "risk": "safe",
+      "note": "Reads DAG lineage."
+    },
+    {
+      "name": "get_exposures",
+      "risk": "safe",
+      "note": "Lists exposures."
+    },
+    {
+      "name": "get_exposure_details",
+      "risk": "safe",
+      "note": "Reads exposure details."
+    },
+    {
+      "name": "get_all_sources",
+      "risk": "safe",
+      "note": "Lists sources."
+    },
+    {
+      "name": "get_source_details",
+      "risk": "safe",
+      "note": "Reads source details."
+    },
+    {
+      "name": "get_all_macros",
+      "risk": "safe",
+      "note": "Lists macros."
+    }
+  ],
+  "seo": {
+    "description": "Share the official dbt MCP server with MCPWire. Let teammates explore metrics, models, and lineage over P2P with a fully read-only toolset."
+  }
+}

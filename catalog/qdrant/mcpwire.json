@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "qdrant",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/qdrant.svg",
+  "tagline": "Shared vector memory for remote teammates — storing facts needs your approval.",
+  "requirements": "Set QDRANT_URL in the host environment, plus QDRANT_API_KEY for hosted or protected instances. Set COLLECTION_NAME to pin a shared collection; otherwise the guest must name the collection in every call. This is the official server from Qdrant.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "qdrant-find"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "qdrant-find",
+      "risk": "safe",
+      "note": "Semantic search over the configured collection."
+    },
+    {
+      "name": "qdrant-store",
+      "risk": "high",
+      "note": "Adds information to the shared collection."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Qdrant MCP server with MCPWire. Point the host at a collection, let teammates search shared context over P2P, and keep writes behind approval."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "upstash-redis",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/upstash.svg",
+  "tagline": "Cloud Redis lookups and command runs for remote teammates — the REST token defines the limits.",
+  "requirements": "Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN in the host environment, from an Upstash database's REST credentials. This is the official server from Upstash; prefer a read-only token for sharing.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "redis_search_docs"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "redis_search_docs",
+      "risk": "safe",
+      "note": "Searches Upstash Redis documentation."
+    },
+    {
+      "name": "redis_run_commands",
+      "risk": "caution",
+      "note": "Runs arbitrary Redis commands — with a read-write token this can modify or delete data."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Upstash Redis MCP server with MCPWire. Configure REST credentials on the host, let teammates run Redis commands over P2P, and use a read-only token to stay safe."
+  }
+}

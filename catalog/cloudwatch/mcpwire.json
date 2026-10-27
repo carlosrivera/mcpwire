@@ -1,0 +1,136 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "cloudwatch",
+  "category": "Observability",
+  "source": "official",
+  "icon": "/icons/cloudwatch.svg",
+  "tagline": "Logs, metrics, and alarms for remote teammates — fully read-only against your AWS account.",
+  "requirements": "Configure AWS credentials on the host (AWS_PROFILE or the standard chain) with read-only CloudWatch permissions. This is the official AWS Labs server; every tool is read-only.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "describe_log_groups",
+      "analyze_log_group",
+      "execute_log_insights_query",
+      "get_logs_insight_query_results",
+      "cancel_logs_insight_query",
+      "execute_cwl_insights_batch",
+      "recommend_indexes_loggroup",
+      "recommend_indexes_account",
+      "get_metric_data",
+      "get_metric_metadata",
+      "analyze_metric",
+      "get_recommended_metric_alarms",
+      "execute_promql_query",
+      "execute_promql_range_query",
+      "get_promql_label_values",
+      "get_promql_series",
+      "get_promql_labels",
+      "get_active_alarms",
+      "get_alarm_history"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "describe_log_groups",
+      "risk": "safe",
+      "note": "Lists log groups."
+    },
+    {
+      "name": "analyze_log_group",
+      "risk": "safe",
+      "note": "Summarizes a log group's structure."
+    },
+    {
+      "name": "execute_log_insights_query",
+      "risk": "safe",
+      "note": "Runs CloudWatch Logs Insights queries — log contents flow to the guest."
+    },
+    {
+      "name": "get_logs_insight_query_results",
+      "risk": "safe",
+      "note": "Reads results of a running query."
+    },
+    {
+      "name": "cancel_logs_insight_query",
+      "risk": "safe",
+      "note": "Cancels a running query."
+    },
+    {
+      "name": "execute_cwl_insights_batch",
+      "risk": "safe",
+      "note": "Runs several Insights queries at once."
+    },
+    {
+      "name": "recommend_indexes_loggroup",
+      "risk": "safe",
+      "note": "Suggests field indexes for a log group."
+    },
+    {
+      "name": "recommend_indexes_account",
+      "risk": "safe",
+      "note": "Suggests field indexes account-wide."
+    },
+    {
+      "name": "get_metric_data",
+      "risk": "safe",
+      "note": "Reads metric datapoints."
+    },
+    {
+      "name": "get_metric_metadata",
+      "risk": "safe",
+      "note": "Describes available metrics."
+    },
+    {
+      "name": "analyze_metric",
+      "risk": "safe",
+      "note": "Analyzes metric patterns."
+    },
+    {
+      "name": "get_recommended_metric_alarms",
+      "risk": "safe",
+      "note": "Suggests alarms for a metric."
+    },
+    {
+      "name": "execute_promql_query",
+      "risk": "safe",
+      "note": "Runs PromQL against Amazon Managed Prometheus."
+    },
+    {
+      "name": "execute_promql_range_query",
+      "risk": "safe",
+      "note": "Runs ranged PromQL queries."
+    },
+    {
+      "name": "get_promql_label_values",
+      "risk": "safe",
+      "note": "Lists Prometheus label values."
+    },
+    {
+      "name": "get_promql_series",
+      "risk": "safe",
+      "note": "Lists Prometheus series."
+    },
+    {
+      "name": "get_promql_labels",
+      "risk": "safe",
+      "note": "Lists Prometheus labels."
+    },
+    {
+      "name": "get_active_alarms",
+      "risk": "safe",
+      "note": "Lists active alarms."
+    },
+    {
+      "name": "get_alarm_history",
+      "risk": "safe",
+      "note": "Reads alarm history."
+    }
+  ],
+  "seo": {
+    "description": "Share the official AWS CloudWatch MCP server with MCPWire. Let teammates query logs, metrics, and alarms over P2P with a fully read-only toolset."
+  }
+}

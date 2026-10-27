@@ -1,0 +1,217 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "apple-notes",
+  "category": "Productivity",
+  "source": "community",
+  "icon": "/icons/apple-notes.svg",
+  "tagline": "Your actual Apple Notes, over P2P — personal data, so share with yourself only.",
+  "requirements": "The host needs macOS with the Notes app signed in; the server drives Notes via AppleScript and the server registers about 89 tools. Notes are personal data — this guide is meant for sharing with your own devices or people you trust completely.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "health-check",
+      "get-capabilities",
+      "list-accounts",
+      "list-folders",
+      "list-smart-folders",
+      "list-folder-tree",
+      "get-folder-by-id",
+      "show-folder",
+      "show-account",
+      "list-notes",
+      "list-recent-notes",
+      "search-notes",
+      "query-notes",
+      "get-note-by-id",
+      "get-note-content",
+      "get-note-plaintext",
+      "get-note-details",
+      "get-note-markdown",
+      "get-note-metadata",
+      "get-note-link",
+      "show-note",
+      "list-note-links",
+      "list-shared-notes",
+      "get-notes-stats",
+      "get-sync-status"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "health-check",
+      "risk": "safe",
+      "note": "Verifies Notes access works."
+    },
+    {
+      "name": "get-capabilities",
+      "risk": "safe",
+      "note": "Reports which Notes features this Mac supports."
+    },
+    {
+      "name": "list-accounts",
+      "risk": "safe",
+      "note": "Lists Notes accounts (iCloud, local)."
+    },
+    {
+      "name": "list-folders",
+      "risk": "safe",
+      "note": "Lists folders."
+    },
+    {
+      "name": "list-smart-folders",
+      "risk": "safe",
+      "note": "Lists smart folders."
+    },
+    {
+      "name": "list-folder-tree",
+      "risk": "safe",
+      "note": "Lists the folder hierarchy."
+    },
+    {
+      "name": "get-folder-by-id",
+      "risk": "safe",
+      "note": "Reads one folder."
+    },
+    {
+      "name": "show-folder",
+      "risk": "safe",
+      "note": "Shows a folder's contents."
+    },
+    {
+      "name": "show-account",
+      "risk": "safe",
+      "note": "Shows an account's summary."
+    },
+    {
+      "name": "list-notes",
+      "risk": "safe",
+      "note": "Lists notes — note contents are personal data."
+    },
+    {
+      "name": "list-recent-notes",
+      "risk": "safe",
+      "note": "Lists recently edited notes."
+    },
+    {
+      "name": "search-notes",
+      "risk": "safe",
+      "note": "Searches note text."
+    },
+    {
+      "name": "query-notes",
+      "risk": "safe",
+      "note": "Filters notes with structured queries."
+    },
+    {
+      "name": "get-note-by-id",
+      "risk": "safe",
+      "note": "Reads one note."
+    },
+    {
+      "name": "get-note-content",
+      "risk": "safe",
+      "note": "Reads a note's full content."
+    },
+    {
+      "name": "get-note-plaintext",
+      "risk": "safe",
+      "note": "Reads a note as plain text."
+    },
+    {
+      "name": "get-note-details",
+      "risk": "safe",
+      "note": "Reads note metadata and content."
+    },
+    {
+      "name": "get-note-markdown",
+      "risk": "safe",
+      "note": "Reads a note as markdown."
+    },
+    {
+      "name": "get-note-metadata",
+      "risk": "safe",
+      "note": "Reads a note's metadata."
+    },
+    {
+      "name": "get-note-link",
+      "risk": "safe",
+      "note": "Builds a note's deep link."
+    },
+    {
+      "name": "show-note",
+      "risk": "safe",
+      "note": "Opens a note in the Notes app."
+    },
+    {
+      "name": "list-note-links",
+      "risk": "safe",
+      "note": "Lists links between notes."
+    },
+    {
+      "name": "list-shared-notes",
+      "risk": "safe",
+      "note": "Lists shared notes."
+    },
+    {
+      "name": "get-notes-stats",
+      "risk": "safe",
+      "note": "Reports vault statistics."
+    },
+    {
+      "name": "get-sync-status",
+      "risk": "safe",
+      "note": "Reports iCloud sync status."
+    },
+    {
+      "name": "create-note",
+      "risk": "high",
+      "note": "Creates notes in your account."
+    },
+    {
+      "name": "update-note",
+      "risk": "high",
+      "note": "Edits notes."
+    },
+    {
+      "name": "delete-note",
+      "risk": "high",
+      "note": "Deletes notes."
+    },
+    {
+      "name": "append-to-note",
+      "risk": "high",
+      "note": "Appends content to notes."
+    },
+    {
+      "name": "batch-delete-notes",
+      "risk": "high",
+      "note": "Deletes many notes at once."
+    },
+    {
+      "name": "create-folder",
+      "risk": "high",
+      "note": "Creates folders."
+    },
+    {
+      "name": "delete-folder-by-id",
+      "risk": "high",
+      "note": "Deletes folders."
+    },
+    {
+      "name": "set-note-pinned",
+      "risk": "high",
+      "note": "Pins or unpins notes."
+    },
+    {
+      "name": "save-markdown-template",
+      "risk": "high",
+      "note": "Saves a reusable template."
+    }
+  ],
+  "seo": {
+    "description": "Share Apple Notes with MCPWire over P2P. Read and search your notes from another machine with macOS — personal data, intended for your own devices."
+  }
+}

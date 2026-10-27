@@ -1,0 +1,93 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "chroma",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/chroma.svg",
+  "tagline": "Embedding store search for remote teammates — collection writes need your approval.",
+  "requirements": "No setup for a local persistent database (set CHROMA_DATA_DIR to pin the data directory); set CHROMA_HOST, CHROMA_PORT, and CHROMA_API_KEY to reach a Chroma server or Chroma Cloud instead. This is the official server from Chroma.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "chroma_list_collections",
+      "chroma_get_collection_info",
+      "chroma_get_collection_count",
+      "chroma_get_documents",
+      "chroma_peek_collection",
+      "chroma_query_documents"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "chroma_list_collections",
+      "risk": "safe",
+      "note": "Lists collections."
+    },
+    {
+      "name": "chroma_get_collection_info",
+      "risk": "safe",
+      "note": "Reads collection metadata."
+    },
+    {
+      "name": "chroma_get_collection_count",
+      "risk": "safe",
+      "note": "Counts records in a collection."
+    },
+    {
+      "name": "chroma_get_documents",
+      "risk": "safe",
+      "note": "Reads stored documents — their contents flow to the guest."
+    },
+    {
+      "name": "chroma_peek_collection",
+      "risk": "safe",
+      "note": "Previews records in a collection."
+    },
+    {
+      "name": "chroma_query_documents",
+      "risk": "safe",
+      "note": "Semantic search over a collection."
+    },
+    {
+      "name": "chroma_create_collection",
+      "risk": "high",
+      "note": "Creates collections."
+    },
+    {
+      "name": "chroma_modify_collection",
+      "risk": "high",
+      "note": "Renames or reconfigures collections."
+    },
+    {
+      "name": "chroma_delete_collection",
+      "risk": "high",
+      "note": "Deletes collections."
+    },
+    {
+      "name": "chroma_add_documents",
+      "risk": "high",
+      "note": "Writes documents into a collection."
+    },
+    {
+      "name": "chroma_update_documents",
+      "risk": "high",
+      "note": "Updates stored documents."
+    },
+    {
+      "name": "chroma_delete_documents",
+      "risk": "high",
+      "note": "Deletes documents."
+    },
+    {
+      "name": "chroma_fork_collection",
+      "risk": "high",
+      "note": "Forks a collection."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Chroma MCP server with MCPWire. Point the host at your local or cloud Chroma, let teammates search embeddings over P2P, and keep collection writes behind approval."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.motherduck/mcp-server-motherduck",
+  "title": "MotherDuck",
+  "description": "Stdio MCP server for MotherDuck.",
+  "version": "1.1.0",
+  "repository": {
+    "url": "https://github.com/motherduckdb/mcp-server-motherduck",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/motherduckdb/mcp-server-motherduck",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "mcp-server-motherduck",
+      "version": "1.1.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "MOTHERDUCK_TOKEN",
+          "description": "Inherited from the host environment: MOTHERDUCK_TOKEN. Only needed for MotherDuck cloud databases; local DuckDB files need no token.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

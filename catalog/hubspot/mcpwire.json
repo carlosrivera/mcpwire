@@ -1,0 +1,135 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "hubspot",
+  "category": "Business",
+  "source": "official",
+  "icon": "/icons/hubspot.svg",
+  "tagline": "CRM contacts, deals, and engagements for remote teammates — writes need your approval.",
+  "requirements": "Set PRIVATE_APP_ACCESS_TOKEN in the host environment, from a HubSpot private app whose scopes cover only the CRM objects you intend to share. This is the official server from HubSpot; customer data is personal data — share deliberately.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "hubspot-get-user-details",
+      "hubspot-list-objects",
+      "hubspot-search-objects",
+      "hubspot-batch-read-objects",
+      "hubspot-get-schemas",
+      "hubspot-list-properties",
+      "hubspot-get-property",
+      "hubspot-get-association-definitions",
+      "hubspot-list-associations",
+      "hubspot-get-engagement",
+      "hubspot-list-workflows",
+      "hubspot-get-workflow",
+      "hubspot-get-link"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "hubspot-get-user-details",
+      "risk": "safe",
+      "note": "Identifies the account behind the token."
+    },
+    {
+      "name": "hubspot-list-objects",
+      "risk": "safe",
+      "note": "Lists CRM records of a type — contacts, companies, deals."
+    },
+    {
+      "name": "hubspot-search-objects",
+      "risk": "safe",
+      "note": "Searches CRM records."
+    },
+    {
+      "name": "hubspot-batch-read-objects",
+      "risk": "safe",
+      "note": "Reads records in bulk."
+    },
+    {
+      "name": "hubspot-get-schemas",
+      "risk": "safe",
+      "note": "Reads object schemas."
+    },
+    {
+      "name": "hubspot-list-properties",
+      "risk": "safe",
+      "note": "Lists record properties."
+    },
+    {
+      "name": "hubspot-get-property",
+      "risk": "safe",
+      "note": "Reads one property definition."
+    },
+    {
+      "name": "hubspot-get-association-definitions",
+      "risk": "safe",
+      "note": "Reads how object types relate."
+    },
+    {
+      "name": "hubspot-list-associations",
+      "risk": "safe",
+      "note": "Lists records linked to a record."
+    },
+    {
+      "name": "hubspot-get-engagement",
+      "risk": "safe",
+      "note": "Reads a call, email, or meeting record."
+    },
+    {
+      "name": "hubspot-list-workflows",
+      "risk": "safe",
+      "note": "Lists automation workflows."
+    },
+    {
+      "name": "hubspot-get-workflow",
+      "risk": "safe",
+      "note": "Reads workflow details."
+    },
+    {
+      "name": "hubspot-get-link",
+      "risk": "safe",
+      "note": "Builds a HubSpot record link."
+    },
+    {
+      "name": "hubspot-batch-create-objects",
+      "risk": "high",
+      "note": "Creates CRM records."
+    },
+    {
+      "name": "hubspot-batch-update-objects",
+      "risk": "high",
+      "note": "Updates CRM records in bulk."
+    },
+    {
+      "name": "hubspot-batch-create-associations",
+      "risk": "high",
+      "note": "Links records to each other."
+    },
+    {
+      "name": "hubspot-create-engagement",
+      "risk": "high",
+      "note": "Logs calls, emails, and meetings."
+    },
+    {
+      "name": "hubspot-update-engagement",
+      "risk": "high",
+      "note": "Edits engagement records."
+    },
+    {
+      "name": "hubspot-create-property",
+      "risk": "high",
+      "note": "Adds record properties."
+    },
+    {
+      "name": "hubspot-update-property",
+      "risk": "high",
+      "note": "Changes record property definitions."
+    }
+  ],
+  "seo": {
+    "description": "Share the official HubSpot MCP server with MCPWire. Configure a private app token on the host, let teammates read CRM records over P2P, and keep creates and updates behind approval."
+  }
+}

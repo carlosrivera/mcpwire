@@ -1,0 +1,138 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "datadog",
+  "category": "Observability",
+  "source": "community",
+  "icon": "/icons/datadog.svg",
+  "tagline": "Metrics, logs, and incidents for remote teammates — host mutes and downtimes need your approval.",
+  "requirements": "Set DATADOG_API_KEY and DATADOG_APP_KEY in the host environment, from Datadog keys with read permissions (set DD_SITE for EU/US3/US5/AP1). Datadog's own MCP server is remote-only, so this entry uses a maintained community server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "list_incidents",
+      "get_incident",
+      "query_metrics",
+      "get_logs",
+      "get_all_services",
+      "get_monitors",
+      "list_dashboards",
+      "get_dashboard",
+      "list_traces",
+      "list_hosts",
+      "get_active_hosts_count",
+      "list_downtimes",
+      "get_rum_applications",
+      "get_rum_events",
+      "get_rum_grouped_event_count",
+      "get_rum_page_performance"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list_incidents",
+      "risk": "safe",
+      "note": "Lists incidents."
+    },
+    {
+      "name": "get_incident",
+      "risk": "safe",
+      "note": "Reads incident details."
+    },
+    {
+      "name": "query_metrics",
+      "risk": "safe",
+      "note": "Runs metric queries."
+    },
+    {
+      "name": "get_logs",
+      "risk": "safe",
+      "note": "Searches logs — log contents flow to the guest."
+    },
+    {
+      "name": "get_all_services",
+      "risk": "safe",
+      "note": "Lists monitored services."
+    },
+    {
+      "name": "get_monitors",
+      "risk": "safe",
+      "note": "Searches monitors."
+    },
+    {
+      "name": "list_dashboards",
+      "risk": "safe",
+      "note": "Lists dashboards."
+    },
+    {
+      "name": "get_dashboard",
+      "risk": "safe",
+      "note": "Reads a dashboard definition."
+    },
+    {
+      "name": "list_traces",
+      "risk": "safe",
+      "note": "Searches APM traces."
+    },
+    {
+      "name": "list_hosts",
+      "risk": "safe",
+      "note": "Lists reporting hosts."
+    },
+    {
+      "name": "get_active_hosts_count",
+      "risk": "safe",
+      "note": "Reports the active host count."
+    },
+    {
+      "name": "list_downtimes",
+      "risk": "safe",
+      "note": "Lists scheduled downtimes."
+    },
+    {
+      "name": "get_rum_applications",
+      "risk": "safe",
+      "note": "Lists RUM applications."
+    },
+    {
+      "name": "get_rum_events",
+      "risk": "safe",
+      "note": "Searches Real User Monitoring events."
+    },
+    {
+      "name": "get_rum_grouped_event_count",
+      "risk": "safe",
+      "note": "Groups RUM event counts."
+    },
+    {
+      "name": "get_rum_page_performance",
+      "risk": "safe",
+      "note": "Reads page performance metrics."
+    },
+    {
+      "name": "mute_host",
+      "risk": "high",
+      "note": "Silences monitoring for a host."
+    },
+    {
+      "name": "unmute_host",
+      "risk": "high",
+      "note": "Resumes monitoring for a host."
+    },
+    {
+      "name": "schedule_downtime",
+      "risk": "high",
+      "note": "Schedules monitor downtime."
+    },
+    {
+      "name": "cancel_downtime",
+      "risk": "high",
+      "note": "Cancels scheduled downtime."
+    }
+  ],
+  "seo": {
+    "description": "Share Datadog MCP tools with MCPWire. Configure read-only API keys on the host, let teammates query metrics, logs, and incidents over P2P, and keep host mutes and downtimes behind approval."
+  }
+}

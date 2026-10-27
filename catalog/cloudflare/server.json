@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.cloudflare/mcp-server-cloudflare",
+  "title": "Cloudflare",
+  "description": "Stdio MCP server for Cloudflare.",
+  "version": "0.2.0",
+  "repository": {
+    "url": "https://github.com/cloudflare/mcp-server-cloudflare",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/cloudflare/mcp-server-cloudflare",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@cloudflare/mcp-server-cloudflare",
+      "version": "0.2.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "CLOUDFLARE_ACCOUNT_ID",
+          "description": "Inherited from the host environment: CLOUDFLARE_ACCOUNT_ID.",
+          "isRequired": true,
+          "isSecret": false
+        },
+        {
+          "name": "CLOUDFLARE_API_TOKEN",
+          "description": "Inherited from the host environment: CLOUDFLARE_API_TOKEN.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "elasticsearch",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/elasticsearch.svg",
+  "tagline": "Index and mapping exploration with query-DSL search — scoped API keys strongly recommended.",
+  "requirements": "Set ES_URL in the host environment plus either ES_API_KEY or both ES_USERNAME and ES_PASSWORD. Use a dedicated API key with read-only privileges on the indices you intend to share. This is the official experimental server from Elastic.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "list_indices",
+      "get_mappings",
+      "search",
+      "get_shards"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list_indices",
+      "risk": "safe",
+      "note": "Lists indices the credentials can see."
+    },
+    {
+      "name": "get_mappings",
+      "risk": "safe",
+      "note": "Reads field mappings for an index."
+    },
+    {
+      "name": "search",
+      "risk": "caution",
+      "note": "Runs query-DSL searches and returns document contents from permitted indices — scope the API key to data that can be shared."
+    },
+    {
+      "name": "get_shards",
+      "risk": "safe",
+      "note": "Reads shard allocation info."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Elasticsearch MCP server with MCPWire. Configure a scoped API key on the host, let teammates search indices and mappings over P2P, and keep the session read-only."
+  }
+}

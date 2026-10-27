@@ -1,0 +1,218 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "browserstack",
+  "category": "Testing",
+  "source": "official",
+  "icon": "/icons/browserstack.svg",
+  "tagline": "Test cases, builds, and session results for remote teammates — live sessions and scans need your approval.",
+  "requirements": "Set BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY in the host environment. This is the official server from BrowserStack; test sessions meter to your plan.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "listTestFiles",
+      "listTestCases",
+      "listFolders",
+      "listTestCaseTemplates",
+      "listTestPlans",
+      "getTestPlan",
+      "listSubTestPlans",
+      "getSubTestPlan",
+      "listTestRuns",
+      "listSessions",
+      "fetchAutomationScreenshots",
+      "getFailureLogs",
+      "listBuildId",
+      "listTestIds",
+      "fetchBuildInsights",
+      "fetchRCA",
+      "listProducts",
+      "describeEntity",
+      "describeCapability",
+      "searchCapability",
+      "getAccessibilityAuthConfig"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "listTestFiles",
+      "risk": "safe",
+      "note": "Lists test files in the workspace."
+    },
+    {
+      "name": "listTestCases",
+      "risk": "safe",
+      "note": "Lists test cases."
+    },
+    {
+      "name": "listFolders",
+      "risk": "safe",
+      "note": "Lists test folders."
+    },
+    {
+      "name": "listTestCaseTemplates",
+      "risk": "safe",
+      "note": "Lists test case templates."
+    },
+    {
+      "name": "listTestPlans",
+      "risk": "safe",
+      "note": "Lists test plans."
+    },
+    {
+      "name": "getTestPlan",
+      "risk": "safe",
+      "note": "Reads a test plan."
+    },
+    {
+      "name": "listSubTestPlans",
+      "risk": "safe",
+      "note": "Lists sub test plans."
+    },
+    {
+      "name": "getSubTestPlan",
+      "risk": "safe",
+      "note": "Reads a sub test plan."
+    },
+    {
+      "name": "listTestRuns",
+      "risk": "safe",
+      "note": "Lists test runs."
+    },
+    {
+      "name": "listSessions",
+      "risk": "safe",
+      "note": "Lists Automate sessions."
+    },
+    {
+      "name": "fetchAutomationScreenshots",
+      "risk": "safe",
+      "note": "Fetches session screenshots."
+    },
+    {
+      "name": "getFailureLogs",
+      "risk": "safe",
+      "note": "Reads test failure logs."
+    },
+    {
+      "name": "listBuildId",
+      "risk": "safe",
+      "note": "Lists Automate builds."
+    },
+    {
+      "name": "listTestIds",
+      "risk": "safe",
+      "note": "Lists test identifiers."
+    },
+    {
+      "name": "fetchBuildInsights",
+      "risk": "safe",
+      "note": "Reads build quality insights."
+    },
+    {
+      "name": "fetchRCA",
+      "risk": "safe",
+      "note": "Reads failure root-cause analysis."
+    },
+    {
+      "name": "listProducts",
+      "risk": "safe",
+      "note": "Lists available BrowserStack products."
+    },
+    {
+      "name": "describeEntity",
+      "risk": "safe",
+      "note": "Describes a product entity."
+    },
+    {
+      "name": "describeCapability",
+      "risk": "safe",
+      "note": "Describes session capabilities."
+    },
+    {
+      "name": "searchCapability",
+      "risk": "safe",
+      "note": "Searches capability definitions."
+    },
+    {
+      "name": "getAccessibilityAuthConfig",
+      "risk": "safe",
+      "note": "Reads the accessibility scan auth config."
+    },
+    {
+      "name": "runAppLiveSession",
+      "risk": "caution",
+      "note": "Starts an app live session — meters to your plan."
+    },
+    {
+      "name": "runBrowserLiveSession",
+      "risk": "caution",
+      "note": "Starts a browser live session."
+    },
+    {
+      "name": "runAppTestsOnBrowserStack",
+      "risk": "caution",
+      "note": "Runs the test suite on real devices."
+    },
+    {
+      "name": "runPercyScan",
+      "risk": "caution",
+      "note": "Runs a Percy visual scan."
+    },
+    {
+      "name": "startAccessibilityScan",
+      "risk": "caution",
+      "note": "Starts an accessibility scan."
+    },
+    {
+      "name": "fetchAccessibilityIssues",
+      "risk": "caution",
+      "note": "Fetches accessibility scan issues."
+    },
+    {
+      "name": "takeAppScreenshot",
+      "risk": "caution",
+      "note": "Captures a device screenshot."
+    },
+    {
+      "name": "managePercyBuildApproval",
+      "risk": "high",
+      "note": "Approves Percy builds — a review decision."
+    },
+    {
+      "name": "createTestCase",
+      "risk": "high",
+      "note": "Creates test cases."
+    },
+    {
+      "name": "updateTestCase",
+      "risk": "high",
+      "note": "Edits test cases."
+    },
+    {
+      "name": "createTestRun",
+      "risk": "high",
+      "note": "Creates test runs."
+    },
+    {
+      "name": "updateTestRun",
+      "risk": "high",
+      "note": "Updates test runs."
+    },
+    {
+      "name": "createProjectOrFolder",
+      "risk": "high",
+      "note": "Creates projects and folders."
+    },
+    {
+      "name": "submitFeedback",
+      "risk": "high",
+      "note": "Sends feedback to BrowserStack."
+    }
+  ],
+  "seo": {
+    "description": "Share the official BrowserStack MCP server with MCPWire. Let teammates read test cases, builds, and failure logs over P2P, and keep live sessions and test writes behind approval."
+  }
+}

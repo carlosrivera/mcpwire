@@ -1,0 +1,206 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "heroku",
+  "category": "Infra",
+  "source": "official",
+  "icon": "/icons/heroku.svg",
+  "tagline": "Apps, dynos, and Postgres health for remote teammates — deploys and scaling need your approval.",
+  "requirements": "Set HEROKU_API_KEY in the host environment, from a Heroku account token scoped to the intended apps. This is the official server from Heroku.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "list_apps",
+      "get_app_info",
+      "get_app_logs",
+      "list_private_spaces",
+      "list_teams",
+      "list_addons",
+      "get_addon_info",
+      "list_addon_services",
+      "list_addon_plans",
+      "pg_info",
+      "pg_ps",
+      "pg_locks",
+      "pg_outliers",
+      "pg_credentials",
+      "pg_maintenance",
+      "pg_backups",
+      "ps_list",
+      "pipelines_list",
+      "pipelines_info"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list_apps",
+      "risk": "safe",
+      "note": "Lists apps the token can reach."
+    },
+    {
+      "name": "get_app_info",
+      "risk": "safe",
+      "note": "Reads app details."
+    },
+    {
+      "name": "get_app_logs",
+      "risk": "safe",
+      "note": "Reads application logs — log contents flow to the guest."
+    },
+    {
+      "name": "list_private_spaces",
+      "risk": "safe",
+      "note": "Lists Private Spaces."
+    },
+    {
+      "name": "list_teams",
+      "risk": "safe",
+      "note": "Lists teams."
+    },
+    {
+      "name": "list_addons",
+      "risk": "safe",
+      "note": "Lists app add-ons."
+    },
+    {
+      "name": "get_addon_info",
+      "risk": "safe",
+      "note": "Reads add-on details."
+    },
+    {
+      "name": "list_addon_services",
+      "risk": "safe",
+      "note": "Lists available add-on services."
+    },
+    {
+      "name": "list_addon_plans",
+      "risk": "safe",
+      "note": "Lists add-on plans."
+    },
+    {
+      "name": "pg_info",
+      "risk": "safe",
+      "note": "Reads Postgres database summary."
+    },
+    {
+      "name": "pg_ps",
+      "risk": "safe",
+      "note": "Reads Postgres process stats."
+    },
+    {
+      "name": "pg_locks",
+      "risk": "safe",
+      "note": "Reads database locks."
+    },
+    {
+      "name": "pg_outliers",
+      "risk": "safe",
+      "note": "Reads expensive query statistics."
+    },
+    {
+      "name": "pg_credentials",
+      "risk": "safe",
+      "note": "Reads credential configuration — not the credentials themselves."
+    },
+    {
+      "name": "pg_maintenance",
+      "risk": "safe",
+      "note": "Reads maintenance window info."
+    },
+    {
+      "name": "pg_backups",
+      "risk": "safe",
+      "note": "Lists database backups."
+    },
+    {
+      "name": "ps_list",
+      "risk": "safe",
+      "note": "Lists dynos."
+    },
+    {
+      "name": "pipelines_list",
+      "risk": "safe",
+      "note": "Lists pipelines."
+    },
+    {
+      "name": "pipelines_info",
+      "risk": "safe",
+      "note": "Reads pipeline details."
+    },
+    {
+      "name": "pg_psql",
+      "risk": "caution",
+      "note": "Runs arbitrary SQL against the database."
+    },
+    {
+      "name": "pg_kill",
+      "risk": "high",
+      "note": "Terminates database connections."
+    },
+    {
+      "name": "pg_upgrade",
+      "risk": "high",
+      "note": "Upgrades the database version."
+    },
+    {
+      "name": "ps_scale",
+      "risk": "high",
+      "note": "Scales dynos — changes your bill."
+    },
+    {
+      "name": "ps_restart",
+      "risk": "high",
+      "note": "Restarts running dynos."
+    },
+    {
+      "name": "maintenance_on",
+      "risk": "high",
+      "note": "Puts the app into maintenance mode."
+    },
+    {
+      "name": "maintenance_off",
+      "risk": "high",
+      "note": "Ends maintenance mode."
+    },
+    {
+      "name": "create_app",
+      "risk": "high",
+      "note": "Creates apps."
+    },
+    {
+      "name": "rename_app",
+      "risk": "high",
+      "note": "Renames apps."
+    },
+    {
+      "name": "create_addon",
+      "risk": "high",
+      "note": "Provisions add-ons — changes your bill."
+    },
+    {
+      "name": "pipelines_create",
+      "risk": "high",
+      "note": "Creates pipelines."
+    },
+    {
+      "name": "pipelines_promote",
+      "risk": "high",
+      "note": "Promotes staging to production."
+    },
+    {
+      "name": "deploy_to_heroku",
+      "risk": "high",
+      "note": "Deploys an app."
+    },
+    {
+      "name": "deploy_one_off_dyno",
+      "risk": "high",
+      "note": "Runs a one-off dyno."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Heroku MCP server with MCPWire. Let teammates read app health, logs, and Postgres stats over P2P, and keep deploys and scaling behind approval."
+  }
+}

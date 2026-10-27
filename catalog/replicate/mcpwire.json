@@ -1,0 +1,134 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "replicate",
+  "category": "AI",
+  "source": "official",
+  "icon": "/icons/replicate.svg",
+  "tagline": "Model catalog browsing for remote teammates — predictions cost your money.",
+  "requirements": "Set REPLICATE_API_TOKEN in the host environment. This is the official server from Replicate; running predictions bills to your account.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "get_account",
+      "list_collections",
+      "get_collections",
+      "list_deployments",
+      "get_deployments",
+      "list_hardware",
+      "list_models",
+      "get_models",
+      "search_models",
+      "list_models_examples",
+      "get_models_readme",
+      "list_models_versions"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "get_account",
+      "risk": "safe",
+      "note": "Identifies the account behind the token."
+    },
+    {
+      "name": "list_collections",
+      "risk": "safe",
+      "note": "Lists model collections."
+    },
+    {
+      "name": "get_collections",
+      "risk": "safe",
+      "note": "Reads a collection."
+    },
+    {
+      "name": "list_deployments",
+      "risk": "safe",
+      "note": "Lists deployments."
+    },
+    {
+      "name": "get_deployments",
+      "risk": "safe",
+      "note": "Reads deployment details."
+    },
+    {
+      "name": "list_hardware",
+      "risk": "safe",
+      "note": "Lists available hardware."
+    },
+    {
+      "name": "list_models",
+      "risk": "safe",
+      "note": "Lists models."
+    },
+    {
+      "name": "get_models",
+      "risk": "safe",
+      "note": "Reads model details."
+    },
+    {
+      "name": "search_models",
+      "risk": "safe",
+      "note": "Searches the model catalog."
+    },
+    {
+      "name": "list_models_examples",
+      "risk": "safe",
+      "note": "Reads model examples."
+    },
+    {
+      "name": "get_models_readme",
+      "risk": "safe",
+      "note": "Reads a model's README."
+    },
+    {
+      "name": "list_models_versions",
+      "risk": "safe",
+      "note": "Lists model versions."
+    },
+    {
+      "name": "create_models_predictions",
+      "risk": "caution",
+      "note": "Runs a model — every prediction bills to your account."
+    },
+    {
+      "name": "create_deployments_predictions",
+      "risk": "caution",
+      "note": "Runs a deployment — billed per use."
+    },
+    {
+      "name": "create_models",
+      "risk": "high",
+      "note": "Creates models under your account."
+    },
+    {
+      "name": "delete_models",
+      "risk": "high",
+      "note": "Deletes models."
+    },
+    {
+      "name": "create_deployments",
+      "risk": "high",
+      "note": "Creates deployments."
+    },
+    {
+      "name": "update_deployments",
+      "risk": "high",
+      "note": "Edits deployments."
+    },
+    {
+      "name": "delete_deployments",
+      "risk": "high",
+      "note": "Deletes deployments."
+    },
+    {
+      "name": "delete_models_versions",
+      "risk": "high",
+      "note": "Deletes model versions."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Replicate MCP server with MCPWire. Configure an API token on the host, let teammates browse models and deployments over P2P, and keep prediction runs behind approval."
+  }
+}

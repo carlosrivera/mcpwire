@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "motherduck",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/motherduck.svg",
+  "tagline": "DuckDB and MotherDuck analytics for remote teammates — queries can write files.",
+  "requirements": "Set MOTHERDUCK_TOKEN in the host environment to reach MotherDuck cloud databases; without a token the server opens local DuckDB files. This is the official server from MotherDuck. Point it only at databases whose contents may be disclosed.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "list_databases",
+      "list_tables",
+      "list_columns"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list_databases",
+      "risk": "safe",
+      "note": "Lists attached databases."
+    },
+    {
+      "name": "list_tables",
+      "risk": "safe",
+      "note": "Lists tables in a database."
+    },
+    {
+      "name": "list_columns",
+      "risk": "safe",
+      "note": "Reads column schemas."
+    },
+    {
+      "name": "switch_database_connection",
+      "risk": "caution",
+      "note": "Attaches a different database, including local files by path."
+    },
+    {
+      "name": "execute_query",
+      "risk": "caution",
+      "note": "Runs arbitrary SQL — DuckDB statements can write files and mutate local databases."
+    }
+  ],
+  "seo": {
+    "description": "Share the official MotherDuck MCP server with MCPWire. Point the host at your DuckDB or MotherDuck data, let teammates explore schemas over P2P, and keep query runs behind approval."
+  }
+}

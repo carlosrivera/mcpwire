@@ -1,0 +1,184 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "supabase-management",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/supabase-management.svg",
+  "tagline": "Project, branch, and SQL tools over the Management API — writes need your approval.",
+  "requirements": "Set SUPABASE_ACCESS_TOKEN in the host environment, from a Supabase personal access token scoped to the intended organization. This is the official server from Supabase, separate from the older API reference server under Supabase. SQL and branch tools can change real databases.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "search_docs",
+      "list_organizations",
+      "get_organization",
+      "list_projects",
+      "get_project",
+      "list_tables",
+      "list_extensions",
+      "list_migrations",
+      "query_logs",
+      "get_advisors",
+      "get_project_url",
+      "get_publishable_keys",
+      "generate_typescript_types",
+      "list_edge_functions",
+      "get_edge_function",
+      "list_branches"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "search_docs",
+      "risk": "safe",
+      "note": "Searches Supabase documentation."
+    },
+    {
+      "name": "list_organizations",
+      "risk": "safe",
+      "note": "Lists organizations."
+    },
+    {
+      "name": "get_organization",
+      "risk": "safe",
+      "note": "Reads organization details."
+    },
+    {
+      "name": "list_projects",
+      "risk": "safe",
+      "note": "Lists projects."
+    },
+    {
+      "name": "get_project",
+      "risk": "safe",
+      "note": "Reads project details."
+    },
+    {
+      "name": "get_cost",
+      "risk": "safe",
+      "note": "Estimates the cost of a planned create."
+    },
+    {
+      "name": "list_tables",
+      "risk": "safe",
+      "note": "Lists tables and schemas."
+    },
+    {
+      "name": "list_extensions",
+      "risk": "safe",
+      "note": "Lists installed extensions."
+    },
+    {
+      "name": "list_migrations",
+      "risk": "safe",
+      "note": "Lists applied migrations."
+    },
+    {
+      "name": "query_logs",
+      "risk": "safe",
+      "note": "Reads service logs — log contents flow to the guest."
+    },
+    {
+      "name": "get_advisors",
+      "risk": "safe",
+      "note": "Reads security and performance advisories."
+    },
+    {
+      "name": "get_project_url",
+      "risk": "safe",
+      "note": "Reads the project's API URL."
+    },
+    {
+      "name": "get_publishable_keys",
+      "risk": "safe",
+      "note": "Reads public anon keys — publishable by design."
+    },
+    {
+      "name": "generate_typescript_types",
+      "risk": "safe",
+      "note": "Generates TypeScript types from the schema."
+    },
+    {
+      "name": "list_edge_functions",
+      "risk": "safe",
+      "note": "Lists edge functions."
+    },
+    {
+      "name": "get_edge_function",
+      "risk": "safe",
+      "note": "Reads an edge function's body."
+    },
+    {
+      "name": "list_branches",
+      "risk": "safe",
+      "note": "Lists preview branches."
+    },
+    {
+      "name": "execute_sql",
+      "risk": "caution",
+      "note": "Runs arbitrary SQL against the project — statements can write data."
+    },
+    {
+      "name": "confirm_cost",
+      "risk": "high",
+      "note": "Approves spend for a create operation."
+    },
+    {
+      "name": "create_project",
+      "risk": "high",
+      "note": "Creates projects."
+    },
+    {
+      "name": "pause_project",
+      "risk": "high",
+      "note": "Pauses projects."
+    },
+    {
+      "name": "restore_project",
+      "risk": "high",
+      "note": "Restores paused projects."
+    },
+    {
+      "name": "apply_migration",
+      "risk": "high",
+      "note": "Applies schema migrations."
+    },
+    {
+      "name": "deploy_edge_function",
+      "risk": "high",
+      "note": "Deploys edge functions."
+    },
+    {
+      "name": "create_branch",
+      "risk": "high",
+      "note": "Creates preview branches."
+    },
+    {
+      "name": "delete_branch",
+      "risk": "high",
+      "note": "Deletes branches and their data."
+    },
+    {
+      "name": "merge_branch",
+      "risk": "high",
+      "note": "Merges a branch into production."
+    },
+    {
+      "name": "reset_branch",
+      "risk": "high",
+      "note": "Resets a branch's data."
+    },
+    {
+      "name": "rebase_branch",
+      "risk": "high",
+      "note": "Rebases a branch on production."
+    }
+  ],
+  "seo": {
+    "title": "Supabase Management API MCP server: setup & sharing",
+    "description": "Share the official Supabase Management MCP server with MCPWire. Let teammates inspect projects and schemas over P2P, and keep SQL runs, migrations, and branch merges behind approval."
+  }
+}

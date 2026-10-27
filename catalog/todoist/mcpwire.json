@@ -1,0 +1,116 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "todoist",
+  "category": "Business",
+  "source": "official",
+  "icon": "/icons/todoist.svg",
+  "tagline": "Task and project lookups for remote teammates — task changes need your approval.",
+  "requirements": "Set TODOIST_API_KEY in the host environment, using an app-specific token. This is the official local server; it registers many more tools than documented here, and everything outside the allowlist requires explicit approval.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "user-info",
+      "get-overview",
+      "search",
+      "fetch",
+      "find-tasks",
+      "find-tasks-by-date",
+      "find-projects",
+      "find-sections",
+      "find-comments"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "user-info",
+      "risk": "safe",
+      "note": "Identifies the account behind the API key."
+    },
+    {
+      "name": "get-overview",
+      "risk": "safe",
+      "note": "Summarizes projects, sections, and open tasks."
+    },
+    {
+      "name": "search",
+      "risk": "safe",
+      "note": "Searches tasks (OpenAI-compatible interface)."
+    },
+    {
+      "name": "fetch",
+      "risk": "safe",
+      "note": "Fetches a task or project by ID (OpenAI-compatible interface)."
+    },
+    {
+      "name": "find-tasks",
+      "risk": "safe",
+      "note": "Lists tasks with filters."
+    },
+    {
+      "name": "find-tasks-by-date",
+      "risk": "safe",
+      "note": "Lists tasks by due-date range."
+    },
+    {
+      "name": "find-projects",
+      "risk": "safe",
+      "note": "Lists projects."
+    },
+    {
+      "name": "find-sections",
+      "risk": "safe",
+      "note": "Lists sections in a project."
+    },
+    {
+      "name": "find-comments",
+      "risk": "safe",
+      "note": "Lists task or project comments."
+    },
+    {
+      "name": "add-tasks",
+      "risk": "high",
+      "note": "Creates tasks."
+    },
+    {
+      "name": "update-tasks",
+      "risk": "high",
+      "note": "Updates task content, dates, and priorities."
+    },
+    {
+      "name": "complete-tasks",
+      "risk": "high",
+      "note": "Closes tasks."
+    },
+    {
+      "name": "uncomplete-tasks",
+      "risk": "high",
+      "note": "Reopens completed tasks."
+    },
+    {
+      "name": "reschedule-tasks",
+      "risk": "high",
+      "note": "Moves tasks to new dates."
+    },
+    {
+      "name": "add-comments",
+      "risk": "high",
+      "note": "Posts comments as your identity."
+    },
+    {
+      "name": "add-projects",
+      "risk": "high",
+      "note": "Creates projects."
+    },
+    {
+      "name": "delete-object",
+      "risk": "high",
+      "note": "Deletes tasks, projects, sections, comments, or labels."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Todoist MCP server with MCPWire. Configure an API key on the host, let teammates read tasks and projects over P2P, and keep task writes behind approval."
+  }
+}

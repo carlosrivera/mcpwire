@@ -1,0 +1,104 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "airtable",
+  "category": "Database",
+  "source": "community",
+  "icon": "/icons/airtable.svg",
+  "tagline": "Bases and records for remote teammates — every visible base is readable.",
+  "requirements": "Set AIRTABLE_API_KEY in the host environment, from a personal access token scoped to only the bases you intend to share. Airtable tokens cannot be scoped per-tool, so the token scope is the real boundary.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "list_bases",
+      "list_tables",
+      "describe_table",
+      "list_records",
+      "search_records",
+      "get_record",
+      "list_comments"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "list_bases",
+      "risk": "safe",
+      "note": "Lists bases the token can reach."
+    },
+    {
+      "name": "list_tables",
+      "risk": "safe",
+      "note": "Lists tables in a base."
+    },
+    {
+      "name": "describe_table",
+      "risk": "safe",
+      "note": "Reads table schema and field definitions."
+    },
+    {
+      "name": "list_records",
+      "risk": "safe",
+      "note": "Reads records — cell contents go to the guest."
+    },
+    {
+      "name": "search_records",
+      "risk": "safe",
+      "note": "Searches record text."
+    },
+    {
+      "name": "get_record",
+      "risk": "safe",
+      "note": "Reads one record."
+    },
+    {
+      "name": "list_comments",
+      "risk": "safe",
+      "note": "Reads record comments."
+    },
+    {
+      "name": "create_record",
+      "risk": "high",
+      "note": "Inserts records."
+    },
+    {
+      "name": "update_records",
+      "risk": "high",
+      "note": "Modifies records, with bulk support."
+    },
+    {
+      "name": "delete_records",
+      "risk": "high",
+      "note": "Deletes records."
+    },
+    {
+      "name": "create_table",
+      "risk": "high",
+      "note": "Creates tables."
+    },
+    {
+      "name": "update_table",
+      "risk": "high",
+      "note": "Changes table names and descriptions."
+    },
+    {
+      "name": "create_field",
+      "risk": "high",
+      "note": "Adds columns."
+    },
+    {
+      "name": "update_field",
+      "risk": "high",
+      "note": "Modifies column definitions; type changes can reformat data."
+    },
+    {
+      "name": "create_comment",
+      "risk": "high",
+      "note": "Posts comments as your identity."
+    }
+  ],
+  "seo": {
+    "description": "Share the Airtable MCP server with MCPWire. Configure a scoped personal access token on the host, let teammates read bases and records over P2P, and keep writes behind approval."
+  }
+}

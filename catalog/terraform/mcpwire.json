@@ -1,0 +1,62 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "terraform",
+  "category": "Infra",
+  "source": "official",
+  "icon": "/icons/terraform.svg",
+  "tagline": "Provider docs, module search, and Checkov scans for remote teammates — terraform runs need your approval.",
+  "requirements": "No credentials needed for documentation search and Checkov scans (public registry and local files). This is the official AWS Labs server for AWS-focused Terraform and Terragrunt workflows; command execution stays off by default.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "search_aws_provider_docs",
+      "search_awscc_provider_docs",
+      "search_specific_aws_ia_modules",
+      "search_user_provided_module",
+      "run_checkov_scan"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "search_aws_provider_docs",
+      "risk": "safe",
+      "note": "Searches AWS provider documentation."
+    },
+    {
+      "name": "search_awscc_provider_docs",
+      "risk": "safe",
+      "note": "Searches AWS Cloud Control provider docs."
+    },
+    {
+      "name": "search_specific_aws_ia_modules",
+      "risk": "safe",
+      "note": "Searches official AWS-IA modules."
+    },
+    {
+      "name": "search_user_provided_module",
+      "risk": "safe",
+      "note": "Searches public Terraform Registry modules."
+    },
+    {
+      "name": "run_checkov_scan",
+      "risk": "safe",
+      "note": "Scans local Terraform files with Checkov."
+    },
+    {
+      "name": "execute_terraform_command",
+      "risk": "high",
+      "note": "Runs terraform init/plan/apply on the host — apply changes real infrastructure."
+    },
+    {
+      "name": "execute_terragrunt_command",
+      "risk": "high",
+      "note": "Runs terragrunt commands on the host."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Terraform MCP server with MCPWire. Let teammates search provider docs and scan configurations over P2P, and keep terraform apply behind approval."
+  }
+}

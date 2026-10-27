@@ -4,7 +4,7 @@
   "slug": "puppeteer",
   "category": "Browser",
   "source": "official",
-  "icon": "/icons/mcp.svg",
+  "icon": "/icons/puppeteer.svg",
   "tagline": "Drive a headless Chrome on your machine from a remote agent, safely sandboxed.",
   "requirements": "Requires a supported browser installation. This is the archived reference server.",
   "inputs": {},

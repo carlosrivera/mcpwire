@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "tavily",
+  "category": "Web",
+  "source": "official",
+  "icon": "/icons/tavily.svg",
+  "tagline": "LLM-ready web search and extraction for remote teammates — usage bills to your key.",
+  "requirements": "Set TAVILY_API_KEY in the host environment. This is the official server from Tavily; API usage is metered to your plan.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "tavily_search",
+      "tavily_extract",
+      "tavily_map"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "tavily_search",
+      "risk": "safe",
+      "note": "Web search returning LLM-ready results."
+    },
+    {
+      "name": "tavily_extract",
+      "risk": "safe",
+      "note": "Fetches clean page content from URLs."
+    },
+    {
+      "name": "tavily_map",
+      "risk": "safe",
+      "note": "Lists the URL structure of a site."
+    },
+    {
+      "name": "tavily_crawl",
+      "risk": "caution",
+      "note": "Crawls site hierarchies — can consume a lot of quota."
+    },
+    {
+      "name": "tavily_research",
+      "risk": "caution",
+      "note": "Deep research that plans and runs many search steps; the most expensive tool on the plan."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Tavily MCP server with MCPWire. Configure the API key on the host, let teammates search and extract web content over P2P, and keep deep research behind approval."
+  }
+}

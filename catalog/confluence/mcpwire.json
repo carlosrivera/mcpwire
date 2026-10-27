@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "confluence",
+  "category": "Knowledge",
+  "source": "community",
+  "icon": "/icons/confluence.svg",
+  "tagline": "Space and page lookups for remote teammates — page edits need your approval.",
+  "requirements": "Set ATLASSIAN_SITE_NAME (for your-company.atlassian.net use your-company), ATLASSIAN_USER_EMAIL, and ATLASSIAN_API_TOKEN in the host environment. Confluence Cloud only. Atlassian's own MCP server is remote-only, so this entry uses a well-maintained community stdio server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "conf_get"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "conf_get",
+      "risk": "caution",
+      "note": "Reads any Confluence REST endpoint the token can access, including page content and attachments. Scope the API token to the spaces you intend to share."
+    },
+    {
+      "name": "conf_post",
+      "risk": "high",
+      "note": "Creates pages, comments, and other resources."
+    },
+    {
+      "name": "conf_put",
+      "risk": "high",
+      "note": "Replaces pages and other resources."
+    },
+    {
+      "name": "conf_patch",
+      "risk": "high",
+      "note": "Partially updates pages and properties."
+    },
+    {
+      "name": "conf_delete",
+      "risk": "high",
+      "note": "Removes pages, labels, and attachments."
+    }
+  ],
+  "seo": {
+    "description": "Share Confluence MCP tools with MCPWire. Configure an Atlassian API token on the host, read spaces and pages over P2P, and keep page writes out of the allowlist."
+  }
+}

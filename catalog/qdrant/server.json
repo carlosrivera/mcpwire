@@ -1,0 +1,49 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.qdrant/mcp-server-qdrant",
+  "title": "Qdrant",
+  "description": "Stdio MCP server for Qdrant.",
+  "version": "0.8.1",
+  "repository": {
+    "url": "https://github.com/qdrant/mcp-server-qdrant",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/qdrant/mcp-server-qdrant",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "mcp-server-qdrant",
+      "version": "0.8.1",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "QDRANT_URL",
+          "description": "Inherited from the host environment: QDRANT_URL.",
+          "isRequired": true,
+          "isSecret": false
+        },
+        {
+          "name": "QDRANT_API_KEY",
+          "description": "Inherited from the host environment: QDRANT_API_KEY.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "COLLECTION_NAME",
+          "description": "Inherited from the host environment: COLLECTION_NAME.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "EMBEDDING_MODEL",
+          "description": "Inherited from the host environment: EMBEDDING_MODEL.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

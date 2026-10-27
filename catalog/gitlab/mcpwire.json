@@ -1,0 +1,249 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "gitlab",
+  "category": "DevOps",
+  "source": "community",
+  "icon": "/icons/gitlab.svg",
+  "tagline": "Repositories, merge requests, and pipelines for remote teammates — writes need your approval.",
+  "requirements": "Set GITLAB_PERSONAL_ACCESS_TOKEN in the host environment (read_api scope is enough for the defaults; set GITLAB_API_URL for self-managed instances). The community server from zereight — GitLab's own MCP server is remote-only. The launch exposes the default 40-tool core set; discover_tools unlocks more for a session.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "whoami",
+      "health_check",
+      "help",
+      "discover_tools",
+      "search_repositories",
+      "get_file_contents",
+      "get_project",
+      "list_projects",
+      "list_project_members",
+      "list_branches",
+      "get_branch",
+      "list_commits",
+      "get_commit",
+      "get_commit_diff",
+      "get_file_blame",
+      "get_repository_tree",
+      "list_labels",
+      "list_issues",
+      "my_issues",
+      "get_issue",
+      "list_issue_discussions",
+      "list_merge_requests",
+      "get_merge_request",
+      "get_merge_request_diffs",
+      "list_merge_request_changed_files",
+      "list_merge_request_diffs",
+      "get_merge_request_file_diff",
+      "get_merge_request_approval_state",
+      "mr_discussions",
+      "get_merge_request_discussion",
+      "get_merge_request_note",
+      "get_merge_request_notes"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "whoami",
+      "risk": "safe",
+      "note": "Identifies the account behind the token."
+    },
+    {
+      "name": "health_check",
+      "risk": "safe",
+      "note": "Verifies the token works."
+    },
+    {
+      "name": "help",
+      "risk": "safe",
+      "note": "Lists usage hints."
+    },
+    {
+      "name": "discover_tools",
+      "risk": "safe",
+      "note": "Activates additional non-core toolsets for this session — new tools then require approval like any other."
+    },
+    {
+      "name": "search_repositories",
+      "risk": "safe",
+      "note": "Searches projects."
+    },
+    {
+      "name": "get_file_contents",
+      "risk": "safe",
+      "note": "Reads repository files."
+    },
+    {
+      "name": "get_project",
+      "risk": "safe",
+      "note": "Reads project details."
+    },
+    {
+      "name": "list_projects",
+      "risk": "safe",
+      "note": "Lists accessible projects."
+    },
+    {
+      "name": "list_project_members",
+      "risk": "safe",
+      "note": "Lists project members."
+    },
+    {
+      "name": "list_branches",
+      "risk": "safe",
+      "note": "Lists branches."
+    },
+    {
+      "name": "get_branch",
+      "risk": "safe",
+      "note": "Reads branch details."
+    },
+    {
+      "name": "list_commits",
+      "risk": "safe",
+      "note": "Lists commit history."
+    },
+    {
+      "name": "get_commit",
+      "risk": "safe",
+      "note": "Reads a commit."
+    },
+    {
+      "name": "get_commit_diff",
+      "risk": "safe",
+      "note": "Reads a commit's diff."
+    },
+    {
+      "name": "get_file_blame",
+      "risk": "safe",
+      "note": "Reads per-line authorship."
+    },
+    {
+      "name": "get_repository_tree",
+      "risk": "safe",
+      "note": "Lists repository paths."
+    },
+    {
+      "name": "list_labels",
+      "risk": "safe",
+      "note": "Lists project labels."
+    },
+    {
+      "name": "list_issues",
+      "risk": "safe",
+      "note": "Lists issues."
+    },
+    {
+      "name": "my_issues",
+      "risk": "safe",
+      "note": "Lists the token account's issues."
+    },
+    {
+      "name": "get_issue",
+      "risk": "safe",
+      "note": "Reads issue details."
+    },
+    {
+      "name": "list_issue_discussions",
+      "risk": "safe",
+      "note": "Reads issue comment threads."
+    },
+    {
+      "name": "list_merge_requests",
+      "risk": "safe",
+      "note": "Lists merge requests."
+    },
+    {
+      "name": "get_merge_request",
+      "risk": "safe",
+      "note": "Reads merge request details."
+    },
+    {
+      "name": "get_merge_request_diffs",
+      "risk": "safe",
+      "note": "Reads merge request diffs."
+    },
+    {
+      "name": "list_merge_request_changed_files",
+      "risk": "safe",
+      "note": "Lists changed files."
+    },
+    {
+      "name": "list_merge_request_diffs",
+      "risk": "safe",
+      "note": "Lists version diffs."
+    },
+    {
+      "name": "get_merge_request_file_diff",
+      "risk": "safe",
+      "note": "Reads one file's diff."
+    },
+    {
+      "name": "get_merge_request_approval_state",
+      "risk": "safe",
+      "note": "Reads approval state."
+    },
+    {
+      "name": "mr_discussions",
+      "risk": "safe",
+      "note": "Reads merge request threads."
+    },
+    {
+      "name": "get_merge_request_discussion",
+      "risk": "safe",
+      "note": "Reads one thread."
+    },
+    {
+      "name": "get_merge_request_note",
+      "risk": "safe",
+      "note": "Reads one comment."
+    },
+    {
+      "name": "get_merge_request_notes",
+      "risk": "safe",
+      "note": "Reads merge request comments."
+    },
+    {
+      "name": "create_issue",
+      "risk": "high",
+      "note": "Creates issues."
+    },
+    {
+      "name": "update_issue",
+      "risk": "high",
+      "note": "Edits issues."
+    },
+    {
+      "name": "create_issue_note",
+      "risk": "high",
+      "note": "Posts comments as your identity."
+    },
+    {
+      "name": "create_merge_request",
+      "risk": "high",
+      "note": "Opens merge requests."
+    },
+    {
+      "name": "update_merge_request",
+      "risk": "high",
+      "note": "Edits merge requests, including merge settings."
+    },
+    {
+      "name": "create_merge_request_thread",
+      "risk": "high",
+      "note": "Starts review threads."
+    },
+    {
+      "name": "resolve_merge_request_thread",
+      "risk": "caution",
+      "note": "Marks review threads resolved."
+    }
+  ],
+  "seo": {
+    "description": "Share GitLab MCP tools with MCPWire. Configure a scoped access token on the host, let teammates read repos, issues, and merge requests over P2P, and keep writes behind approval."
+  }
+}

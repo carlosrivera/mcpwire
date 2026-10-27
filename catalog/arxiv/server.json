@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.blazickjp/arxiv-mcp-server",
+  "title": "arXiv",
+  "description": "Stdio MCP server for arXiv.",
+  "version": "0.8.2",
+  "repository": {
+    "url": "https://github.com/blazickjp/arxiv-mcp-server",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/blazickjp/arxiv-mcp-server",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "arxiv-mcp-server",
+      "version": "0.8.2",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

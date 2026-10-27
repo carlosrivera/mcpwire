@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.awslabs/aws-documentation-mcp-server",
+  "title": "AWS Documentation",
+  "description": "Stdio MCP server for AWS Documentation.",
+  "version": "1.2.3",
+  "repository": {
+    "url": "https://github.com/awslabs/mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/awslabs/mcp/tree/main/src/aws-documentation-mcp-server",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "awslabs.aws-documentation-mcp-server",
+      "version": "1.2.3",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "AWS_DOCUMENTATION_PARTITION",
+          "description": "Inherited from the host environment: AWS_DOCUMENTATION_PARTITION.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.microsoft/azure-devops-mcp",
+  "title": "Azure DevOps",
+  "description": "Stdio MCP server for Azure DevOps.",
+  "version": "2.11.0",
+  "repository": {
+    "url": "https://github.com/microsoft/azure-devops-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/microsoft/azure-devops-mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@azure-devops/mcp",
+      "version": "2.11.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "PERSONAL_ACCESS_TOKEN",
+          "description": "Inherited from the host environment: PERSONAL_ACCESS_TOKEN.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ],
+      "packageArguments": [
+        {
+          "type": "positional",
+          "valueHint": "organization",
+          "value": "{organization}",
+          "variables": {
+            "organization": {
+              "description": "Azure DevOps organization name",
+              "format": "string",
+              "isRequired": true
+            }
+          }
+        },
+        {
+          "type": "named",
+          "name": "--authentication",
+          "value": "pat"
+        }
+      ]
+    }
+  ]
+}

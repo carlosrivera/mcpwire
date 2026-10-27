@@ -1,0 +1,122 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "discord",
+  "category": "Comms",
+  "source": "community",
+  "icon": "/icons/discord.svg",
+  "tagline": "Channel history and search for remote teammates — messages sent as you need your approval.",
+  "requirements": "Create a Discord bot, enable the Message Content intent, invite it to the server, and set DISCORD_TOKEN in the host environment (GUILD_ID scopes it to one server). Discord has no official MCP server, so this entry uses a maintained community server. Prefer a bot that can only read the channels you intend to share.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "discord_get_channel",
+      "discord_get_message_history",
+      "discord_search_messages",
+      "discord_get_message",
+      "discord_list_attachments"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "discord_get_channel",
+      "risk": "safe",
+      "note": "Reads channel details."
+    },
+    {
+      "name": "discord_get_message_history",
+      "risk": "safe",
+      "note": "Reads channel history — message contents flow to the guest."
+    },
+    {
+      "name": "discord_search_messages",
+      "risk": "safe",
+      "note": "Searches messages."
+    },
+    {
+      "name": "discord_get_message",
+      "risk": "safe",
+      "note": "Reads one message."
+    },
+    {
+      "name": "discord_list_attachments",
+      "risk": "safe",
+      "note": "Lists message attachments."
+    },
+    {
+      "name": "discord_send_message",
+      "risk": "high",
+      "note": "Posts messages as the bot — or as you, with a user token."
+    },
+    {
+      "name": "discord_edit_message",
+      "risk": "high",
+      "note": "Edits messages."
+    },
+    {
+      "name": "discord_delete_message",
+      "risk": "high",
+      "note": "Deletes messages."
+    },
+    {
+      "name": "discord_add_reaction",
+      "risk": "high",
+      "note": "Reacts to messages."
+    },
+    {
+      "name": "discord_remove_reaction",
+      "risk": "high",
+      "note": "Removes reactions."
+    },
+    {
+      "name": "discord_create_dm",
+      "risk": "high",
+      "note": "Opens direct-message channels."
+    },
+    {
+      "name": "discord_get_dm_channels",
+      "risk": "caution",
+      "note": "Lists DMs — private conversations, only allow for a dedicated bot account."
+    },
+    {
+      "name": "discord_get_friends",
+      "risk": "caution",
+      "note": "Lists the account's friends — personal data, only for a dedicated bot account."
+    },
+    {
+      "name": "discord_add_friend",
+      "risk": "high",
+      "note": "Sends friend requests."
+    },
+    {
+      "name": "discord_remove_friend",
+      "risk": "high",
+      "note": "Removes friends."
+    },
+    {
+      "name": "discord_update_presence",
+      "risk": "high",
+      "note": "Changes the account's presence status."
+    },
+    {
+      "name": "discord_clear_presence",
+      "risk": "high",
+      "note": "Clears presence status."
+    },
+    {
+      "name": "discord_download_attachment",
+      "risk": "caution",
+      "note": "Downloads attachment files onto the host disk."
+    },
+    {
+      "name": "discord_cleanup_download",
+      "risk": "caution",
+      "note": "Deletes downloaded attachment files."
+    }
+  ],
+  "seo": {
+    "description": "Share Discord MCP tools with MCPWire. Configure a scoped bot token on the host, let teammates read channel history over P2P, and keep sending and account changes behind approval."
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "arxiv",
+  "category": "Research",
+  "source": "community",
+  "icon": "/icons/arxiv.svg",
+  "tagline": "Search, download, and read academic papers — public research data, no credentials.",
+  "requirements": "No credentials needed — the server queries public arXiv endpoints and stores downloaded papers on the host. This is the most widely used community arXiv server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "search_papers",
+      "download_paper",
+      "list_papers",
+      "read_paper",
+      "get_abstract",
+      "semantic_search",
+      "citation_graph",
+      "export_citations",
+      "get_paper_latex",
+      "list_paper_latex_sections",
+      "get_paper_latex_section",
+      "get_paper_outline",
+      "read_paper_section",
+      "search_paper_text",
+      "check_alerts",
+      "list_watches"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "search_papers",
+      "risk": "safe",
+      "note": "Searches arXiv by query."
+    },
+    {
+      "name": "download_paper",
+      "risk": "safe",
+      "note": "Downloads a paper PDF to the host's paper storage."
+    },
+    {
+      "name": "list_papers",
+      "risk": "safe",
+      "note": "Lists downloaded papers."
+    },
+    {
+      "name": "read_paper",
+      "risk": "safe",
+      "note": "Reads a downloaded paper's content."
+    },
+    {
+      "name": "get_abstract",
+      "risk": "safe",
+      "note": "Reads a paper's abstract."
+    },
+    {
+      "name": "semantic_search",
+      "risk": "safe",
+      "note": "Semantic search over downloaded papers."
+    },
+    {
+      "name": "citation_graph",
+      "risk": "safe",
+      "note": "Explores a paper's citations."
+    },
+    {
+      "name": "export_citations",
+      "risk": "safe",
+      "note": "Exports citations in BibTeX and other formats."
+    },
+    {
+      "name": "get_paper_latex",
+      "risk": "safe",
+      "note": "Reads a paper's LaTeX source."
+    },
+    {
+      "name": "list_paper_latex_sections",
+      "risk": "safe",
+      "note": "Lists LaTeX sections."
+    },
+    {
+      "name": "get_paper_latex_section",
+      "risk": "safe",
+      "note": "Reads one LaTeX section."
+    },
+    {
+      "name": "get_paper_outline",
+      "risk": "safe",
+      "note": "Reads a paper's outline."
+    },
+    {
+      "name": "read_paper_section",
+      "risk": "safe",
+      "note": "Reads one section of a paper."
+    },
+    {
+      "name": "search_paper_text",
+      "risk": "safe",
+      "note": "Full-text search across downloaded papers."
+    },
+    {
+      "name": "check_alerts",
+      "risk": "safe",
+      "note": "Checks watched topics for new papers."
+    },
+    {
+      "name": "list_watches",
+      "risk": "safe",
+      "note": "Lists watched topics."
+    },
+    {
+      "name": "watch_topic",
+      "risk": "caution",
+      "note": "Adds a topic watch on the host."
+    },
+    {
+      "name": "unwatch_topic",
+      "risk": "caution",
+      "note": "Removes a topic watch."
+    },
+    {
+      "name": "reindex",
+      "risk": "caution",
+      "note": "Rebuilds the local search index."
+    }
+  ],
+  "seo": {
+    "description": "Share the arXiv MCP server with MCPWire. Let teammates search, download, and read academic papers over P2P with no credentials required."
+  }
+}

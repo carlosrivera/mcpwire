@@ -3,32 +3,15 @@ import Base from '../layouts/Base.astro';
 import { Code } from 'astro:components';
 import servers from '../data/servers';
 import CopyButton from '../components/CopyButton.astro';
-const integrations = [
-  { name: 'PostgreSQL', slug: 'postgres', icon: 'postgresql' },
-  { name: 'GitHub', slug: 'github', icon: 'github' },
-  { name: 'Slack', slug: 'slack', icon: 'slack' },
-  { name: 'Docker', slug: 'docker', icon: 'docker' },
-  { name: 'SQLite', slug: 'sqlite', icon: 'sqlite' },
-  { name: 'Supabase', slug: 'supabase', icon: 'supabase' },
-  { name: 'Figma', slug: 'figma', icon: 'figma' },
-  { name: 'MongoDB', slug: 'mongodb', icon: 'mongodb' },
-  { name: 'Notion', slug: 'notion', icon: 'notion' },
-  { name: 'Kubernetes', slug: 'kubernetes', icon: 'kubernetes' },
-  { name: 'Stripe', slug: 'stripe', icon: 'stripe' },
-  { name: 'Redis', slug: 'redis', icon: 'redis' },
-  { name: 'Git', slug: 'git', icon: 'git' },
-  { name: 'Playwright', slug: 'playwright', icon: 'playwright' },
-  { name: 'Netlify', slug: 'netlify', icon: 'netlify' },
-  { name: 'Brave Search', slug: 'brave-search', icon: 'brave-browser' },
-  { name: 'Sentry', slug: 'sentry', icon: 'sentry' },
-  { name: 'Google Maps', slug: 'google-maps', icon: 'google-maps' },
-  { name: 'Filesystem', slug: 'filesystem', icon: 'folder' },
-  { name: 'Fetch', slug: 'fetch', icon: 'globe' },
-  { name: 'Memory', slug: 'memory', icon: 'brain' },
-  { name: 'Time', slug: 'time', icon: 'clock' },
-  { name: 'Sequential Thinking', slug: 'sequential-thinking', icon: 'workflow' },
-  { name: 'Everything', slug: 'everything', icon: 'blocks' },
-];
+// Derived from the catalog so new entries appear here without edits.
+const homepageHidden = new Set(['time', 'everything']);
+const integrations = servers
+  .filter((server) => !homepageHidden.has(server.slug))
+  .map((server) => ({
+    name: server.name,
+    slug: server.slug,
+    icon: server.icon.replace('/icons/', '').replace(/\.svg$/, ''),
+  }));
 const clients = [
   { name: 'Claude Code', icon: 'claude' },
   { name: 'Cursor', icon: 'cursor' },

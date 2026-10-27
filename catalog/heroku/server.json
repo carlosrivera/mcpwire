@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.heroku/heroku-mcp-server",
+  "title": "Heroku",
+  "description": "Stdio MCP server for Heroku.",
+  "version": "1.2.12",
+  "repository": {
+    "url": "https://github.com/heroku/heroku-mcp-server",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/heroku/heroku-mcp-server",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@heroku/mcp-server",
+      "version": "1.2.12",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "HEROKU_API_KEY",
+          "description": "Inherited from the host environment: HEROKU_API_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

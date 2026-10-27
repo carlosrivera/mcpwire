@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.awslabs/cloudwatch-mcp-server",
+  "title": "CloudWatch",
+  "description": "Stdio MCP server for AWS CloudWatch.",
+  "version": "0.3.1",
+  "repository": {
+    "url": "https://github.com/awslabs/mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/awslabs/mcp/tree/main/src/cloudwatch-mcp-server",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "awslabs.cloudwatch-mcp-server",
+      "version": "0.3.1",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "AWS_PROFILE",
+          "description": "Inherited from the host environment: AWS_PROFILE.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "AWS_REGION",
+          "description": "Inherited from the host environment: AWS_REGION.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.pinecone/pinecone-mcp",
+  "title": "Pinecone",
+  "description": "Stdio MCP server for Pinecone.",
+  "version": "0.3.0",
+  "repository": {
+    "url": "https://github.com/pinecone-io/pinecone-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://docs.pinecone.io/guides/operations/mcp-server",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@pinecone-database/mcp",
+      "version": "0.3.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "PINECONE_API_KEY",
+          "description": "Inherited from the host environment: PINECONE_API_KEY.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "wikipedia",
+  "category": "Knowledge",
+  "source": "community",
+  "icon": "/icons/wikipedia.svg",
+  "tagline": "The encyclopedia over P2P — public data, fully read-only, no credentials.",
+  "requirements": "No credentials needed — the server reads public Wikipedia APIs. This is the most widely used community Wikipedia server; it also registers prefixed aliases for each tool, which behave identically.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "search_wikipedia",
+      "get_article",
+      "get_summary",
+      "summarize_article_for_query",
+      "summarize_article_section",
+      "get_sections",
+      "get_links",
+      "get_related_topics",
+      "get_coordinates",
+      "extract_key_facts",
+      "test_wikipedia_connectivity"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "search_wikipedia",
+      "risk": "safe",
+      "note": "Searches Wikipedia."
+    },
+    {
+      "name": "get_article",
+      "risk": "safe",
+      "note": "Reads a full article."
+    },
+    {
+      "name": "get_summary",
+      "risk": "safe",
+      "note": "Reads an article summary."
+    },
+    {
+      "name": "summarize_article_for_query",
+      "risk": "safe",
+      "note": "Summarizes an article around a question."
+    },
+    {
+      "name": "summarize_article_section",
+      "risk": "safe",
+      "note": "Summarizes one section."
+    },
+    {
+      "name": "get_sections",
+      "risk": "safe",
+      "note": "Lists article sections."
+    },
+    {
+      "name": "get_links",
+      "risk": "safe",
+      "note": "Lists an article's links."
+    },
+    {
+      "name": "get_related_topics",
+      "risk": "safe",
+      "note": "Lists related topics."
+    },
+    {
+      "name": "get_coordinates",
+      "risk": "safe",
+      "note": "Reads article coordinates."
+    },
+    {
+      "name": "extract_key_facts",
+      "risk": "safe",
+      "note": "Extracts key facts from an article."
+    },
+    {
+      "name": "test_wikipedia_connectivity",
+      "risk": "safe",
+      "note": "Verifies the API connection."
+    }
+  ],
+  "seo": {
+    "description": "Share the Wikipedia MCP server with MCPWire. Let teammates search and read the encyclopedia over P2P with a fully read-only, credential-free toolset."
+  }
+}

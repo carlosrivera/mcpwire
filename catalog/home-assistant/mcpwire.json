@@ -1,0 +1,184 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "home-assistant",
+  "category": "Smart Home",
+  "source": "community",
+  "icon": "/icons/home-assistant.svg",
+  "tagline": "Your smart home's sensors and history over P2P — device control needs your approval.",
+  "requirements": "Set HA_URL to your Home Assistant instance and HA_TOKEN to a long-lived access token. Home Assistant itself ships an MCP integration, but this standalone server is the popular way to connect from outside; the token's access is the boundary. Guest device control is possible via approval.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "get_version",
+      "system_overview",
+      "domain_summary_tool",
+      "list_entities",
+      "get_entity",
+      "get_entities_by_area",
+      "search_entities_tool",
+      "list_automations",
+      "get_history",
+      "get_history_range",
+      "get_statistics",
+      "get_statistics_range",
+      "get_error_log",
+      "list_dashboards",
+      "get_dashboard_config",
+      "list_view_sections",
+      "list_dashboard_backups"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "get_version",
+      "risk": "safe",
+      "note": "Reports the Home Assistant version."
+    },
+    {
+      "name": "system_overview",
+      "risk": "safe",
+      "note": "Summarizes the whole home."
+    },
+    {
+      "name": "domain_summary_tool",
+      "risk": "safe",
+      "note": "Summarizes entities by domain."
+    },
+    {
+      "name": "list_entities",
+      "risk": "safe",
+      "note": "Lists devices and sensors — home state flows to the guest."
+    },
+    {
+      "name": "get_entity",
+      "risk": "safe",
+      "note": "Reads one entity's state."
+    },
+    {
+      "name": "get_entities_by_area",
+      "risk": "safe",
+      "note": "Lists entities in a room."
+    },
+    {
+      "name": "search_entities_tool",
+      "risk": "safe",
+      "note": "Searches entities."
+    },
+    {
+      "name": "list_automations",
+      "risk": "safe",
+      "note": "Lists automations."
+    },
+    {
+      "name": "get_history",
+      "risk": "safe",
+      "note": "Reads entity history — presence and sensor history are personal data."
+    },
+    {
+      "name": "get_history_range",
+      "risk": "safe",
+      "note": "Reads history for a date range."
+    },
+    {
+      "name": "get_statistics",
+      "risk": "safe",
+      "note": "Reads sensor statistics."
+    },
+    {
+      "name": "get_statistics_range",
+      "risk": "safe",
+      "note": "Reads statistics for a date range."
+    },
+    {
+      "name": "get_error_log",
+      "risk": "safe",
+      "note": "Reads the Home Assistant error log."
+    },
+    {
+      "name": "list_dashboards",
+      "risk": "safe",
+      "note": "Lists dashboards."
+    },
+    {
+      "name": "get_dashboard_config",
+      "risk": "safe",
+      "note": "Reads dashboard configuration."
+    },
+    {
+      "name": "list_view_sections",
+      "risk": "safe",
+      "note": "Lists dashboard views."
+    },
+    {
+      "name": "list_dashboard_backups",
+      "risk": "safe",
+      "note": "Lists dashboard backups."
+    },
+    {
+      "name": "entity_action",
+      "risk": "caution",
+      "note": "Controls devices — lights, switches, climate. Each action needs approval."
+    },
+    {
+      "name": "call_service_tool",
+      "risk": "caution",
+      "note": "Calls any Home Assistant service — as broad as the token allows."
+    },
+    {
+      "name": "restart_ha",
+      "risk": "high",
+      "note": "Restarts Home Assistant."
+    },
+    {
+      "name": "set_dashboard_config",
+      "risk": "high",
+      "note": "Overwrites dashboard configuration."
+    },
+    {
+      "name": "add_card",
+      "risk": "high",
+      "note": "Adds dashboard cards."
+    },
+    {
+      "name": "update_card",
+      "risk": "high",
+      "note": "Edits dashboard cards."
+    },
+    {
+      "name": "remove_card",
+      "risk": "high",
+      "note": "Removes dashboard cards."
+    },
+    {
+      "name": "move_card",
+      "risk": "high",
+      "note": "Reorders dashboard cards."
+    },
+    {
+      "name": "add_view",
+      "risk": "high",
+      "note": "Adds dashboard views."
+    },
+    {
+      "name": "remove_view",
+      "risk": "high",
+      "note": "Removes dashboard views."
+    },
+    {
+      "name": "update_view",
+      "risk": "high",
+      "note": "Edits dashboard views."
+    },
+    {
+      "name": "restore_dashboard",
+      "risk": "high",
+      "note": "Restores a dashboard backup."
+    }
+  ],
+  "seo": {
+    "description": "Share Home Assistant with MCPWire. Let teammates check sensors, history, and automations over P2P, and keep device control and dashboard edits behind approval."
+  }
+}

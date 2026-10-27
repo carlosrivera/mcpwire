@@ -1,0 +1,101 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "snyk",
+  "category": "Security",
+  "source": "official",
+  "icon": "/icons/snyk.svg",
+  "tagline": "Code, dependency, and container scans for remote teammates — auth and policy changes need your approval.",
+  "requirements": "Run `snyk auth` on the host or set SNYK_TOKEN for project scans; static analysis tools work without an account. This is Snyk's official MCP mode of their CLI, launched via the `mcp` subcommand.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "snyk_version",
+      "snyk_code_scan",
+      "snyk_sca_scan",
+      "snyk_iac_scan",
+      "snyk_container_scan",
+      "snyk_sbom_scan",
+      "snyk_aibom",
+      "snyk_package_health_check",
+      "snyk_breakability_check"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "snyk_version",
+      "risk": "safe",
+      "note": "Reports the CLI version."
+    },
+    {
+      "name": "snyk_code_scan",
+      "risk": "safe",
+      "note": "Static analysis of local source code."
+    },
+    {
+      "name": "snyk_sca_scan",
+      "risk": "safe",
+      "note": "Scans dependencies for known vulnerabilities."
+    },
+    {
+      "name": "snyk_iac_scan",
+      "risk": "safe",
+      "note": "Scans infrastructure-as-code files."
+    },
+    {
+      "name": "snyk_container_scan",
+      "risk": "safe",
+      "note": "Scans a container image for vulnerabilities."
+    },
+    {
+      "name": "snyk_sbom_scan",
+      "risk": "safe",
+      "note": "Scans an SBOM document."
+    },
+    {
+      "name": "snyk_aibom",
+      "risk": "safe",
+      "note": "Generates an AI bill of materials."
+    },
+    {
+      "name": "snyk_package_health_check",
+      "risk": "safe",
+      "note": "Reports health signals for a package."
+    },
+    {
+      "name": "snyk_breakability_check",
+      "risk": "safe",
+      "note": "Checks whether an upgrade breaks the build."
+    },
+    {
+      "name": "snyk_secret_scan",
+      "risk": "caution",
+      "note": "Finds hardcoded secrets — findings may quote the secret text."
+    },
+    {
+      "name": "snyk_auth",
+      "risk": "caution",
+      "note": "Starts an interactive browser login."
+    },
+    {
+      "name": "snyk_send_feedback",
+      "risk": "high",
+      "note": "Sends feedback to Snyk."
+    },
+    {
+      "name": "snyk_trust",
+      "risk": "high",
+      "note": "Marks packages or sources as trusted — a policy change."
+    },
+    {
+      "name": "snyk_logout",
+      "risk": "high",
+      "note": "Clears the host's Snyk authentication."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Snyk MCP server with MCPWire. Let teammates run code, dependency, and container scans over P2P, and keep authentication and trust changes behind approval."
+  }
+}

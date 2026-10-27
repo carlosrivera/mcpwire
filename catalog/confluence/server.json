@@ -1,0 +1,43 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.aashari/mcp-server-atlassian-confluence",
+  "title": "Confluence",
+  "description": "Stdio MCP server for Confluence.",
+  "version": "3.3.0",
+  "repository": {
+    "url": "https://github.com/aashari/mcp-server-atlassian-confluence",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/aashari/mcp-server-atlassian-confluence",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@aashari/mcp-server-atlassian-confluence",
+      "version": "3.3.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "ATLASSIAN_SITE_NAME",
+          "description": "Inherited from the host environment: ATLASSIAN_SITE_NAME.",
+          "isRequired": true,
+          "isSecret": false
+        },
+        {
+          "name": "ATLASSIAN_USER_EMAIL",
+          "description": "Inherited from the host environment: ATLASSIAN_USER_EMAIL.",
+          "isRequired": true,
+          "isSecret": false
+        },
+        {
+          "name": "ATLASSIAN_API_TOKEN",
+          "description": "Inherited from the host environment: ATLASSIAN_API_TOKEN.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.awslabs/terraform-mcp-server",
+  "title": "Terraform",
+  "description": "Stdio MCP server for Terraform.",
+  "version": "1.0.18",
+  "repository": {
+    "url": "https://github.com/awslabs/mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/awslabs/mcp/tree/main/src/terraform-mcp-server",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "awslabs.terraform-mcp-server",
+      "version": "1.0.18",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "AWS_PROFILE",
+          "description": "Inherited from the host environment: AWS_PROFILE.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "AWS_REGION",
+          "description": "Inherited from the host environment: AWS_REGION.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.chroma/chroma-mcp",
+  "title": "Chroma",
+  "description": "Stdio MCP server for Chroma.",
+  "version": "0.2.6",
+  "repository": {
+    "url": "https://github.com/chroma-core/chroma",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/chroma-core/chroma",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "chroma-mcp",
+      "version": "0.2.6",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "CHROMA_DATA_DIR",
+          "description": "Inherited from the host environment: CHROMA_DATA_DIR.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "CHROMA_HOST",
+          "description": "Inherited from the host environment: CHROMA_HOST.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "CHROMA_PORT",
+          "description": "Inherited from the host environment: CHROMA_PORT.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "CHROMA_API_KEY",
+          "description": "Inherited from the host environment: CHROMA_API_KEY.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

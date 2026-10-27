@@ -1,0 +1,147 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "cloudflare",
+  "category": "Infra",
+  "source": "official",
+  "icon": "/icons/cloudflare.svg",
+  "tagline": "Workers, KV, R2, and D1 visibility for remote teammates — deployments need your approval.",
+  "requirements": "Set CLOUDFLARE_ACCOUNT_ID and a scoped CLOUDFLARE_API_TOKEN in the host environment. The official server registers 150+ tools; this guide documents the most relevant ones, and everything outside the allowlist requires explicit approval.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "zones_list",
+      "get_kvs",
+      "kv_list",
+      "kv_get",
+      "d1_list_databases",
+      "worker_list",
+      "worker_get",
+      "r2_list_buckets",
+      "r2_list_objects",
+      "r2_get_object"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "zones_list",
+      "risk": "safe",
+      "note": "Lists zones in the account."
+    },
+    {
+      "name": "get_kvs",
+      "risk": "safe",
+      "note": "Lists KV namespaces."
+    },
+    {
+      "name": "kv_list",
+      "risk": "safe",
+      "note": "Lists keys in a KV namespace."
+    },
+    {
+      "name": "kv_get",
+      "risk": "safe",
+      "note": "Reads a value from KV."
+    },
+    {
+      "name": "d1_list_databases",
+      "risk": "safe",
+      "note": "Lists D1 databases."
+    },
+    {
+      "name": "worker_list",
+      "risk": "safe",
+      "note": "Lists Workers."
+    },
+    {
+      "name": "worker_get",
+      "risk": "safe",
+      "note": "Reads a Worker's script content."
+    },
+    {
+      "name": "r2_list_buckets",
+      "risk": "safe",
+      "note": "Lists R2 buckets."
+    },
+    {
+      "name": "r2_list_objects",
+      "risk": "safe",
+      "note": "Lists objects in an R2 bucket."
+    },
+    {
+      "name": "r2_get_object",
+      "risk": "safe",
+      "note": "Reads an object from R2."
+    },
+    {
+      "name": "d1_query",
+      "risk": "caution",
+      "note": "Runs arbitrary SQL against D1 — the query can write as well as read."
+    },
+    {
+      "name": "analytics_get",
+      "risk": "caution",
+      "note": "Reads Workers analytics; requires a paid Workers plan."
+    },
+    {
+      "name": "kv_put",
+      "risk": "high",
+      "note": "Writes values to KV."
+    },
+    {
+      "name": "kv_delete",
+      "risk": "high",
+      "note": "Deletes KV keys."
+    },
+    {
+      "name": "r2_put_object",
+      "risk": "high",
+      "note": "Writes objects to R2."
+    },
+    {
+      "name": "r2_delete_object",
+      "risk": "high",
+      "note": "Deletes objects from R2."
+    },
+    {
+      "name": "worker_put",
+      "risk": "high",
+      "note": "Creates or updates Worker scripts."
+    },
+    {
+      "name": "worker_deploy",
+      "risk": "high",
+      "note": "Deploys Workers."
+    },
+    {
+      "name": "worker_delete",
+      "risk": "high",
+      "note": "Deletes Workers."
+    },
+    {
+      "name": "d1_create_database",
+      "risk": "high",
+      "note": "Creates D1 databases."
+    },
+    {
+      "name": "d1_delete_database",
+      "risk": "high",
+      "note": "Deletes D1 databases."
+    },
+    {
+      "name": "secret_put",
+      "risk": "high",
+      "note": "Stores Worker secrets."
+    },
+    {
+      "name": "version_rollback",
+      "risk": "high",
+      "note": "Rolls a Worker back to an earlier version."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Cloudflare MCP server with MCPWire. Configure a scoped API token on the host, let teammates inspect Workers, KV, R2, and D1 over P2P, and keep deployments behind approval."
+  }
+}

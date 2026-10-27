@@ -1,0 +1,71 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "exa",
+  "category": "Web",
+  "source": "official",
+  "icon": "/icons/exa.svg",
+  "tagline": "Neural web and code search for remote teammates — people lookups stay behind approval.",
+  "requirements": "Set EXA_API_KEY in the host environment. This is the official server from Exa Labs; API usage is metered to your plan.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "web_search_exa",
+      "web_fetch_exa",
+      "get_code_context_exa",
+      "company_research_exa"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "web_search_exa",
+      "risk": "safe",
+      "note": "Neural web search."
+    },
+    {
+      "name": "web_search_advanced_exa",
+      "risk": "safe",
+      "note": "Web search with full parameter control."
+    },
+    {
+      "name": "web_fetch_exa",
+      "risk": "safe",
+      "note": "Fetches page content by URL."
+    },
+    {
+      "name": "get_code_context_exa",
+      "risk": "safe",
+      "note": "Searches code and documentation for programming questions."
+    },
+    {
+      "name": "company_research_exa",
+      "risk": "safe",
+      "note": "Researches a company's web presence."
+    },
+    {
+      "name": "crawling_exa",
+      "risk": "caution",
+      "note": "Crawls multiple pages from a seed URL."
+    },
+    {
+      "name": "deep_search_exa",
+      "risk": "caution",
+      "note": "Agent-powered multi-step research; expensive in credits."
+    },
+    {
+      "name": "linkedin_search_exa",
+      "risk": "caution",
+      "note": "Searches LinkedIn profiles — personal data about people."
+    },
+    {
+      "name": "people_search_exa",
+      "risk": "caution",
+      "note": "Searches for people across the web — personal data."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Exa MCP server with MCPWire. Configure the API key on the host, let teammates run neural web and code search over P2P, and keep people lookups behind approval."
+  }
+}

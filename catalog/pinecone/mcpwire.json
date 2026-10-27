@@ -1,0 +1,74 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "pinecone",
+  "category": "Database",
+  "source": "official",
+  "icon": "/icons/pinecone.svg",
+  "tagline": "Vector index search and docs for remote teammates — writes need your approval.",
+  "requirements": "Set PINECONE_API_KEY in the host environment, from a Pinecone key scoped to the indexes you intend to share. This is the official server from Pinecone.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "search-docs",
+      "list-indexes",
+      "describe-index",
+      "describe-index-stats",
+      "search-records",
+      "rerank-documents",
+      "cascading-search"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "search-docs",
+      "risk": "safe",
+      "note": "Searches Pinecone documentation."
+    },
+    {
+      "name": "list-indexes",
+      "risk": "safe",
+      "note": "Lists indexes the key can reach."
+    },
+    {
+      "name": "describe-index",
+      "risk": "safe",
+      "note": "Reads index configuration."
+    },
+    {
+      "name": "describe-index-stats",
+      "risk": "safe",
+      "note": "Reads index statistics."
+    },
+    {
+      "name": "search-records",
+      "risk": "safe",
+      "note": "Semantic search — record contents flow to the guest."
+    },
+    {
+      "name": "rerank-documents",
+      "risk": "safe",
+      "note": "Reranks documents against a query."
+    },
+    {
+      "name": "cascading-search",
+      "risk": "safe",
+      "note": "Combines search and rerank in one call."
+    },
+    {
+      "name": "upsert-records",
+      "risk": "high",
+      "note": "Writes vectors into an index."
+    },
+    {
+      "name": "create-index-for-model",
+      "risk": "high",
+      "note": "Creates a new index."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Pinecone MCP server with MCPWire. Configure a scoped API key on the host, let teammates search vector indexes over P2P, and keep upserts behind approval."
+  }
+}

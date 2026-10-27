@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.awslabs/aws-api-mcp-server",
+  "title": "AWS API",
+  "description": "Stdio MCP server for the AWS API.",
+  "version": "1.5.6",
+  "repository": {
+    "url": "https://github.com/awslabs/mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/awslabs/mcp/tree/main/src/aws-api-mcp-server",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "awslabs.aws-api-mcp-server",
+      "version": "1.5.6",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "AWS_PROFILE",
+          "description": "Inherited from the host environment: AWS_PROFILE.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "AWS_REGION",
+          "description": "Inherited from the host environment: AWS_REGION.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

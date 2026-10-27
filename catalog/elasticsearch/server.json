@@ -1,0 +1,55 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.elastic/mcp-server-elasticsearch",
+  "title": "Elasticsearch",
+  "description": "Stdio MCP server for Elasticsearch.",
+  "version": "0.3.1",
+  "repository": {
+    "url": "https://github.com/elastic/mcp-server-elasticsearch",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/elastic/mcp-server-elasticsearch",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@elastic/mcp-server-elasticsearch",
+      "version": "0.3.1",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "ES_URL",
+          "description": "Inherited from the host environment: ES_URL.",
+          "isRequired": true,
+          "isSecret": false
+        },
+        {
+          "name": "ES_API_KEY",
+          "description": "Inherited from the host environment: ES_API_KEY.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "ES_USERNAME",
+          "description": "Inherited from the host environment: ES_USERNAME.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "ES_PASSWORD",
+          "description": "Inherited from the host environment: ES_PASSWORD.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "ES_CA_CERT",
+          "description": "Inherited from the host environment: ES_CA_CERT.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

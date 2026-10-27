@@ -1,0 +1,27 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.replicate/replicate-mcp",
+  "title": "Replicate",
+  "description": "Stdio MCP server for Replicate.",
+  "version": "0.9.0",
+  "websiteUrl": "https://replicate.com/docs/reference/mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "replicate-mcp",
+      "version": "0.9.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "REPLICATE_API_TOKEN",
+          "description": "Inherited from the host environment: REPLICATE_API_TOKEN.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

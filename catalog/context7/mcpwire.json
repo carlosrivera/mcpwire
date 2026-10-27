@@ -4,7 +4,7 @@
   "slug": "context7",
   "category": "Knowledge",
   "source": "community",
-  "icon": "/icons/mcp.svg",
+  "icon": "/icons/context7.svg",
   "tagline": "Up-to-date library docs for any agent — fully safe to teleport.",
   "requirements": "Network access is required. Configure a Context7 API key if your plan requires one. Pinned package requires Node.js >=20.18.1.",
   "inputs": {},

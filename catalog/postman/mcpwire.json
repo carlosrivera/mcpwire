@@ -1,0 +1,118 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "postman",
+  "category": "DevOps",
+  "source": "official",
+  "icon": "/icons/postman.svg",
+  "tagline": "API collections, specs, and environments for remote teammates — edits need your approval.",
+  "requirements": "Set POSTMAN_API_KEY in the host environment. The local server starts with Postman's minimal toolset (42 tools); this guide documents the most relevant ones. Flags such as --code, --full, and --region eu are not part of this catalog's launch.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "getAuthenticatedUser",
+      "getWorkspaces",
+      "getWorkspace",
+      "getCollections",
+      "getCollection",
+      "getEnvironments",
+      "getEnvironment",
+      "getAllSpecs",
+      "getSpec",
+      "searchPostmanElements",
+      "getEnabledTools"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "getAuthenticatedUser",
+      "risk": "safe",
+      "note": "Identifies the account behind the API key."
+    },
+    {
+      "name": "getWorkspaces",
+      "risk": "safe",
+      "note": "Lists workspaces the key can access."
+    },
+    {
+      "name": "getWorkspace",
+      "risk": "safe",
+      "note": "Reads workspace details."
+    },
+    {
+      "name": "getCollections",
+      "risk": "safe",
+      "note": "Lists collections."
+    },
+    {
+      "name": "getCollection",
+      "risk": "safe",
+      "note": "Reads collection contents, including request examples."
+    },
+    {
+      "name": "getEnvironments",
+      "risk": "safe",
+      "note": "Lists environments. Values may include secrets — review before sharing."
+    },
+    {
+      "name": "getEnvironment",
+      "risk": "safe",
+      "note": "Reads environment variables. Values may include secrets — review before sharing."
+    },
+    {
+      "name": "getAllSpecs",
+      "risk": "safe",
+      "note": "Lists API specifications."
+    },
+    {
+      "name": "getSpec",
+      "risk": "safe",
+      "note": "Reads an API specification."
+    },
+    {
+      "name": "searchPostmanElements",
+      "risk": "safe",
+      "note": "Searches collections, specs, and workspaces."
+    },
+    {
+      "name": "getEnabledTools",
+      "risk": "safe",
+      "note": "Lists the tools this server exposes."
+    },
+    {
+      "name": "runCollection",
+      "risk": "caution",
+      "note": "Executes collection requests against your APIs — real calls, including any that write."
+    },
+    {
+      "name": "createCollection",
+      "risk": "high",
+      "note": "Creates collections."
+    },
+    {
+      "name": "createWorkspace",
+      "risk": "high",
+      "note": "Creates workspaces."
+    },
+    {
+      "name": "putCollection",
+      "risk": "high",
+      "note": "Overwrites collection content."
+    },
+    {
+      "name": "createCollectionRequest",
+      "risk": "high",
+      "note": "Adds requests to a collection."
+    },
+    {
+      "name": "duplicateCollection",
+      "risk": "high",
+      "note": "Copies a collection under your identity."
+    }
+  ],
+  "seo": {
+    "description": "Share the official Postman MCP server with MCPWire. Configure an API key on the host, let teammates read collections and specs over P2P, and keep collection writes behind approval."
+  }
+}

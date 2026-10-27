@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schemas/mcpwire.schema.json",
+  "schemaVersion": 1,
+  "slug": "jira",
+  "category": "Business",
+  "source": "community",
+  "icon": "/icons/jira.svg",
+  "tagline": "Sprint and issue lookups for remote teammates — writes need your approval.",
+  "requirements": "Set ATLASSIAN_SITE_NAME (for your-company.atlassian.net use your-company), ATLASSIAN_USER_EMAIL, and ATLASSIAN_API_TOKEN in the host environment. Jira Cloud only. Atlassian's own MCP server is remote-only, so this entry uses a well-maintained community stdio server.",
+  "inputs": {},
+  "defaults": {
+    "allow": [
+      "jira_get"
+    ],
+    "redactSecrets": true,
+    "ttl": "30m"
+  },
+  "tools": [
+    {
+      "name": "jira_get",
+      "risk": "caution",
+      "note": "Reads any Jira REST endpoint the token can access, including issues, comments, and user data. Scope the API token to the projects you intend to share."
+    },
+    {
+      "name": "jira_post",
+      "risk": "high",
+      "note": "Creates issues, comments, and other resources."
+    },
+    {
+      "name": "jira_put",
+      "risk": "high",
+      "note": "Replaces issues, comments, and other resources."
+    },
+    {
+      "name": "jira_patch",
+      "risk": "high",
+      "note": "Partially updates issues and fields."
+    },
+    {
+      "name": "jira_delete",
+      "risk": "high",
+      "note": "Removes issues, comments, and attachments."
+    }
+  ],
+  "seo": {
+    "description": "Share Jira MCP tools with MCPWire. Configure an Atlassian API token on the host, read issues and projects over P2P, and keep create, update, and delete tools out of the allowlist."
+  }
+}
