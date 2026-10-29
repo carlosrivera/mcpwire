@@ -12,6 +12,30 @@ const integrations = servers
     slug: server.slug,
     icon: server.icon.replace('/icons/', '').replace(/\.svg$/, ''),
   }));
+
+const featuredSlugs = [
+  'docker', 'github', 'postgres', 'redis',
+  'slack', 'figma', 'notion', 'supabase',
+  'linear', 'cloudflare', 'chrome-devtools', 'brave-search',
+  'sentry', 'playwright', 'sqlite', 'jira',
+  'stripe', 'datadog', 'airtable', 'puppeteer',
+  'mongodb', 'clickup', 'git', 'kubernetes',
+];
+const featuredMap = new Map(integrations.map((item) => [item.slug, item]));
+const initialIntegrations = featuredSlugs
+  .map((slug) => featuredMap.get(slug))
+  .filter((item): item is (typeof integrations)[0] => Boolean(item));
+
+if (initialIntegrations.length < 24) {
+  const chosenSlugs = new Set(initialIntegrations.map((i) => i.slug));
+  for (const item of integrations) {
+    if (!chosenSlugs.has(item.slug)) {
+      initialIntegrations.push(item);
+      chosenSlugs.add(item.slug);
+      if (initialIntegrations.length === 24) break;
+    }
+  }
+}
 const clients = [
   { name: 'Claude Code', icon: 'claude' },
   { name: 'Cursor', icon: 'cursor' },
@@ -176,12 +200,13 @@ const guest = `{
       <p>Wrap the databases, browsers, and internal tools you already run locally—no SDK changes required.</p>
       <a href="/teleport/">Browse all {servers.length} server guides <span aria-hidden="true">→</span></a>
     </div>
-    {integrations.map((server) => (
+    {initialIntegrations.map((server) => (
       <a class="home-integration" href={`/teleport/${server.slug}/`} aria-label={`${server.name} server guide`} data-tooltip={server.name}>
         <img src={`/icons/${server.icon}.svg`} alt="" width="38" height="38" loading="lazy" />
       </a>
     ))}
   </section>
+  <script type="application/json" id="integrations-pool" set:html={JSON.stringify(integrations)} />
 
   <section class="home-faq home-width" aria-labelledby="faq-title">
     <div class="home-faq-head">
@@ -250,7 +275,9 @@ const guest = `{
 
 <script>
   import { connectPipelineWires } from '../scripts/pipeline-wires';
+  import { initCloudRotator } from '../scripts/cloud-rotator';
   connectPipelineWires();
+  initCloudRotator();
 
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const startRotator = (rotatorId: string, intervalMs: number, delayMs: number) => {

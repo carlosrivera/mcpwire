@@ -4,12 +4,16 @@ import DocCode from '../components/DocCode.astro';
 import servers from '../data/servers';
 const filesystem = servers.find(server => server.slug === 'filesystem');
 const sqliteServer = servers.find(server => server.slug === 'sqlite');
+const gitServer = servers.find(server => server.slug === 'git');
 const contents = [
   ['start', 'Run the CLI'], ['share', 'Share a server'], ['connect', 'Connect an agent'],
-  ['verify', 'Try a tool call'], ['controls', 'Choose your controls'], ['sqlite', 'SQLite example'],
-  ['record', 'Record a session'], ['troubleshooting', 'Troubleshooting'],
+  ['verify', 'Try a tool call'], ['sandbox', 'Test on one machine'], ['controls', 'Choose your controls'], ['sqlite', 'SQLite example'],
+  ['servers', 'Share a different server'], ['record', 'Record a session'], ['security', 'Security'], ['troubleshooting', 'Troubleshooting'],
 ];
-const setup = `npx -y @mcpwire/cli`;
+const runners = `npx -y @mcpwire/cli         # npm
+pnpm dlx @mcpwire/cli       # pnpm
+bunx @mcpwire/cli           # Bun
+yarn dlx @mcpwire/cli       # Yarn`;
 const fixture = `mkdir -p "$HOME/mcpwire-demo"
 printf 'Revenue: 42\\nContact: root@corp.example.com\\n' \\
   > "$HOME/mcpwire-demo/report.txt"`;
@@ -20,6 +24,13 @@ const share = `npx -y @mcpwire/cli share \\
   --ttl 30m \\
   -- npx -y @modelcontextprotocol/server-filesystem@${filesystem.packageVersion} \\
   "$HOME/mcpwire-demo"`;
+const cloudShellSnippet = `mkdir -p "$HOME/mcpwire-demo"
+printf 'Hello from Cloud Shell!\\n' > "$HOME/mcpwire-demo/hello.txt"
+npx -y @mcpwire/cli share \\
+  --name cloud-files \\
+  --allow "read_file,list_directory" \\
+  -- npx -y @modelcontextprotocol/server-filesystem "$HOME/mcpwire-demo"`;
+const localJoinSnippet = `npx -y @mcpwire/cli join wire://PASTE_THE_CLOUD_TICKET_HERE`;
 const config = JSON.stringify({mcpServers: {'shared-files': { command: 'npx', args: ['-y', '@mcpwire/cli', 'join', 'wire://PASTE_THE_HOST_TICKET_HERE']}}}, null, 2);
 const flags = [
   ['--allow <list>', 'All tools not denied', 'Expose only these comma-separated tool names. An explicit empty string exposes no tools.'],
@@ -32,6 +43,13 @@ const flags = [
   ['--name <name>', 'Derived from the server command', 'Set the server key in the printed client configuration.'],
 ];
 const recordedShare = share.replace('  --ttl 30m', '  --ttl 30m --max-calls 20 --record ./session.wirelog');
+const gitShare = `npx -y @mcpwire/cli share \\
+  --name shared-git \\
+  --allow "git_status,git_log,git_diff" \\
+  --redact-secrets \\
+  --ttl 30m \\
+  -- uvx mcp-server-git==${gitServer.packageVersion} \\
+  --repository "$HOME/code/my-project"`;
 const sqlite = `npx -y @mcpwire/cli share \\
   --name shared-sqlite \\
   --allow "read_query,list_tables,describe_table" \\
@@ -49,19 +67,19 @@ const sqlite = `npx -y @mcpwire/cli share \\
       </nav>
     </aside>
     <article class="docs-article">
+      <details class="docs-mobile-nav"><summary>On this page</summary><nav aria-label="On this page">{contents.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}</nav></details>
       <header class="docs-intro">
         <p class="eyebrow">The CLI</p>
         <h1>Your server.<br />Their agent.</h1>
         <p class="page-intro">Start a local MCP server on your machine. Give a teammate a session ticket. Their MCP client connects through MCPWire and calls the tools you expose.</p>
         <div class="docs-flow" aria-label="Connection flow"><span>Host machine</span><span aria-hidden="true">↔</span><span>Encrypted connection</span><span aria-hidden="true">↔</span><span>Guest agent</span></div>
-        <details class="docs-mobile-nav"><summary>On this page</summary><nav aria-label="On this page">{contents.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}</nav></details>
       </header>
 
       <section id="start">
         <h2>Run the CLI</h2>
-        <p>Both machines need Node.js 18 or newer. Your teammate also needs an MCP client that supports stdio servers, such as Claude Desktop or Cursor. Run the CLI directly with npx:</p>
-        <DocCode title="Terminal · Run with npx" code={setup} />
-        <p class="note">This prints the help menu; it does not start a sharing session. If you prefer a global install, run <code class="inline">npm install -g @mcpwire/cli</code> and use <code class="inline">mcpwire</code> in place of <code class="inline">npx -y @mcpwire/cli</code>.</p>
+        <p>Both machines need Node.js 18 or newer. Your teammate also needs an MCP client that supports stdio servers, such as Claude Desktop or Cursor. Run the CLI directly with the package runner you already use:</p>
+        <DocCode title="Terminal · Run with your package runner" code={runners} />
+        <p class="note">This prints the help menu; it does not start a sharing session. The examples below use <code class="inline">npx</code>; substitute your runner in any of them. If you prefer a global install, run <code class="inline">npm install -g @mcpwire/cli</code> and use <code class="inline">mcpwire</code> in place of <code class="inline">npx -y @mcpwire/cli</code>.</p>
         <p>The two main subcommands are <code class="inline">share</code> on the host and <code class="inline">join</code> on the guest.</p>
       </section>
 
@@ -82,6 +100,7 @@ const sqlite = `npx -y @mcpwire/cli share \\
         <p>Your teammate does not need the filesystem server or a copy of your files. On their machine, add the entry printed by the host to Claude Desktop’s <code class="inline">claude_desktop_config.json</code>, Cursor’s <code class="inline">.cursor/mcp.json</code>, or another client’s MCP configuration. It looks like this:</p>
         <DocCode title="Guest · MCP client configuration" code={config} lang="json" />
         <p>Paste the full ticket from the host into <code class="inline">wire://...</code>. Merge the entry into an existing <code class="inline">mcpServers</code> object rather than replacing other servers. Reload the client’s MCP configuration.</p>
+        <p class="note">The guest machine doesn’t need npm specifically. For Bun, set <code class="inline">"command": "bunx"</code> with args <code class="inline">["@mcpwire/cli", "join", "wire://…"]</code>; for pnpm, set <code class="inline">"command": "pnpm"</code> with args <code class="inline">["dlx", "@mcpwire/cli", "join", "wire://…"]</code>.</p>
         <p>The MCP client starts <code class="inline">join</code> for them. They do not need to run it separately in a terminal.</p>
       </section>
 
@@ -94,6 +113,24 @@ const sqlite = `npx -y @mcpwire/cli share \\
         <DocCode title="read_file · returned text" code={'Revenue: 42\nContact: [REDACTED_BY_MCPWIRE]'} lang="text" copy={false} />
         <p>The revenue value stays visible and the email is replaced. A <code class="inline">write_file</code> call is rejected before reaching the server:</p>
         <DocCode title="Blocked call · JSON-RPC error" code={JSON.stringify({code:-32601,message:"[MCPWire Firewall] Tool 'write_file' is not allowed by host."},null,2)} lang="json" copy={false} />
+      </section>
+
+      <section id="sandbox">
+        <h2>Test without a second machine</h2>
+        <p>You don’t need two physical computers or a teammate to test MCPWire end-to-end. You can run the host in a free cloud sandbox so it has its own isolated network, datacenter NAT, and public IP, then connect from your local machine.</p>
+
+        <h3>Google Cloud Shell</h3>
+        <p>Google Cloud Shell provides a free browser-based Linux terminal with 50 hours of active usage per week, Node.js pre-installed, and no credit card required. Open <a class="text-link" href="https://shell.cloud.google.com" target="_blank" rel="noopener">shell.cloud.google.com</a> and run:</p>
+        <DocCode title="Google Cloud Shell · start the host" code={cloudShellSnippet} />
+        <p>Copy the <code class="inline">wire://</code> ticket printed in the session console.</p>
+
+        <h3>GitHub Codespaces</h3>
+        <p>Every GitHub account includes 60 free hours per month of Codespaces. Create a Codespace from any repository (or a blank one at <a class="text-link" href="https://github.com/codespaces/new" target="_blank" rel="noopener">github.com/codespaces/new</a>). In the Codespace terminal, run the same share command and copy the ticket.</p>
+
+        <h3>Connect from your local machine</h3>
+        <p>In your local terminal (or inside Claude Desktop / Cursor’s MCP config), connect to the cloud session:</p>
+        <DocCode title="Local terminal · join the remote cloud session" code={localJoinSnippet} />
+        <p>Because the cloud sandbox runs in a remote datacenter, this confirms that DHT peer discovery, NAT hole punching, and encrypted streaming work smoothly across distinct networks.</p>
       </section>
 
       <section id="controls">
@@ -123,6 +160,14 @@ const sqlite = `npx -y @mcpwire/cli share \\
         <a class="text-link" href="/teleport/">Find commands and tool names for other servers <span aria-hidden="true">→</span></a>
       </section>
 
+      <section id="servers">
+        <h2>Share a different server</h2>
+        <p>Any MCP server that communicates over stdio can be shared: replace the command after <code class="inline">--</code> with the launch command for that server, and list its tool names in <code class="inline">--allow</code>. For example, sharing read-only git tools from a repository on your machine (requires <a class="text-link" href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv</a> on the host):</p>
+        <DocCode title="Host · share read-only git tools" code={gitShare} />
+        <p>Everything before <code class="inline">--</code> stays the same regardless of the server. The tool names must match the server exactly — for the git server above, the read-only defaults are <code class="inline">git_status</code>, <code class="inline">git_log</code>, <code class="inline">git_diff_unstaged</code>, <code class="inline">git_diff_staged</code>, <code class="inline">git_diff</code>, and <code class="inline">git_show</code>, while <code class="inline">git_commit</code> and friends stay blocked.</p>
+        <p class="note">Ready-made host commands, full tool tables, and test prompts for {servers.length} servers — filesystem, git, SQLite, GitHub, Postgres, Slack, and more — are in the <a class="text-link" href="/teleport/">server guides</a>. To compose flags and tools interactively, use the <a class="text-link" href="/builder/">command builder</a>, which prints the complete share command for you.</p>
+      </section>
+
       <section id="record">
         <h2>Record a session</h2>
         <p>Add <code class="inline">--record</code> to save a session log. Here is the filesystem example with a recording and a limit of 20 tool calls:</p>
@@ -131,10 +176,32 @@ const sqlite = `npx -y @mcpwire/cli share \\
         <p class="note">The file includes the ticket, server command, and unredacted argument previews. Treat recordings as sensitive. The parent directory must exist, and starting a recording overwrites a file at the same path.</p>
       </section>
 
+      <section id="security">
+        <h2>Security</h2>
+        <p>Some protections are built into every session; others are opt-in flags that you choose per share. This section describes what each layer covers and where its boundary sits.</p>
+        <h3>Encrypted, direct, no relays</h3>
+        <p>The guest connects straight to the host over a Noise-encrypted peer-to-peer tunnel. Tool calls and responses never touch MCPWire infrastructure — there are no relay servers in the data path. Peers find each other through the public Hyperswarm DHT. On networks that block it, point both machines at your own bootstrap nodes:</p>
+        <DocCode title="Both machines · private DHT bootstrap" code={'MCPWIRE_BOOTSTRAP=10.0.0.5:49737,10.0.0.6:49737 npx -y @mcpwire/cli share …'} />
+        <h3>Treat the ticket as a credential</h3>
+        <p>Anyone holding the <code class="inline">wire://</code> ticket can call the exposed tools for as long as the host session is live. Send it over a private channel, never a public one. Pressing Ctrl+C invalidates it; a restarted host issues a fresh ticket, and old tickets stop working.</p>
+        <h3>The firewall works on tool names</h3>
+        <p>Calls for tools outside the allowlist are rejected on the host before the MCP server process ever sees them. That is the boundary: MCPWire does not validate tool arguments, inspect SQL, filter MCP resources or prompts, or sandbox the server process. The server runs with the host’s credentials and filesystem access, so configure the server itself for least privilege — a filesystem server pointed at a demo folder, a database account with read-only grants.</p>
+        <h3>Redaction and recordings are best-effort</h3>
+        <p><code class="inline">--redact-secrets</code> matches known token, key, email, and card patterns and can miss sensitive data; it does not scrub incoming arguments or local logs. Recordings written by <code class="inline">--record</code> contain the ticket, the server command, and unredacted argument previews — store and share them like secrets.</p>
+        <h3>Least-privilege checklist</h3>
+        <ul class="security-checklist">
+          <li>Start from an explicit allowlist (<code class="inline">--allow</code>), not the default all-tools behavior.</li>
+          <li>Set <code class="inline">--ttl</code> and <code class="inline">--max-calls</code> so a forgotten session ends itself.</li>
+          <li>Add <code class="inline">--confirm</code> when the share includes anything state-changing.</li>
+          <li>Run the server with restricted credentials and a narrowed scope (a demo folder, a read-only database user).</li>
+          <li>Send tickets privately, and rotate them by restarting the host when in doubt.</li>
+        </ul>
+      </section>
+
       <section id="troubleshooting">
         <h2>When something doesn’t connect</h2>
         <dl class="troubleshooting">
-          <div><dt>Join times out after 30 seconds</dt><dd>Check that the host process is still running, its TTL and call budget haven’t expired, and the full current ticket was copied. Both machines need network access. Restrictive firewalls or NAT configurations can prevent a connection.</dd></div>
+          <div><dt>Join times out after 30 seconds</dt><dd>Check that the host process is still running, its TTL and call budget haven’t expired, and the full current ticket was copied. Both machines need network access. Restrictive firewalls or NAT configurations can prevent a connection; if the public discovery network is unreachable, point both machines at a private bootstrap with <code class="inline">MCPWIRE_BOOTSTRAP</code> (see <a class="text-link" href="#security">Security</a>).</dd></div>
           <div><dt>The client connects, then immediately closes</dt><dd>Check the host terminal for a server startup error. The server executable must be on the host’s PATH, its dependencies installed, and its arguments valid. A ticket can be printed before the server is launched.</dd></div>
           <div><dt>No tools, or a tool is blocked</dt><dd>Check the server’s exact tool names and the host’s allow/deny lists. An empty allowlist exposes nothing. A deny entry always takes precedence. Use the <a class="text-link" href="/builder/">command builder</a> to assemble a policy.</dd></div>
           <div><dt>File not found or access denied</dt><dd>Use an absolute path from the host’s filesystem, inside the folder passed to the filesystem server. Client configuration paths, by contrast, refer to the guest’s machine.</dd></div>
@@ -145,15 +212,19 @@ const sqlite = `npx -y @mcpwire/cli share \\
       <div class="docs-next card"><div><h2>Pick your next server.</h2><p>Find its launch command, requirements, and tool names.</p></div><a class="btn" href="/teleport/">Server guides <span aria-hidden="true">→</span></a></div>
     </article>
   </div>
+  <script>
+    import '../scripts/docs-scroll-spy';
+  </script>
 </Base>
 <style>
   .docs-shell { display:grid; grid-template-columns:200px minmax(0,1fr); gap:72px; padding-top:48px; }
   .docs-sidebar nav { position:sticky; top:104px; display:flex; flex-direction:column; gap:4px; }
   .docs-sidebar .eyebrow { margin-bottom:14px; }
   .docs-sidebar a { padding:7px 0; color:var(--text-muted); font-size:15px; }
-  .docs-sidebar a:hover { color:var(--accent); }
+  .docs-sidebar a:hover, .docs-sidebar a[aria-current] { color:var(--accent); }
   .docs-sidebar .guide-link { margin-top:20px; color:var(--text); }
   .docs-mobile-nav { display:none; }
+  .security-checklist { margin-block:18px; padding-left:22px; color:var(--text-muted); font-size:16px; line-height:1.8; display:grid; gap:8px; }
   .docs-article { min-width:0; max-width:800px; }
   .docs-intro { margin-bottom:60px; }
   h1 { font-size:clamp(42px,5vw,64px); margin-bottom:22px; }
@@ -184,9 +255,15 @@ const sqlite = `npx -y @mcpwire/cli share \\
   @media(max-width:760px) {
     .docs-shell { display:block; padding-top:28px; }
     .docs-sidebar { display:none; }
-    .docs-mobile-nav { display:block; margin-top:28px; padding:15px 18px; background:var(--surface); border-radius:9px; box-shadow:var(--shadow-sm); }
-    .docs-mobile-nav summary { cursor:pointer; color:var(--text); font-size:15px; }
-    .docs-mobile-nav nav { display:flex; flex-direction:column; gap:12px; padding-top:18px; font-size:15px; color:var(--text-muted); }
+    .docs-mobile-nav { display:block; position:sticky; top:85px; z-index:60; margin-bottom:34px; background:var(--surface); border-radius:10px; box-shadow:var(--shadow-sm); }
+    .docs-mobile-nav summary { list-style:none; display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:14px 18px; color:var(--text); font-size:15px; }
+    .docs-mobile-nav summary::-webkit-details-marker { display:none; }
+    .docs-mobile-nav summary::after { content:'↓'; color:var(--text-faint); font-size:14px; }
+    .docs-mobile-nav[open] summary::after { content:'↑'; }
+    .docs-mobile-nav[open] summary { border-bottom:1px solid var(--line-soft); }
+    .docs-mobile-nav nav { display:flex; flex-direction:column; padding:8px 18px 12px; }
+    .docs-mobile-nav nav a { padding:9px 0; font-size:15px; color:var(--text-muted); }
+    .docs-mobile-nav nav a[aria-current] { color:var(--accent); }
     .docs-sidebar nav { position:static; display:grid; grid-template-columns:1fr 1fr; column-gap:20px; }
     .docs-sidebar .eyebrow { grid-column:1 / -1; margin-bottom:4px; }
     .docs-sidebar a { padding-block:6px; font-size:14px; }

@@ -38,7 +38,7 @@ main { position:relative; z-index:1; flex:1; min-width:0; }
 ::selection { background:#454f5e; color:var(--text); }
 a { color:inherit; text-decoration:none; }
 a:hover { color:var(--accent); }
-img[src="/icons/sentry.svg"], img[src="/icons/elasticsearch.svg"], img[src="/icons/pinecone.svg"] { filter:brightness(0) invert(.78); }
+img[src="/icons/sentry.svg"], img[src="/icons/elasticsearch.svg"], img[src="/icons/pinecone.svg"], img[src="/icons/prisma.svg"] { filter:brightness(0) invert(.78); }
 button,input,select,textarea { font:inherit; }
 a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible { outline:2px solid var(--accent); outline-offset:5px; }
 h1,h2,h3,h4 { font-weight:550; line-height:1.2; letter-spacing:-.035em; color:var(--text); margin:0 0 .55em; }
