@@ -35,6 +35,9 @@ jobs:
       - name: Run CLI tests
         run: pnpm run test:cli
 
+      - name: Test fresh npx package installation
+        run: pnpm --filter @mcpwire/cli run test:install
+
       - name: Publish @mcpwire/cli
         run: |
           CURRENT_VERSION=$(node -p "require('./cli/package.json').version")
