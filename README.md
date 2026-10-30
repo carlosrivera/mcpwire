@@ -139,3 +139,13 @@ To add a server guide or contribute code, see [CONTRIBUTING.md](https://github.c
 ## License
 
 [MIT](https://github.com/carlosrivera/mcpwire/blob/main/LICENSE).
+
+### Docker and LAN peer routes
+
+For bridged Docker hosts, bind the share's UDP socket with `share --port 49737 …`
+and publish only that UDP port. A native client can use the reachable mapped
+endpoint with `join wire://… --peer-address 192.168.1.20:52000` (up to eight IPv4
+routes). The host port can differ from the container port. Routes only assist the
+existing authenticated Noise handshake; public DHT discovery and application
+authorization remain unchanged. A busy requested share port fails closed. See
+`cli/test/peer-addresses.mjs` for address and port-collision regressions.

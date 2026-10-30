@@ -6,6 +6,7 @@
 import { createRequire } from 'node:module';
 import { runShare, type ShareArgs } from './share.js';
 import { runJoin } from './join.js';
+import { parsePeerAddress, type PeerAddress } from './dht.js';
 
 const pkg = createRequire(import.meta.url)('../package.json') as { version: string };
 const VERSION = pkg.version;
@@ -18,11 +19,15 @@ Noise-encrypted P2P tunnel. No cloud. No relay servers. $0 infra.
 
 USAGE
   npx -y @mcpwire/cli share [flags] -- <command to run your MCP server>
-  npx -y @mcpwire/cli join wire://<ticket>
+  npx -y @mcpwire/cli join wire://<ticket> [--peer-address <IPv4:port>]
 
   (or if installed globally via 'npm i -g @mcpwire/cli': mcpwire share ...)
 
+JOIN FLAGS
+  --peer-address <IPv4:port>  Handshake route to a forwarded DHT socket (repeat up to 8)
+
 SHARE FLAGS
+  --port <n>          Bind the DHT UDP socket to this port; fail if unavailable
   --allow <list>      Comma-separated tool whitelist (peer can't even see others)
   --deny <list>       Comma-separated tool blacklist (wins over --allow)
   --redact-secrets    DLP: redact API keys / JWTs / emails / cards in responses
@@ -57,7 +62,7 @@ function fail(msg: string): never {
 }
 
 function parseShareArgs(rest: string[]): ShareArgs {
-  const valueFlags = new Set(['--allow', '--deny', '--ttl', '--max-calls', '--record', '--name']);
+  const valueFlags = new Set(['--allow', '--deny', '--ttl', '--max-calls', '--record', '--name', '--port']);
   const args: ShareArgs = {
     allow: undefined,
     deny: undefined,
@@ -91,6 +96,10 @@ function parseShareArgs(rest: string[]): ShareArgs {
       else if (a === '--ttl') args.ttl = v;
       else if (a === '--record') args.record = v;
       else if (a === '--name') args.name = v;
+      else if (a === '--port') {
+        if (!/^[1-9][0-9]{0,4}$/.test(v) || Number(v) > 65535) fail('--port expects an integer from 1 to 65535');
+        args.port = Number(v);
+      }
       else if (a === '--max-calls') {
         const n = parseInt(v, 10);
         if (!Number.isFinite(n) || n <= 0) fail(`--max-calls expects a positive integer (got "${v}")`);
@@ -115,7 +124,12 @@ async function main(): Promise<void> {
   } else if (mode === 'join') {
     const ticket = rest[0];
     if (!ticket) fail('join requires a wire:// ticket, e.g. mcpwire join wire://7f9a2b8c…');
-    await runJoin(ticket);
+    const peerAddresses: PeerAddress[] = [];
+    for (let i = 1; i < rest.length; i += 2) {
+      if (rest[i] !== '--peer-address' || !rest[i + 1] || peerAddresses.length === 8) fail('join accepts up to 8 --peer-address values');
+      peerAddresses.push(parsePeerAddress(rest[i + 1]));
+    }
+    await runJoin(ticket, peerAddresses);
   } else if (mode === '--version' || mode === '-v') {
     process.stdout.write(`mcpwire v${VERSION}\n`);
   } else {

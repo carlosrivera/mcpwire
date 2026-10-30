@@ -54,6 +54,7 @@ export interface ShareArgs {
   redact: boolean;
   confirm: boolean;
   ttl: string | null;
+  port?: number;
   maxCalls: number | null;
   record?: string;
   name?: string;
@@ -335,7 +336,14 @@ export async function runShare(args: ShareArgs, version: string): Promise<void> 
   }
   const serverName = deriveServerName(args);
 
-  const swarm = createSwarm();
+  const swarm = createSwarm({ port: args.port });
+  if (args.port !== undefined) {
+    await swarm.dht.ready();
+    if (swarm.dht.address().port !== args.port) {
+      await swarm.destroy();
+      throw new Error('Requested DHT port is unavailable');
+    }
+  }
   let stopped = false;
   let terminal: ReturnType<typeof import('./tui.js')['startConsole']> | undefined;
 
