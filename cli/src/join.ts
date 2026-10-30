@@ -6,9 +6,9 @@
  */
 import type { Duplex } from 'node:stream';
 import { shortFingerprint } from './ui.js';
-import { createSwarm } from './dht.js';
+import { createSwarm, type PeerAddress } from './dht.js';
 
-export async function runJoin(ticketArg: string): Promise<void> {
+export async function runJoin(ticketArg: string, peerAddresses: PeerAddress[] = []): Promise<void> {
   const hex = ticketArg.replace(/^wire:\/\//i, '').trim();
   if (!/^[0-9a-fA-F]{64}$/.test(hex)) {
     process.stderr.write(
@@ -18,7 +18,7 @@ export async function runJoin(ticketArg: string): Promise<void> {
   }
   const topic = Buffer.from(hex, 'hex');
 
-  const swarm = createSwarm();
+  const swarm = createSwarm({ peerAddresses });
   let bridged = false;
   let stopping = false;
 

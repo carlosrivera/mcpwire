@@ -1,7 +1,7 @@
 {
   "name": "@mcpwire/cli",
-  "version": "1.1.1",
-  "description": "P2P tool teleportation for AI agents. Share an MCP server's capability over an E2EE Noise tunnel — never your credentials.",
+  "version": "1.1.2",
+  "description": "P2P tool teleportation for AI agents. Share an MCP server's capability over an E2EE Noise tunnel \u2014 never your credentials.",
   "bin": {
     "mcpwire": "dist/index.js"
   },
@@ -26,7 +26,7 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
     "start": "node dist/index.js",
-    "test": "pnpm run build && node test/run-tests.mjs && node test/tui.mjs",
+    "test": "pnpm run build && node test/run-tests.mjs && node test/tui.mjs && node test/peer-addresses.mjs",
     "test:e2e": "pnpm run build && node test/e2e-real.mjs",
     "test:e2e:sqlite": "pnpm run build && node test/e2e-real.mjs --sqlite",
     "test:examples": "node test/examples.mjs",

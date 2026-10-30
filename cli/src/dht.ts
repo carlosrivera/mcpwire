@@ -1,5 +1,27 @@
 import Hyperswarm from 'hyperswarm';
 import DHT from 'hyperdht';
+import { isIPv4 } from 'node:net';
+
+export interface PeerAddress { host: string; port: number }
+export function parsePeerAddress(value: string): PeerAddress {
+  const match = /^(.*):([1-9][0-9]{0,4})$/.exec(value);
+  if (!match || !isIPv4(match[1]) || Number(match[2]) > 65535) {
+    throw new Error('Peer address must be an IPv4 address and port');
+  }
+  return { host: match[1], port: Number(match[2]) };
+}
+
+class AddressedDHT extends DHT {
+  constructor(private readonly peerAddresses: PeerAddress[], port?: number) {
+    super({ ...swarmOpts(), ...(port === undefined ? {} : { port }) });
+  }
+  override connect(key: Buffer, opts: Record<string, unknown> & { relayAddresses?: PeerAddress[] } = {}) {
+    if (this.peerAddresses.length === 0) return super.connect(key, opts);
+    // These are handshake routes to the peer's DHT socket, not plaintext relays.
+    // HyperDHT still authenticates the Noise key discovered for the topic.
+    return super.connect(key, { ...opts, relayAddresses: [...this.peerAddresses, ...(opts.relayAddresses ?? [])] });
+  }
+}
 
 /**
  * DHT bootstrap configuration.
@@ -32,6 +54,6 @@ export function swarmOpts(): { bootstrap?: Array<{ host: string; port: number }>
 // Inject our pinned DHT rather than Hyperswarm's floating transitive version.
 // HyperDHT 6.33–6.34 can create half-open LAN connections (upstream #304).
 
-export function createSwarm(): Hyperswarm {
-  return new Hyperswarm({ dht: new DHT(swarmOpts()) });
+export function createSwarm(options: { peerAddresses?: PeerAddress[]; port?: number } = {}): Hyperswarm {
+  return new Hyperswarm({ dht: new AddressedDHT(options.peerAddresses ?? [], options.port) });
 }
