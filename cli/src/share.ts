@@ -339,7 +339,7 @@ export async function runShare(args: ShareArgs, version: string): Promise<void> 
   const swarm = createSwarm({ port: args.port });
   if (args.port !== undefined) {
     await swarm.dht.ready();
-    if (swarm.dht.address().port !== args.port) {
+    if (swarm.dht.localAddress()?.port !== args.port) {
       await swarm.destroy();
       throw new Error('Requested DHT port is unavailable');
     }

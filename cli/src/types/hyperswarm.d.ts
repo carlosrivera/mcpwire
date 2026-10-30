@@ -30,7 +30,7 @@ declare module 'hyperswarm' {
     destroy(opts?: { force?: boolean }): Promise<void>;
     flush(): Promise<void>;
     listen(): Promise<void>;
-    readonly dht: { fullyBootstrapped(): Promise<void>; ready(): Promise<void>; address(): { host: string; port: number } };
+    readonly dht: { fullyBootstrapped(): Promise<void>; ready(): Promise<void>; localAddress(): { host: string; port: number } | null };
     readonly connections: Set<NoiseSocket>;
     readonly peers: Map<string, unknown>;
     readonly keyPair: { publicKey: Buffer; secretKey: Buffer };
