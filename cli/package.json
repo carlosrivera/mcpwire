@@ -1,6 +1,6 @@
 {
   "name": "@mcpwire/cli",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "P2P tool teleportation for AI agents. Share an MCP server's capability over an E2EE Noise tunnel \u2014 never your credentials.",
   "bin": {
     "mcpwire": "dist/index.js"

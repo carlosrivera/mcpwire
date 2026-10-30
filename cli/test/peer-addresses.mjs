@@ -29,3 +29,13 @@ try {
   assert.notEqual(code, 0); assert.match(stderr, /Requested DHT port is unavailable|EADDRINUSE/);
 } finally { busy.close(); }
 console.log('Published port collision fails closed.');
+// A free requested server socket must succeed even when the DHT's outbound
+// socket is different (the normal firewalled/NAT configuration).
+const free = createSocket('udp4'); free.bind(0, '0.0.0.0'); await once(free, 'listening');
+const freePort = free.address().port; await new Promise(resolve => free.close(resolve));
+const accepted = spawn(process.execPath, ['dist/index.js', 'share', '--port', String(freePort), '--ttl', '2s', '--', 'node', 'test/fake-server.mjs'], { stdio: ['ignore', 'ignore', 'pipe'] });
+let acceptedLog = ''; accepted.stderr.on('data', c => acceptedLog += c);
+const acceptedTimer = setTimeout(() => accepted.kill('SIGKILL'), 45000);
+const [acceptedCode] = await once(accepted, 'exit'); clearTimeout(acceptedTimer);
+assert.equal(acceptedCode, 0); assert.match(acceptedLog, /wire:\/\/[a-f0-9]{64}/);
+console.log('Requested listening port succeeds with a distinct outbound socket.');
