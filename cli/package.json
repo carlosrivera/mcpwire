@@ -1,6 +1,6 @@
 {
   "name": "@mcpwire/cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "P2P tool teleportation for AI agents. Share an MCP server's capability over an E2EE Noise tunnel — never your credentials.",
   "bin": {
     "mcpwire": "dist/index.js"
@@ -31,7 +31,8 @@
     "test:e2e:sqlite": "pnpm run build && node test/e2e-real.mjs --sqlite",
     "test:examples": "node test/examples.mjs",
     "prepublishOnly": "pnpm run build && cp ../README.md ./README.md",
-    "postpublish": "rm -f ./README.md"
+    "postpublish": "rm -f ./README.md",
+    "test:install": "pnpm run build && node test/package-install.mjs"
   },
   "keywords": [
     "mcp",
@@ -50,7 +51,8 @@
     "hyperdht": "6.32.0",
     "hyperswarm": "^4.8.0",
     "ink": "5.2.1",
-    "react": "18.3.1"
+    "react": "18.3.1",
+    "b4a": "1.9.0"
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "1.32.2",

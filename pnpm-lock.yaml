@@ -181,6 +181,9 @@ importers:
 
   cli:
     dependencies:
+      b4a:
+        specifier: 1.9.0
+        version: 1.9.0
       hyperdht:
         specifier: 6.32.0
         version: 6.32.0(bare-url@2.5.5)
