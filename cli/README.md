@@ -132,3 +132,9 @@ To add a server guide or contribute code, see [CONTRIBUTING.md](https://github.c
 ## License
 
 [MIT](https://github.com/carlosrivera/mcpwire/blob/main/LICENSE).
+
+## Why I built this
+
+- [Agent Runtimes Are Infrastructure, Not Prompts](https://carlosrivera.im/blog/agent-runtimes-infrastructure)
+- [Peer-to-Peer Agent Execution Over MCP](https://carlosrivera.im/blog/panas-peer-to-peer-inference-mcp)
+- Author profile: [Carlos Rivera — Systems Architect & Fractional CTO](https://carlosrivera.im)

@@ -27,7 +27,21 @@ const schema = {
   '@context':'https://schema.org',
   '@graph':[
     {'@type':'Organization','@id':`${SITE_URL}/#organization`,name:SITE_NAME,url:SITE_URL,
-      logo:{'@type':'ImageObject',url:`${SITE_URL}/social/logo.png`,width:512,height:512},sameAs:['https://github.com/carlosrivera/mcpwire']},
+      logo:{'@type':'ImageObject',url:`${SITE_URL}/social/logo.png`,width:512,height:512},
+      founder:{
+        '@type':'Person',
+        '@id':'https://carlosrivera.im/#person',
+        name:'Carlos Rivera',
+        jobTitle:'Systems Architect & Founder',
+        url:'https://carlosrivera.im',
+        sameAs:[
+          'https://carlosrivera.im',
+          'https://github.com/carlosrivera',
+          'https://www.linkedin.com/in/jcarlosrivera/',
+          'https://x.com/carlos_gif',
+        ],
+      },
+      sameAs:['https://github.com/carlosrivera/mcpwire']},
     {'@type':'WebSite','@id':`${SITE_URL}/#website`,url:`${SITE_URL}/`,name:SITE_NAME,description:SITE_DESCRIPTION,inLanguage:'en',publisher:{'@id':`${SITE_URL}/#organization`}},
     {'@type':'ImageObject','@id':`${canonical}#primaryimage`,url:imageURL,contentUrl:imageURL,width:1200,height:630,caption:imageAlt},
     {'@type':pageType,'@id':`${canonical}#webpage`,url:canonical,name:fullTitle,description,inLanguage:'en',

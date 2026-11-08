@@ -147,5 +147,10 @@ and publish only that UDP port. A native client can use the reachable mapped
 endpoint with `join wire://… --peer-address 192.168.1.20:52000` (up to eight IPv4
 routes). The host port can differ from the container port. Routes only assist the
 existing authenticated Noise handshake; public DHT discovery and application
-authorization remain unchanged. A busy requested share port fails closed. See
-`cli/test/peer-addresses.mjs` for address and port-collision regressions.
+authorization remain unchanged. A busy requested share port fails closed. See `cli/test/peer-addresses.mjs` for address and port-collision regressions.
+
+## Why I built this
+
+- [Agent Runtimes Are Infrastructure, Not Prompts](https://carlosrivera.im/blog/agent-runtimes-infrastructure)
+- [Peer-to-Peer Agent Execution Over MCP](https://carlosrivera.im/blog/panas-peer-to-peer-inference-mcp)
+- Author profile: [Carlos Rivera — Systems Architect & Fractional CTO](https://carlosrivera.im)

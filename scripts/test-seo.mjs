@@ -58,7 +58,24 @@ for (const file of pages) {
   const scripts = elements('script').filter(node=>attributes(node).type==='application/ld+json');
   assert.equal(scripts.length,1,`${pathname}: expected one structured-data graph`);
   const graph = JSON.parse(text(scripts[0]))['@graph']; assert(Array.isArray(graph));
-  assert(graph.some(node=>node['@type']==='WebSite')); assert(graph.some(node=>node['@type']==='Organization'));
+  assert(graph.some(node=>node['@type']==='WebSite'));
+  const org = graph.find(node=>node['@type']==='Organization'&&node['@id']===`${SITE_URL}/#organization`);
+  assert(org,`${pathname}: missing Organization`);
+  assert.deepEqual(org.founder,{
+    '@type':'Person',
+    '@id':'https://carlosrivera.im/#person',
+    name:'Carlos Rivera',
+    jobTitle:'Systems Architect & Founder',
+    url:'https://carlosrivera.im',
+    sameAs:[
+      'https://carlosrivera.im',
+      'https://github.com/carlosrivera',
+      'https://www.linkedin.com/in/jcarlosrivera/',
+      'https://x.com/carlos_gif',
+    ],
+  });
+  const creditLink = elements('a').find(node=>attributes(node).href==='https://carlosrivera.im');
+  assert(creditLink && text(creditLink).trim()==='Built by Carlos Rivera',`${pathname}: missing footer credit link`);
   const robots = oneMeta('robots');
   if (pathname==='/404') assert(robots.includes('noindex')); else { assert(!robots.includes('noindex')); indexed.add(canonical); }
   if (pathname.startsWith('/teleport/')) {

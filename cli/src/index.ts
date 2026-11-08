@@ -54,6 +54,14 @@ EXAMPLES
   npx -y @mcpwire/cli join wire://7f9a2b8c4e1d0a...
 
 Full docs & visual policy builder: https://mcpwire.co
+
+Why I built this:
+  - Agent Runtimes Are Infrastructure, Not Prompts
+    https://carlosrivera.im/blog/agent-runtimes-infrastructure
+  - Peer-to-Peer Agent Execution Over MCP
+    https://carlosrivera.im/blog/panas-peer-to-peer-inference-mcp
+  - Author profile: Carlos Rivera — Systems Architect & Fractional CTO
+    https://carlosrivera.im
 `.trim();
 
 function fail(msg: string): never {
